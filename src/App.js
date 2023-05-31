@@ -1,10 +1,11 @@
 import './styles/App.scss';
+import Notification from "./components/Notification.component";
 
 const App = () => {
   return (
     <>
       {/* <!-- Notification alert --> */}
-      <div id="notification"></div>
+      <Notification/>      
 
       {/* <!-- Main Content --> */}
       <main>
