@@ -3,6 +3,7 @@ import './styles/Loader.scss';
 import Notification from "./components/Notification.component";
 import Modal from "./components/Modal.component";
 import Loader from "./components/Loader.component";
+import Button from "./components/Button.component";
 
 const App = () => {
   return (
@@ -13,12 +14,13 @@ const App = () => {
       {/* <!-- Main Content --> */}
       <main>
         <section><div class="background-overlay"></div></section>
+
         <section>
             <div class="avatar-container">
                 <div class="avatar"></div>
             </div>
-            <button class="main-button">View Owned Games</button>
-            <button class="add-game-button-mobile">Submit Game Suggestion</button>
+            <Button variant="primary" class="main-button">View Owned Games</Button>
+            <Button variant="light" class="add-game-button-mobile">Submit Game Suggestion</Button>
             <div class="card">
                 <div id="card-header-container">
                     <h3 class="card-header">Suggested Games:</h3>
@@ -31,7 +33,7 @@ const App = () => {
                         </select>
                     </div>
                 </div>
-                <button class="add-game-button">+</button>
+                <Button variant="add" class="add-game-button">+</Button>
                 <input type="text" id="card-search-input" placeholder="Search games.."/>
                 <div class="card-body">
                     {/* <!-- Loop card items --> */}
@@ -46,6 +48,7 @@ const App = () => {
                 <div class="card-footer"></div>
             </div>
         </section>
+
         <section>
             <Modal/>
         </section>

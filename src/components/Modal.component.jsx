@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { ModalContext } from "../context/modal.context";
+import Button from "./Button.component";
 
 const Modal = () => {
     const {open, setOpen} = useContext(ModalContext);
@@ -12,17 +13,17 @@ const Modal = () => {
                 <div class="modal-body">
                     <form class="search-wrapper" onsubmit="onModalSubmitHandler(event)">
                         <input class="search-field" type="text" placeholder="Search a game..."/>
-                        <button class="search-btn" type="submit">Search</button>
+                        <Button variant="modalInput" class="search-btn" type="submit">Search</Button>
                     </form>
-                    <button id="filter-games-btn" type="button">Filter By Games Selected</button>
+                    <Button variant="modalInput" id="filter-games-btn" type="button">Filter By Games Selected</Button>
                     <div class="modal-listed-games">
                         <div class="game-box">
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button id="submit-game-button" onClick={() => setOpen(!open)}>Submit Game Suggestion</button>
-                    <button id="close-modal-button">Close</button>
+                    <Button variant="modalToggle" id="submit-game-button" onClick={() => setOpen(!open)}>Submit Game Suggestion</Button>
+                    <Button variant="modalToggle" id="close-modal-button">Close</Button>
                 </div>
             </div>
         </div> 
