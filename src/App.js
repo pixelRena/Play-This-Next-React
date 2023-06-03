@@ -1,6 +1,8 @@
 import './styles/App.scss';
+import './styles/Loader.scss';
 import Notification from "./components/Notification.component";
 import Modal from "./components/Modal.component";
+import Loader from "./components/Loader.component";
 
 const App = () => {
   return (
@@ -33,17 +35,12 @@ const App = () => {
                 <input type="text" id="card-search-input" placeholder="Search games.."/>
                 <div class="card-body">
                     {/* <!-- Loop card items --> */}
-                    <div class="card-list">
+                    {/* <div class="card-list">
 
-                    </div>
+                    </div> */}
                     
-                    {/* <!-- Loader --> */}
-                    <div id="loader-container">
-                        <div id="loader">
-                            <div></div>
-                            <div></div>
-                        </div>
-                    </div>
+                    <Loader/>
+                    
 
                 </div>
                 <div class="card-footer"></div>

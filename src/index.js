@@ -4,16 +4,19 @@ import './index.css';
 import App from './App';
 import { NotificationContextProvider } from "./context/notification.context";
 import { ModalContextProvider } from "./context/modal.context";
+import { LoaderContextProvider } from "./context/loader.context";
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <ModalContextProvider>
-      <NotificationContextProvider>
-        <App />
-      </NotificationContextProvider>
-    </ModalContextProvider>
+    <LoaderContextProvider>
+      <ModalContextProvider>
+        <NotificationContextProvider>
+          <App />
+        </NotificationContextProvider>
+      </ModalContextProvider>
+    </LoaderContextProvider>
   </React.StrictMode>
 );
 
