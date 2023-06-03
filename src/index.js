@@ -3,14 +3,17 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import { NotificationContextProvider } from "./context/notification.context";
+import { ModalContextProvider } from "./context/modal.context";
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <NotificationContextProvider>
-      <App />
-    </NotificationContextProvider>
+    <ModalContextProvider>
+      <NotificationContextProvider>
+        <App />
+      </NotificationContextProvider>
+    </ModalContextProvider>
   </React.StrictMode>
 );
 

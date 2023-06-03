@@ -1,5 +1,6 @@
 import './styles/App.scss';
 import Notification from "./components/Notification.component";
+import Modal from "./components/Modal.component";
 
 const App = () => {
   return (
@@ -48,27 +49,9 @@ const App = () => {
                 <div class="card-footer"></div>
             </div>
         </section>
-        <section class="modal-section">
-              <div class="submit-modal">
-                  <h2 class="modal-header">Suggest a game</h2>
-                  <div class="modal-body">
-                      <form class="search-wrapper" onsubmit="onModalSubmitHandler(event)">
-                          <input class="search-field" type="text" placeholder="Search a game..."/>
-                          <button class="search-btn" type="submit">Search</button>
-                      </form>
-                      <button id="filter-games-btn" type="button">Filter By Games Selected</button>
-                      <div class="modal-listed-games">
-                          <div class="game-box">
-
-                          </div>
-                      </div>
-                  </div>
-                  <div class="modal-footer">
-                      <button id="submit-game-button" disabled>Submit Game Suggestion</button>
-                      <button id="close-modal-button">Close</button>
-                  </div>
-              </div>
-          </section>
+        <section>
+            <Modal/>
+        </section>
       </main>
     </>
   );
