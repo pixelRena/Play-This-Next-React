@@ -5,6 +5,7 @@ import Modal from "./components/Modal.component";
 import Loader from "./components/Loader.component";
 import Button from "./components/Button.component";
 import Overlay from "./components/Overlay.component";
+import AvatarContainer from "./components/AvatarContainer.component";
 
 const App = () => {
   return (
@@ -17,9 +18,7 @@ const App = () => {
         <section><Overlay/></section>
 
         <section>
-            <div class="avatar-container">
-                <div class="avatar"></div>
-            </div>
+            <AvatarContainer/>
             <Button>View Owned Games</Button>
             <Button variant="light">Submit Game Suggestion</Button>
             <div class="card">
