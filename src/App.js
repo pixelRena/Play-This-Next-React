@@ -4,6 +4,7 @@ import Notification from "./components/Notification.component";
 import Modal from "./components/Modal.component";
 import Loader from "./components/Loader.component";
 import Button from "./components/Button.component";
+import Overlay from "./components/Overlay.component";
 
 const App = () => {
   return (
@@ -13,7 +14,7 @@ const App = () => {
 
       {/* <!-- Main Content --> */}
       <main>
-        <section><div class="background-overlay"></div></section>
+        <section><Overlay/></section>
 
         <section>
             <div class="avatar-container">
