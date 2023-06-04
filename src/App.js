@@ -2,51 +2,26 @@ import './styles/App.scss';
 import './styles/Loader.scss';
 import Notification from "./components/Notification.component";
 import Modal from "./components/Modal.component";
-import Loader from "./components/Loader.component";
 import Button from "./components/Button.component";
 import Overlay from "./components/Overlay.component";
 import AvatarContainer from "./components/AvatarContainer.component";
+import Card from "./components/Card.component";
 
 const App = () => {
   return (
     <>
-      {/* <!-- Notification alert --> */}
       <Notification/>      
 
-      {/* <!-- Main Content --> */}
       <main>
-        <section><Overlay/></section>
+        <section>
+          <Overlay/>
+        </section>
 
         <section>
             <AvatarContainer/>
             <Button>View Owned Games</Button>
             <Button variant="light">Submit Game Suggestion</Button>
-            <div class="card">
-                <div id="card-header-container">
-                    <h3 class="card-header">Suggested Games:</h3>
-                    <div id="sort-games-container">
-                        <label for="games">Sort by:</label>
-                        <select name="games" id="sort-games-selection">
-                            <option value="next">Playing Next</option>
-                            <option value="completed">Completed</option>
-                            <option value="declined">Declined</option>
-                        </select>
-                    </div>
-                </div>
-                <Button variant="add">+</Button>
-                <input type="text" id="card-search-input" placeholder="Search games.."/>
-                <div class="card-body">
-                    {/* <!-- Loop card items --> */}
-                    {/* <div class="card-list">
-
-                    </div> */}
-                    
-                    <Loader/>
-                    
-
-                </div>
-                <div class="card-footer"></div>
-            </div>
+            <Card/>
         </section>
 
         <section>
