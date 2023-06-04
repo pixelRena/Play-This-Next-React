@@ -1,6 +1,7 @@
 import Button from "./Button.component";
 import Loader from "./Loader.component";
 import '../styles/Card.scss';
+import '../styles/Status.scss';
 import { LoaderContext } from "../context/loader.context";
 import { useContext } from "react";
 

@@ -49,25 +49,6 @@ body {
     border-radius: $custom-border-box;
 }
 
-[class*="game-status"] {
-    padding: 0 5px;
-}
-
-.game-status-completed { 
-    background-color: $status-completed-background;
-    color: $status-completed-color;
-}
-
-.game-status-next { 
-    color: $status-next-color;
-    background-color: $status-next-background;
-}
-
-.game-status-declined { 
-    background-color: $status-declined-background;
-    color: $status-declined-color; 
-}
-
 .overlay {
     position: fixed;
     top: 0;

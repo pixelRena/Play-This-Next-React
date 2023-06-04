@@ -1,0 +1,27 @@
+@import './variables';
+
+[class*="game-status"] {
+    padding: 0 5px;
+}
+
+.game-status {
+    &-completed {
+        background-color: $status-completed-background;
+        color: $status-completed-color;
+    }
+
+    &-next {
+        color: $status-next-color;
+        background-color: $status-next-background;
+    }
+
+    &-declined {
+        background-color: $status-declined-background;
+        color: $status-declined-color; 
+    }
+
+    &-queue {
+        background-color: $status-queue-background;
+        color: $status-queue-color; 
+    }
+}
