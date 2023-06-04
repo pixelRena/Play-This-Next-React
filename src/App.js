@@ -19,8 +19,8 @@ const App = () => {
             <div class="avatar-container">
                 <div class="avatar"></div>
             </div>
-            <Button variant="primary" class="main-button">View Owned Games</Button>
-            <Button variant="light" class="add-game-button-mobile">Submit Game Suggestion</Button>
+            <Button>View Owned Games</Button>
+            <Button variant="light">Submit Game Suggestion</Button>
             <div class="card">
                 <div id="card-header-container">
                     <h3 class="card-header">Suggested Games:</h3>
@@ -33,7 +33,7 @@ const App = () => {
                         </select>
                     </div>
                 </div>
-                <Button variant="add" class="add-game-button">+</Button>
+                <Button variant="add">+</Button>
                 <input type="text" id="card-search-input" placeholder="Search games.."/>
                 <div class="card-body">
                     {/* <!-- Loop card items --> */}

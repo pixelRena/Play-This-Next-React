@@ -8,8 +8,8 @@ const BUTTON_VARIANT_CLASSES = {
     modalToggle: 'modal-toggle'
 }
 
-const Button = ({children, variant="primary"}) => {
-    return <button className={`button-container ${BUTTON_VARIANT_CLASSES[variant]}`}>{children}</button>;
+const Button = ({children, variant="primary", ...otherProps}) => {
+    return <button className={`button-container ${BUTTON_VARIANT_CLASSES[variant]}`} {...otherProps}>{children}</button>;
 }
  
 export default Button;

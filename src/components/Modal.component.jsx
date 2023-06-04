@@ -13,7 +13,7 @@ const Modal = () => {
                 <div class="modal-body">
                     <form class="search-wrapper" onsubmit="onModalSubmitHandler(event)">
                         <input class="search-field" type="text" placeholder="Search a game..."/>
-                        <Button variant="modalInput" class="search-btn" type="submit">Search</Button>
+                        <Button variant="modalInput" type="submit">Search</Button>
                     </form>
                     <Button variant="modalInput" id="filter-games-btn" type="button">Filter By Games Selected</Button>
                     <div class="modal-listed-games">
@@ -22,8 +22,8 @@ const Modal = () => {
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <Button variant="modalToggle" id="submit-game-button" onClick={() => setOpen(!open)}>Submit Game Suggestion</Button>
-                    <Button variant="modalToggle" id="close-modal-button">Close</Button>
+                    <Button variant="modalToggle">Submit Game Suggestion</Button>
+                    <Button variant="modalToggle" onClick={() => setOpen(false)}>Close</Button>
                 </div>
             </div>
         </div> 
