@@ -3,7 +3,11 @@ import Loader from "./Loader.component";
 import '../styles/Card.scss';
 import '../styles/Status.scss';
 import { LoaderContext } from "../context/loader.context";
+import { ModalContext } from "../context/modal.context";
 import { useContext } from "react";
+
+const data = null;
+const gamesCompleted = 0;
 
 const Card = () => (
     <div id="card">
@@ -48,13 +52,43 @@ const CardBody = () => {
     )
 }
 
-const CardList = () => <div className="card-list"></div>
+const CardList = () => 
+    <div className="card-list">
+        { data?.map(({name, image, username, status}) =>
+                <div className="card-list-item">
+                    {/* <!-- Column --> */}
+                    <div 
+                        className="card-list-image"
+                        style={{backgroundImage: `url(${image})`}}>     
+                    </div>
+                    {/* <!-- Column --> */}
+                    <div>
+                        <div className="card-list-item-title">{name}</div>
+                            <div className="card-list-extra-information">
+                            Posted by: 
+                            <strong>
+                                <a href={`https://www.twitch.tv/${username}`} target="_blank">${username}</a>
+                            </strong> <br/>
+                            <strong className={`game-status-${status}`}>
+                            {status}
+                            </strong>
+                        </div>
+                    </div>
+                </div>
+            
+            )
+        }        
+    </div>
 
-const CardFooter = () => <div id="card-footer">Games Completed: 3</div>
+const CardFooter = () => <div id="card-footer">Games Completed: {gamesCompleted}</div>
 
-const CardInputGroup = () => (
-    <>
-        <Button variant="add">+</Button>
-        <input type="text" id="card-search-input" placeholder="Search games.."/>
-    </>
-)
+const CardInputGroup = () => {
+    const {setOpen} = useContext(ModalContext);
+
+    return ( 
+            <>
+                <Button variant="add" onClick={() => setOpen(true)}>+</Button>
+                <input type="text" id="card-search-input" placeholder="Search games.."/>
+            </>
+        )
+}

@@ -76,29 +76,29 @@
         overflow-x: hidden;
     }
 
-    .card-item {
-        display: flex;
-        flex-direction: row;
-        margin-bottom: 30px;
+    .card-list {
+        .card-list-item {
+            display: flex;
+            flex-direction: row;
+            margin-bottom: 30px;
 
-        .card-image-holder {
-            overflow: hidden;
-            width: 100px;
+            .card-list-image {
+                margin-right: 15px;
+                background-size: cover;
+                background-position: center;
+                overflow: hidden;
+                width: 100px;
+            }
+
+            .card-list-item-title { 
+                line-height: 20px; 
+                word-break: break-word;
+                width: 30vw;
+            }
+
+            .card-list-extra-information { font-size: 17px; }
         }
-
-        .card-game-title { 
-            line-height: 20px; 
-            word-break: break-word;
-            width: 30vw;
-        }
-
-        img {
-            object-position: center;
-            object-fit: contain;
-        }
-
-        .card-extra-information { font-size: 17px; }
-    }
+}
 
     #card-footer {
         background-color: black;
