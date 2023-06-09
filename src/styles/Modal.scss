@@ -1,0 +1,152 @@
+@import './_variables';
+
+#modal-container { 
+    z-index: 5;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    position: absolute;
+    &::before {
+        position: fixed;
+        content: "";
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.8);
+    }
+    
+    .submit-modal {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin: 0 auto;
+        width: 55vw;
+        z-index: 5;
+
+        .modal-body,
+        .modal-header {
+            background-color: $secondary-color;
+        }
+
+        .modal-header {
+            text-align: center;
+            padding: 0 150px 0 150px;
+            font-weight: unset;
+            border: 1px solid $primary-color;
+            transform: matrix(0.89, 0, -0.50, 1, 0, 0);
+        }
+
+        .modal-body {
+            padding: 25px 50px 0 50px;
+            background: $secondary-color;
+            border: 1px solid $primary-color;
+            border-radius: $custom-border-box;
+
+            .search-wrapper {
+                display: flex;
+                flex-direction: row;
+
+                input {
+                    color: inherit;
+                    font-family: inherit;
+                    font-weight: bolder;
+                    font-size: 17px;
+                    background-color: rgba(0,0,0,0);
+                    padding: 0 10px 0 10px;
+                    border: 1px solid $primary-color;
+                    width: 100%;
+
+                    &:focus {   
+                        outline: 0;
+                        border: 1px solid #5f2aff;
+                    }
+                }
+            }
+
+            .modal-listed-games {
+                border: 1px solid $primary-color;
+                margin: 10px 0 10px 0;
+                width: 100%;
+
+                #modal-results {
+                    padding: 15px;
+                    display: flex;
+                    flex-direction: column;
+                    height: 480px;
+                    overflow: auto;
+
+                    .modal-results-item {
+                        display: flex;
+                        flex-direction: row;
+                        margin-bottom: 15px;
+            
+                        .modal-results-image {
+                            overflow: hidden;
+                            margin-right: 15px;;
+                            width: 100px;
+                        }
+            
+                        .modal-results-title { 
+                            line-height: 20px; 
+                            word-break: break-word;
+                            width: 30vw;
+                        }
+            
+                        img {
+                            object-position: center;
+                            object-fit: contain;
+                        }
+            
+                        .modal-results-extra-information { font-size: 17px; }
+                    }
+                }
+            }
+        }
+        
+        .modal-footer {
+            text-align: center;
+            margin-top: 5px;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    main {
+        section {
+            &:nth-child(2) { width: 90vw; }
+        }
+
+        .submit-modal {
+            width: 90%;
+            .modal-body {
+                .search-wrapper input { border-radius: 0; }
+                #filter-games-btn { 
+                    margin-top: 5px; 
+                    width: 100%;
+                }
+            }
+            .modal-header { padding: unset; }
+            .modal-footer {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+                margin-bottom: 10px;
+            }
+        }
+    }
+}
+
+@media (min-width: 2560px) {
+    main {
+        .submit-modal {
+            height: 100%;
+            .modal-body { 
+                height: 70%; 
+                .modal-listed-games { 
+                    height: 80%; 
+                    .game-box { height: 100%; }
+                }
+            }
+        }
+    }
+}

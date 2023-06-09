@@ -2,11 +2,11 @@
 
 .button-container {
     cursor: pointer;
+    font-family: inherit;
     
     &.primary {
         position: relative;
         margin-bottom: 20px;
-        font-family: inherit;
         font-size: 20px;
         color: inherit;
         background-color: $primary-color;
@@ -33,7 +33,6 @@
     &.light {
         display: none;
         margin-bottom: 5px;
-        font-family: inherit;
         font-size: 20px;
         font-weight: bolder;
         background-color: white;
@@ -61,8 +60,7 @@
 
     &.modal-input {
         color: inherit;
-        font-family: inherit;
-        background-color: rgba(0,0,0,0);
+        background-color: transparent;
         border: 1px solid $primary-color;
 
         &:hover,
@@ -74,7 +72,6 @@
     }
 
     &.modal-toggle {
-        font-family: inherit;
         font-size: 17px;
         color: inherit;
         display: inline;
@@ -88,6 +85,26 @@
             opacity: 0.5; 
             cursor: not-allowed; 
         }
+    }
+
+    &.modal-add {
+        background-color: transparent;
+        margin-top: 5px; 
+        color: #fff; 
+        font-weight: bolder;
+        width: 7vw; 
+        font-size: 15px;
+        text-align: center;
+        border: 1px solid #fff;
+        &:hover {
+            background-color: #fff;
+            color: #000
+        }
+    }
+
+    &.selected {
+        background-color: #fff;
+        color: #000  
     }
 }
 

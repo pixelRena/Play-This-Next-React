@@ -5,11 +5,12 @@ const BUTTON_VARIANT_CLASSES = {
     light: 'light',
     add: 'add',
     modalInput: 'modal-input',
-    modalToggle: 'modal-toggle'
+    modalToggle: 'modal-toggle',
+    modalAdd: 'modal-add'
 }
 
 const Button = ({children, variant="primary", ...otherProps}) => {
-    return <button className={`button-container ${BUTTON_VARIANT_CLASSES[variant]}`} {...otherProps}>{children}</button>;
+    return <button {...otherProps} className={`button-container ${BUTTON_VARIANT_CLASSES[variant]} ${otherProps.className}`}>{children}</button>;
 }
  
 export default Button;

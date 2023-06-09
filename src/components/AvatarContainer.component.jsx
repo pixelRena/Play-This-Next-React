@@ -1,7 +1,7 @@
 const AvatarContainer = () => {
     return ( 
-        <div class="avatar-container">
-            <div class="avatar"></div>
+        <div className="avatar-container">
+            <div className="avatar"></div>
         </div>
     );
 }
