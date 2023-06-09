@@ -4,10 +4,10 @@ import '../styles/Card.scss';
 import '../styles/Status.scss';
 import { LoaderContext } from "../context/loader.context";
 import { ModalContext } from "../context/modal.context";
-import { useContext } from "react";
+import { CardContext } from "../context/card.context";
+import { useContext, useState } from "react";
 
 const data = null;
-const gamesCompleted = 0;
 
 const Card = () => (
     <div id="card">
@@ -19,23 +19,33 @@ const Card = () => (
 
 export default Card;
 
-const CardHeader = () => (
-    <>
-        <div id="card-header-container">
-            <h3 id="card-header">Suggested Games:</h3>
-            <div id="status-container">
-                <label htmlFor="status">Sort by:</label>
-                <select name="status" id="status-selection">
-                    <option value="next">Playing Next</option>
-                    <option value="queue">In Queue</option>
-                    <option value="completed">Completed</option>
-                    <option value="declined">Declined</option>
-                </select>
+const CardHeader = () => {
+    const {cardHeader, isCardFlipped} = useContext(CardContext);
+    const [statusSelection, setStatusSelection] = useState("next"); 
+
+    return (
+        <>
+            <div id="card-header-container">
+                <h3 id="card-header">{cardHeader}</h3>
+                {
+                isCardFlipped ?
+                   null 
+                :
+                    <div id="status-container">
+                        <label htmlFor="status">Sort by:</label>
+                        <select name="status" id="status-selection" onChange={(event) => setStatusSelection(event.target.value)}>
+                            <option value="next">Playing Next</option>
+                            <option value="queue">In Queue</option>
+                            <option value="completed">Completed</option>
+                            <option value="declined">Declined</option>
+                        </select>
+                    </div>
+                }
             </div>
-        </div>
-        <CardInputGroup/>
-    </>
-)
+            <CardInputGroup/>
+        </>
+    )
+}
 
 const CardBody = () => {
     const {isLoading} = useContext(LoaderContext);
@@ -52,35 +62,54 @@ const CardBody = () => {
     )
 }
 
-const CardList = () => 
-    <div className="card-list">
-        { data?.map(({name, image, username, status}) =>
-                <div className="card-list-item">
-                    {/* <!-- Column --> */}
-                    <div 
-                        className="card-list-image"
-                        style={{backgroundImage: `url(${image})`}}>     
-                    </div>
-                    {/* <!-- Column --> */}
-                    <div>
-                        <div className="card-list-item-title">{name}</div>
-                            <div className="card-list-extra-information">
-                            Posted by: 
-                            <strong>
-                                <a href={`https://www.twitch.tv/${username}`} target="_blank">${username}</a>
-                            </strong> <br/>
-                            <strong className={`game-status-${status}`}>
-                            {status}
-                            </strong>
+const CardList = () => {
+    const {isCardFlipped} = useContext(CardContext);
+
+    return (
+        <div className="card-list">
+            { data?.map(({name, image, username, status}) =>
+                    <div className="card-list-item" key={`${name}-id`}>
+                        {/* <!-- Column --> */}
+                        <div 
+                            className="card-list-image"
+                            style={{backgroundImage: `url(${image})`}}>     
+                        </div>
+                        {/* <!-- Column --> */}
+                        <div>
+                            <div className="card-list-item-title">{name}</div>
+                            {
+                            isCardFlipped ?
+                                null 
+                            :
+                                <div className="card-list-extra-information">
+                                    Posted by: 
+                                    <strong>
+                                        <a href={`https://www.twitch.tv/${username}`} target="_blank" rel="noreferrer">${username}</a>
+                                    </strong> <br/>
+                                    <strong className={`game-status-${status}`}>
+                                    {status}
+                                    </strong>
+                                </div>
+                            }
                         </div>
                     </div>
-                </div>
-            
-            )
-        }        
-    </div>
+                
+                )
+            }        
+        </div>
+    )
+}
 
-const CardFooter = () => <div id="card-footer">Games Completed: {gamesCompleted}</div>
+const CardFooter = () => { 
+    const {
+        cardFooter, 
+        isCardFlipped, 
+        ownedGames, 
+        gamesCompleted
+    } = useContext(CardContext);
+
+    return <div id="card-footer">{cardFooter} {isCardFlipped ? ownedGames : gamesCompleted}</div>
+}
 
 const CardInputGroup = () => {
     const {setOpen} = useContext(ModalContext);

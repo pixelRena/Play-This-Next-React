@@ -6,7 +6,8 @@ import Button from "./components/Button.component";
 import Overlay from "./components/Overlay.component";
 import AvatarContainer from "./components/AvatarContainer.component";
 import Card from "./components/Card.component";
-import { useState } from "react";
+import { CardContext } from "./context/card.context";
+import { useEffect, useContext } from "react";
 
 // TODO: Create Select, Input, Form Component
 // ! Why not put all the contexts together?
@@ -14,7 +15,21 @@ import { useState } from "react";
 // ? Font sizes to go from px to rem?
 
 const App = () => {
-  const [toggleView, setToggleView] = useState(true);
+  const {
+    isCardFlipped, 
+    setIsCardFlipped, 
+    setCardHeader, 
+    setCardFooter, 
+    buttonTitle, 
+    setButtonTitle
+  } = useContext(CardContext);
+
+  useEffect(() => {
+    setCardHeader(isCardFlipped ? "Owned Games:" : "Suggested Games:");
+    setCardFooter(isCardFlipped ? "Games Owned (Steam):" : "Games Completed:");
+    setButtonTitle(isCardFlipped ? "View Owned Games" : "View Suggested Games");
+    // eslint-disable-next-line
+  },[isCardFlipped]);
 
   return (
     <>
@@ -26,7 +41,9 @@ const App = () => {
 
         <section>
             <AvatarContainer/>
-            <Button onClick={() => setToggleView(!toggleView)}>{toggleView ? "View Owned Games" : "View Suggested Games"}</Button>
+            <Button onClick={() => setIsCardFlipped(!isCardFlipped)}>
+              {buttonTitle}
+            </Button>
             <Button variant="light">Submit Game Suggestion</Button>
             <Card/>
         </section>

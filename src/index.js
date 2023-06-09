@@ -5,6 +5,7 @@ import App from './App';
 import { NotificationContextProvider } from "./context/notification.context";
 import { ModalContextProvider } from "./context/modal.context";
 import { LoaderContextProvider } from "./context/loader.context";
+import { CardContextProvider } from "./context/card.context";
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -13,7 +14,9 @@ root.render(
     <LoaderContextProvider>
       <ModalContextProvider>
         <NotificationContextProvider>
-          <App />
+          <CardContextProvider>
+            <App />
+          </CardContextProvider>
         </NotificationContextProvider>
       </ModalContextProvider>
     </LoaderContextProvider>

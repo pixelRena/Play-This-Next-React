@@ -82,8 +82,8 @@ const Modal = () => {
                     </Button>
                     <div className="modal-listed-games">
                         <div id="modal-results">
-                        {results?.map(({name,image}) => (
-                            <div className="modal-results-item">
+                        {results?.map(({name,image}, i) => (
+                            <div className="modal-results-item" key={`${name}-game-results-${i}`}>
                                 {/* <!-- Column --> */}
                                 <div className="modal-results-image">
                                     <img 
