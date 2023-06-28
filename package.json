@@ -1,48 +1,12 @@
 {
   "name": "play-this-next-react",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "axios": "^1.4.0",
-    "cors": "^2.8.5",
-    "dotenv": "^16.0.3",
-    "express": "^4.18.2",
-    "firebase-admin": "^11.9.0",
-    "nodemon": "^2.0.22",
-    "path": "^0.12.7",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "sass": "^1.62.1",
-    "web-vitals": "^2.1.4"
-  },
-  "devDependencies": {
-    "react-scripts": "5.0.1"
-  },
+  "version": "1.0.0",
+  "description": "<div align=\"center\">   <a href=\"https://github.com/pixelRena/\">     <img src=\"./assets/images/favicon.svg\" alt=\"Logo\" width=\"80\">   </a>",
+  "main": "index.js",
   "scripts": {
-    "start": "nodemon server.js",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "build": "cd server && npm install && cd ../frontend && npm install && npm run build",
+    "start": "node server/server.js"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
+  "author": "",
+  "license": "ISC"
 }

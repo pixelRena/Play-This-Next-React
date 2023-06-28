@@ -22,7 +22,7 @@ const app = express();
 const buildPath = path.join(__dirname, 'build')
 
 app.use(cors());
-app.use(express.static(buildPath))
+// app.use(express.static(buildPath))
 app.use(express.json())
 
 // Fetches steam games
@@ -129,9 +129,9 @@ app.post('/add-suggested-game', async (req,res) => {
     res.send(gamesInDB);
 });
 
-app.get('*', (req, res) => {
-    res.sendFile(path.join(buildPath, 'index.html'))
-})
-
+app.use(express.static(path.join(__dirname, '../frontend/build')));
+app.get("*", (req,res) => 
+	res.sendFile(path.join(__dirname, '../frontend/build/index.html'))
+);
 
 app.listen(process.env.PORT || 3000, () => { console.log("listening on port.."+process.env.PORT)});

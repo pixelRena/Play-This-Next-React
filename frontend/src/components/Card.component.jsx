@@ -51,11 +51,10 @@ const CardBody = () => {
 	const { suggested, steam } = state;
     const [data, setData] = useState(suggested.data);
 
-    // useEffect(() => {
-    //     setData(data === suggested.data ? steam.data : suggested.data);
-    // },[])
-
-    console.log(data);
+    useEffect(() => {
+        // ! Only working on second render
+        setData(data === suggested.data ? steam.data : suggested.data);
+    },[])
 
     return (
         <div id="card-body">

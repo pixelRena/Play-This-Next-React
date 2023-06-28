@@ -16,7 +16,6 @@ import axios from "axios";
 // ? Put all css files inside of index instead of app.js?
 // ? Font sizes to go from px to rem?
 
-// TODO Make it so that firebase is not always called, only called once upon render
 // TODO create call for rawg api in in the modal
 // ! Fix loader not showing in card component
 // ! Fix images for owned games
@@ -36,7 +35,7 @@ const App = () => {
     const fetchSuggestedGames = async () => {
       dispatch({type: `FETCH_REQUEST_FOR_SUGGESTED`});
       try {
-        let { data } = await axios.get("/suggested-games-collection");
+        let { data } = await axios.get("//localhost:3000/suggested-games-collection");
         dispatch({
           type: `FETCH_SUCCESS_FOR_SUGGESTED`,
           payload: data
@@ -52,7 +51,7 @@ const App = () => {
     const fetchSteamGames = async () => {
       dispatch({type: `FETCH_REQUEST_FOR_STEAM`});
       try {
-        let { data } = await axios.get("/steam-games-collection");
+        let { data } = await axios.get("//localhost:3000/steam-games-collection");
         dispatch({
           type: `FETCH_SUCCESS_FOR_STEAM`,
           payload: data
@@ -65,9 +64,8 @@ const App = () => {
       }     
     }
 
-    fetchSuggestedGames();
-    fetchSteamGames();
-    console.log("running")
+    // fetchSuggestedGames();
+    // fetchSteamGames();
   },[])
 
   useEffect(() => {
