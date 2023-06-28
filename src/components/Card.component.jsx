@@ -2,12 +2,10 @@ import Button from "./Button.component";
 import Loader from "./Loader.component";
 import '../styles/Card.scss';
 import '../styles/Status.scss';
-import { LoaderContext } from "../context/loader.context";
 import { ModalContext } from "../context/modal.context";
 import { CardContext } from "../context/card.context";
-import { useContext, useState } from "react";
-
-const data = null;
+import { useContext, useEffect, useState } from "react";
+import { Store } from "../context/store.context";
 
 const Card = () => (
     <div id="card">
@@ -48,21 +46,30 @@ const CardHeader = () => {
 }
 
 const CardBody = () => {
-    const {isLoading} = useContext(LoaderContext);
+    const {isCardFlipped} = useContext(CardContext);
+	const { state } = useContext(Store);
+	const { suggested, steam } = state;
+    const [data, setData] = useState(suggested.data);
+
+    // useEffect(() => {
+    //     setData(data === suggested.data ? steam.data : suggested.data);
+    // },[])
+
+    console.log(data);
 
     return (
         <div id="card-body">
             {/* <!-- Loop card items --> */}
-            {isLoading ? 
+            {suggested.loading ? 
                 <Loader/> 
             : 
-                <CardList/>
+                <CardList data={data}/>
             }
         </div>
     )
 }
 
-const CardList = () => {
+const CardList = ({data}) => {
     const {isCardFlipped} = useContext(CardContext);
 
     return (
@@ -84,7 +91,7 @@ const CardList = () => {
                                 <div className="card-list-extra-information">
                                     Posted by: 
                                     <strong>
-                                        <a href={`https://www.twitch.tv/${username}`} target="_blank" rel="noreferrer">${username}</a>
+                                        <a href={`https://www.twitch.tv/${username}`} target="_blank" rel="noreferrer">{username}</a>
                                     </strong> <br/>
                                     <strong className={`game-status-${status}`}>
                                     {status}

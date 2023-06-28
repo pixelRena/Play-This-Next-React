@@ -105,7 +105,10 @@
         
         .modal-footer {
             text-align: center;
-            margin-top: 5px;
+            margin-top: 20px;
+            display: flex;
+            gap: 5px;
+            justify-content: center;
         }
     }
 }
