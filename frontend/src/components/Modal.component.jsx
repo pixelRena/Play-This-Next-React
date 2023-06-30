@@ -2,28 +2,22 @@ import { useContext, useState } from "react";
 import { ModalContext } from "../context/modal.context";
 import Button from "./Button.component";
 import '../styles/Modal.scss';
-import data from '../mock.json';
+import axios from 'axios';
 
 const Modal = () => {
     const {open, setOpen} = useContext(ModalContext);
     const [text, setText] = useState('');
     const [games, setGames] = useState([]);
-    const [results, setResults] = useState(data);
+    const [results, setResults] = useState([]);
 
     const onSearchHandler = async (event) => {
         event.preventDefault();
-        // Call api to search for rawg games DB
 
-        // Updates results state
-        console.log("returns games searched for");
+        let { data } = await axios.get(`//localhost:3000/search-games?term=${text}`)
+        setResults(data)
     }
 
     const addGameHandler = (name,image) => {
-        // if(games.some(game => game.name === name)) {
-        //     alert("Game already exists");
-        //     return;
-        // }
-        
         setGames([
             ...games, 
             {
@@ -36,15 +30,26 @@ const Modal = () => {
     const removeGameHandler = (name, image) => {
         setGames(games.filter(game => game.name !== name && game.image !== image));
     }
-
-    // Checks if game has been added to selected games
-    const gameAdded = (name) => { return games.some(game => game.name === name)}
+    const gameAdded = (name) => { return games.some(game => game.name === name) }
 
     const onSubmitHandler = async () => {
-        setText('');
-        // Calls api to update firebase docs
-        
-        setGames('');
+        try {
+            if (localStorage.getItem("username-serenuy-games-ttv")) {
+                let username = localStorage.getItem("username-serenuy-games-ttv")
+                await axios.post("//localhost:3000/add-suggested-game", { games, username });
+            } else {
+                let username = prompt("Enter your twitch username:")
+                localStorage.setItem("username-serenuy-games-ttv", username)
+                await axios.post("//localhost:3000/add-suggested-game", { games, username });
+            }
+                
+            alert("success")               
+            setText('');               
+            setGames([]);
+            setResults();
+            setOpen(false);
+                
+        } catch (error) { alert("Unable to add game to list. Try again later.") }
     }
 
     return ( 
@@ -73,10 +78,10 @@ const Modal = () => {
                     </form>
                     <Button 
                         className={results === games && "selected"}
-                        variant="modalInput" 
-                        id="filter-games-btn" 
-                        type="button" 
-                        onClick={() => setResults(results === games ? data : games)}
+                        variant="modalInput"
+                        id="filter-games-btn"
+                        type="button"
+                        onClick={() => setResults(results === games ? []: games ) }
                     >
                     Filter By Games Selected
                     </Button>

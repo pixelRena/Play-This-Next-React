@@ -19,10 +19,8 @@ const suggestedDB = db.collection("suggested").orderBy("next");
 const docs = db.collection("suggested");
 
 const app = express();
-const buildPath = path.join(__dirname, 'build')
 
 app.use(cors());
-// app.use(express.static(buildPath))
 app.use(express.json())
 
 // Fetches steam games
@@ -108,11 +106,11 @@ app.get('/suggested-games-collection', async(req,res) => {
 
 // Adds new suggested game to firebase DB
 app.post('/add-suggested-game', async (req,res) => {
-    const { suggestedGames, username } = req.body;
+    const { games, username } = req.body;
     let updatedSuggestedGames = db.collection("suggested");
     let gamesInDB = [];
 
-    suggestedGames.map(({name, image}) => {    
+    games.map(({name, image}) => {    
         updatedSuggestedGames.doc(name).set({
             username: username || "N/A",
             name,

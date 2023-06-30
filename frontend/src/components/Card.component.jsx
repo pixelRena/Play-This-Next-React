@@ -9,8 +9,8 @@ import { Store } from "../context/store.context";
 
 const Card = () => (
     <div id="card">
-        <CardHeader/>
-        <CardBody/>
+        <CardBody />
+        <CardInputGroup/>
         <CardFooter/>
     </div>
 )
@@ -22,39 +22,40 @@ const CardHeader = () => {
     const [statusSelection, setStatusSelection] = useState("next"); 
 
     return (
-        <>
-            <div id="card-header-container">
-                <h3 id="card-header">{cardHeader}</h3>
-                {
-                isCardFlipped ?
-                   null 
-                :
-                    <div id="status-container">
-                        <label htmlFor="status">Sort by:</label>
-                        <select name="status" id="status-selection" onChange={(event) => setStatusSelection(event.target.value)}>
-                            <option value="next">Playing Next</option>
-                            <option value="queue">In Queue</option>
-                            <option value="completed">Completed</option>
-                            <option value="declined">Declined</option>
-                        </select>
-                    </div>
-                }
-            </div>
-            <CardInputGroup/>
-        </>
+        <div id="card-header-container">
+            <h3 id="card-header">{cardHeader}</h3>
+            {
+            isCardFlipped ?
+                null 
+            :
+                <div id="status-container">
+                    <label htmlFor="status">Sort by:</label>
+                    <select name="status" id="status-selection" onChange={(event) => setStatusSelection(event.target.value)}>
+                        <option value="next">Playing Next</option>
+                        <option value="queue">In Queue</option>
+                        <option value="completed">Completed</option>
+                        <option value="declined">Declined</option>
+                    </select>
+                </div>
+            }
+        </div>
     )
 }
 
 const CardBody = () => {
     const {isCardFlipped} = useContext(CardContext);
 	const { state } = useContext(Store);
-	const { suggested, steam } = state;
-    const [data, setData] = useState(suggested.data);
+    const { suggested, steam } = state;
+    const [data, setData] = useState();
+
+    // Temp workaround:
+    useEffect(() => {
+        setData(suggested.data)
+    },[suggested])
 
     useEffect(() => {
-        // ! Only working on second render
         setData(data === suggested.data ? steam.data : suggested.data);
-    },[])
+    },[isCardFlipped])
 
     return (
         <div id="card-body">
@@ -99,7 +100,6 @@ const CardList = ({data}) => {
                             }
                         </div>
                     </div>
-                
                 )
             }        
         </div>
@@ -118,12 +118,12 @@ const CardFooter = () => {
 }
 
 const CardInputGroup = () => {
-    const {setOpen} = useContext(ModalContext);
+    const { setOpen } = useContext(ModalContext);
 
     return ( 
-            <>
-                <Button variant="add" onClick={() => setOpen(true)}>+</Button>
-                <input type="text" id="card-search-input" placeholder="Search games.."/>
-            </>
-        )
+        <>
+            <Button variant="add" onClick={() => setOpen(true)}>+</Button>
+            {/* <input type="text" id="card-search-input" placeholder="Search games.." /> */}
+        </>
+    )
 }

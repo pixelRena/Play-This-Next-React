@@ -1,8 +1,9 @@
-import { createContext, useReducer } from 'react';
+import { createContext, useEffect, useReducer } from 'react';
+import axios from 'axios'
 
 export const Store = createContext();
 
-const initalState = {
+const initialState = {
     suggested: {
         data: [],
         loading: true,
@@ -55,7 +56,33 @@ function reducer(state,action) {
 }
 
 export const StoreProvider = ({children}) => {
-	const [state, dispatch] = useReducer(reducer, initalState);
+	const [state, dispatch] = useReducer(reducer, initialState);
+
+	const api = async (url, actionType) => {
+		dispatch({ type: `FETCH_REQUEST_FOR_${actionType}` });
+		try {
+		  const { data } = await axios.get(url);
+		  dispatch({
+			type: `FETCH_SUCCESS_FOR_${actionType}`,
+			payload: data
+		  });
+		} catch (error) {
+		  dispatch({
+			type: `FETCH_FAIL_FOR_${actionType}`,
+			payload: error.message
+		  });
+		}
+	}
+
+	useEffect(() => {
+		const fetchGameData = async () => {
+			await api("//localhost:3000/suggested-games-collection", "SUGGESTED");
+			await api("//localhost:3000/steam-games-collection", "STEAM");
+		};
+
+		fetchGameData();
+	}, []);
+	
 	const value = {state, dispatch};
 
 	return <Store.Provider value={value}>{children}</Store.Provider>;
