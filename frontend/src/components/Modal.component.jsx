@@ -16,7 +16,7 @@ const Modal = () => {
     const onSearchHandler = async (event) => {
         event.preventDefault();
 
-        let { data } = await axios.get(`//localhost:3000/search-games?term=${text}`)
+        let { data } = await axios.get(`/search-games?term=${text}`)
         setResults(data)
     }
 
@@ -47,7 +47,7 @@ const Modal = () => {
                 })
             }
             
-            await axios.post("//localhost:3000/add-suggested-game", { games, username: username ?? userInput });
+            await axios.post("/add-suggested-game", { games, username: username ?? userInput });
             
             alert("Game(s) added to suggested list successfully")               
             setText('');               

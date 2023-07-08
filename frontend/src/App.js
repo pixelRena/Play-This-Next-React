@@ -4,13 +4,11 @@ import Button from "./components/Button.component";
 import Overlay from "./components/Overlay.component";
 import AvatarContainer from "./components/AvatarContainer.component";
 import Card from "./components/Card.component";
+import ParticlesContainer from "./components/ParticlesContainer.component";
 import { CardContext } from "./context/card.context";
 import { useContext } from "react";
 
 // ? Font sizes to go from px to rem?
-
-//  ! Fix username not sending correctly
-// ! Fix images for owned games
 
 const App = () => {
   const {
@@ -40,6 +38,7 @@ const App = () => {
             <Modal/>
         </section>
       </main>
+      <ParticlesContainer/>
     </>
   );
 }

@@ -83,13 +83,11 @@ export const StoreProvider = ({children}) => {
 
 	useEffect(() => {
 		const fetchGameData = async () => {
-			await api("//localhost:3000/suggested-games-collection", "SUGGESTED");
-			await api("//localhost:3000/steam-games-collection", "STEAM");
+			await api("/suggested-games-collection", "SUGGESTED");
+			await api("/steam-games-collection", "STEAM");
 		};
 
 		fetchGameData();
-
-		console.log(state)
 	}, [postRequest]);
 	
 	const value = {state, dispatch, setPostRequest};
