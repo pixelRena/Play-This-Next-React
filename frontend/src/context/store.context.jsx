@@ -1,4 +1,4 @@
-import { createContext, useEffect, useReducer } from 'react';
+import { createContext, useEffect, useContext, useReducer } from 'react';
 import axios from 'axios'
 
 export const Store = createContext();
