@@ -78,7 +78,7 @@ const CardList = ({data}) => {
                     <div className="card-list-item" key={`${name}-id`}>
                         {/* <!-- Column --> */}
                         <div 
-                            className="card-list-image"
+                            className={`${isCardFlipped ? 'card-list-image-steam' : 'card-list-image'}`}
                             style={{backgroundImage: `url(${image})`}}>     
                         </div>
                         {/* <!-- Column --> */}
