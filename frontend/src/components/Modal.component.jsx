@@ -1,11 +1,14 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ModalContext } from "../context/modal.context";
 import Button from "./Button.component";
 import '../styles/Modal.scss';
 import axios from 'axios';
+import { Store } from "../context/store.context";
 
 const Modal = () => {
-    const {open, setOpen} = useContext(ModalContext);
+    const { open, setOpen } = useContext(ModalContext);
+    const { state, dispatch } = useContext(Store);
+    const { username } = state;
     const [text, setText] = useState('');
     const [games, setGames] = useState([]);
     const [results, setResults] = useState([]);
@@ -33,17 +36,20 @@ const Modal = () => {
     const gameAdded = (name) => { return games.some(game => game.name === name) }
 
     const onSubmitHandler = async () => {
+        let userInput
         try {
-            if (localStorage.getItem("username-serenuy-games-ttv")) {
-                let username = localStorage.getItem("username-serenuy-games-ttv")
-                await axios.post("//localhost:3000/add-suggested-game", { games, username });
-            } else {
-                let username = prompt("Enter your twitch username:")
-                localStorage.setItem("username-serenuy-games-ttv", username)
-                await axios.post("//localhost:3000/add-suggested-game", { games, username });
+            if (!username) {
+                userInput = prompt("Enter your twitch username: ")
+                localStorage.setItem("username-serenuy-games-ttv", userInput)
+                dispatch({
+                    type: "username",
+                    payload: userInput,
+                })
             }
+            
+            await axios.post("//localhost:3000/add-suggested-game", { games, username: username ?? userInput });
                 
-            alert("success")               
+            alert("Game(s) added to suggested list successfully")               
             setText('');               
             setGames([]);
             setResults();

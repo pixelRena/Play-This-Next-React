@@ -18,7 +18,8 @@ const initialState = {
         data: [],
         loading: true,
         error: ""
-    }
+	},
+	username: localStorage.getItem('username-serenuy-games-ttv') ?? null
 }
 
 function reducer(state,action) {
@@ -50,6 +51,11 @@ function reducer(state,action) {
 					error: action.payload,
 				}
 			};
+		case "username": 
+			return {
+				...state,
+				username: action.payload,
+			}
 		default:
 			return state;
 	}
