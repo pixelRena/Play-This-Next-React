@@ -137,7 +137,7 @@ const CardList = ({data}) => {
                                 null 
                             :
                                 <div className="card-list-extra-information">
-                                    Posted by: 
+                                    Posted by:&nbsp;
                                     <strong>
                                         <a href={`https://www.twitch.tv/${username}`} target="_blank" rel="noreferrer">{username}</a>
                                     </strong> <br/>

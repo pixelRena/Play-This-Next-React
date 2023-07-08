@@ -1,13 +1,13 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { ModalContext } from "../context/modal.context";
-import Button from "./Button.component";
-import '../styles/Modal.scss';
-import axios from 'axios';
 import { Store } from "../context/store.context";
+import Button from "./Button.component";
+import axios from 'axios';
+import '../styles/Modal.scss';
 
 const Modal = () => {
     const { open, setOpen } = useContext(ModalContext);
-    const { state, dispatch } = useContext(Store);
+    const { state, dispatch, setPostRequest } = useContext(Store);
     const { username } = state;
     const [text, setText] = useState('');
     const [games, setGames] = useState([]);
@@ -48,12 +48,13 @@ const Modal = () => {
             }
             
             await axios.post("//localhost:3000/add-suggested-game", { games, username: username ?? userInput });
-                
+            
             alert("Game(s) added to suggested list successfully")               
             setText('');               
             setGames([]);
             setResults();
             setOpen(false);
+            setPostRequest(true);
                 
         } catch (error) { alert("Unable to add game to list. Try again later.") }
     }

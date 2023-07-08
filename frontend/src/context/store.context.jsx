@@ -1,4 +1,4 @@
-import { createContext, useEffect, useContext, useReducer } from 'react';
+import { createContext, useEffect, useState, useReducer } from 'react';
 import axios from 'axios'
 
 export const Store = createContext();
@@ -63,6 +63,7 @@ function reducer(state,action) {
 
 export const StoreProvider = ({children}) => {
 	const [state, dispatch] = useReducer(reducer, initialState);
+	const [postRequest, setPostRequest] = useState(false)
 
 	const api = async (url, actionType) => {
 		dispatch({ type: `FETCH_REQUEST_FOR_${actionType}` });
@@ -87,9 +88,11 @@ export const StoreProvider = ({children}) => {
 		};
 
 		fetchGameData();
-	}, []);
+
+		console.log(state)
+	}, [postRequest]);
 	
-	const value = {state, dispatch};
+	const value = {state, dispatch, setPostRequest};
 
 	return <Store.Provider value={value}>{children}</Store.Provider>;
 }
