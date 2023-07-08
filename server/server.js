@@ -6,9 +6,15 @@ const cors = require("cors");
 const dotenv = require('dotenv');
 dotenv.config();
 
-var serviceAccount = require("./firebaseKey.json");
+// var serviceAccount = require("./firebaseKey.json");
 firebase.initializeApp({
-  credential: firebase.credential.cert(serviceAccount
+  credential: firebase.credential.cert({
+    "projectId": process.env.FIREBASE_PROJECT_ID,
+    "clientEmail": process.env.FIREBASE_CLIENT_EMAIL,
+    "privateKey": JSON.parse(process.env.FIREBASE_PRIVATE_KEY),
+    "privateKeyId": process.env.FIREBASE_PRIVATE_KEY_ID,
+    "token_uri":"https://oauth2.googleapis.com/token"
+    }
     )
 });
 
@@ -99,7 +105,7 @@ app.get('/suggested-games-collection', async(req,res) => {
         snapshot.forEach(snap => gamesInDB.push(snap.data()))
     });
 
-    console.log(gamesInDB);
+    // console.log(gamesInDB);
     
     res.send(gamesInDB);
 });
@@ -112,7 +118,7 @@ app.post('/add-suggested-game', async (req,res) => {
 
     games.map(({name, image}) => {    
         updatedSuggestedGames.doc(name).set({
-            username: username || "N/A",
+            username: username || "User not provided",
             name,
             image,
             status: "queue",
