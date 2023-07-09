@@ -7,6 +7,7 @@ import Card from "./components/Card.component";
 import ParticlesContainer from "./components/ParticlesContainer.component";
 import { CardContext } from "./context/card.context";
 import { useContext } from "react";
+import { ModalContext } from "./context/modal.context";
 
 // ? Font sizes to go from px to rem?
 
@@ -16,6 +17,7 @@ const App = () => {
     setIsCardFlipped,
     buttonTitle,
   } = useContext(CardContext);
+  const {setOpen} = useContext(ModalContext)
 
   return (
     <>
@@ -30,7 +32,7 @@ const App = () => {
             <Button onClick={() => setIsCardFlipped(!isCardFlipped)}>
               {buttonTitle}
             </Button>
-            <Button variant="light">Submit Game Suggestion</Button>
+          <Button variant="light" onClick={() => setOpen(true)}>Submit Game Suggestion</Button>
             <Card/>
         </section>
 
