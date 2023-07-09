@@ -88,9 +88,10 @@ const Modal = () => {
                         variant="modalInput"
                         id="filter-games-btn"
                         type="button"
-                        onClick={() => setResults(results === games ? []: games ) }
+                        disabled
+                        // onClick={() => setResults(results === games ? []: games ) }
                     >
-                    Filter By Games Selected
+                    Filter (disabled)
                     </Button>
                     <div className="modal-listed-games">
                         <div id="modal-results">
