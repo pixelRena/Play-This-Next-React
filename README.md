@@ -22,3 +22,9 @@
   <li>Icons8</li>
   <li>Loading.io</li>
 </ul>
+
+Features to come:
+
+- Ability to not duplicate games
+- Allow users to hide certain statuses from view
+- add ScrollToTop upon changing statuses

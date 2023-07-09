@@ -119,7 +119,7 @@
 }
 
 @media (max-width: 768px) {
-    main {
+    #modal-container {
         section {
             &:nth-child(2) { width: 90vw; }
         }
