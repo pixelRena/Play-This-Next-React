@@ -30,19 +30,12 @@
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        align-items: flex-end;
+        align-items: center;
+        padding-top: 12px;
         #card-header {
             font-weight: unset;
-            margin-top: unset;
-            margin-bottom: unset;
-
-            &::after {
-                content: "";
-                margin-top: -15px;
-                display: block;
-                border-bottom: 0.3px solid white;
-                width: 35%;
-            }
+            margin: 0;
+            
         }
         
         #status-container {   
@@ -105,7 +98,10 @@
                 width: 30vw;
             }
 
-            .card-list-extra-information { font-size: 17px; }
+            .card-list-extra-information { 
+                display: flex;
+                flex-direction: column;
+                font-size: 17px; }
         }
 }
 
@@ -114,8 +110,7 @@
         border-radius: 0px 0px 19px 19px;
         border: 1px solid $primary-color;
         border-width: 0px 0px 10px 0px;
-        padding-top: 5px;
-        padding-bottom: 5px;
+        padding-block: 15px;
     }
 }
 

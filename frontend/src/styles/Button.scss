@@ -13,7 +13,7 @@
         border-color:black;
         border-radius: 0px 21px 21px 21px;
         border-width: 3px 10px 10px 1px;
-        padding: 0 100px 0 100px;
+        padding: 13px 100px;
         width: 100%;
         overflow: hidden;
         &::before {
@@ -69,6 +69,9 @@
             color: black;
             font-weight: bolder;
         }
+        &#filter-games-btn {
+            padding: 10px;
+        }
     }
 
     &.modal-toggle {
@@ -80,6 +83,7 @@
         border-style: solid;
         border-color: #FFFFFF;
         border-radius: 0px 21px 21px 21px;  
+        padding: 13px 15px;
         
         &:disabled {
             opacity: 0.5; 

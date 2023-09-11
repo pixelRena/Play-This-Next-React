@@ -63,6 +63,7 @@ const Card = () => {
             setData(suggested.data)
         }
         setText('')
+        // eslint-disable-next-line
     }, [isCardFlipped])
     
     return (
@@ -103,7 +104,9 @@ const CardHeader = ({handleStatus}) => {
 
 const CardBody = ({data}) => {
 	const { state } = useContext(Store);
-    const { suggested, steam } = state;
+    const { suggested } = state;
+
+    console.log(suggested)
 
     return (
         <div id="card-body">
@@ -137,13 +140,17 @@ const CardList = ({data}) => {
                                 null 
                             :
                                 <div className="card-list-extra-information">
-                                    Posted by:&nbsp;
-                                    <strong>
-                                        <a href={`https://www.twitch.tv/${username}`} target="_blank" rel="noreferrer">{username}</a>
-                                    </strong> <br/>
-                                    <strong className={`game-status-${status}`}>
-                                    {status}
-                                    </strong>
+                                    <div>
+                                        Posted by:&nbsp;
+                                        <strong>
+                                            <a href={`https://www.twitch.tv/${username}`} target="_blank" rel="noreferrer">{username}</a>
+                                        </strong>
+                                    </div>
+                                    <div>
+                                        <strong className={`game-status-${status}`}>
+                                        {status}
+                                        </strong>
+                                    </div>
                                 </div>
                             }
                         </div>

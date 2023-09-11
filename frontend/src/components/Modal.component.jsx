@@ -65,34 +65,38 @@ const Modal = () => {
             <div className="submit-modal">
                 <h2 className="modal-header">Suggest a game</h2>
                 <div className="modal-body">
-                    <form 
-                        className="search-wrapper" 
-                        onSubmit={(event) => onSearchHandler(event)}
-                    >
-                        <input 
-                            className="search-field" 
-                            type="text" 
-                            placeholder="Search a game..."
-                            value={text}
-                            onChange={(event) => setText(event.target.value)}
-                        />
-                        <Button 
-                            variant="modalInput" 
-                            type="submit"
+                    <div>
+                        <form
+                            className="search-wrapper"
+                            onSubmit={(event) => onSearchHandler(event)}
                         >
-                        Search
-                        </Button>
-                    </form>
-                    <Button 
-                        className={results === games && "selected"}
-                        variant="modalInput"
-                        id="filter-games-btn"
-                        type="button"
-                        disabled
-                        // onClick={() => setResults(results === games ? []: games ) }
-                    >
-                    Filter (disabled)
-                    </Button>
+                            <input
+                                className="search-field"
+                                type="text"
+                                placeholder="Search a game..."
+                                value={text}
+                                onChange={(event) => setText(event.target.value)}
+                            />
+                            <Button
+                                variant="modalInput"
+                                type="submit"
+                            >
+                            Search
+                            </Button>
+                        </form>
+                        <div>
+                            <Button
+                                className={results === games && "selected"}
+                                variant="modalInput"
+                                id="filter-games-btn"
+                                type="button"
+                                disabled
+                                // onClick={() => setResults(results === games ? []: games ) }
+                            >
+                            Filter (disabled)
+                            </Button>
+                        </div>
+                    </div>
                     <div className="modal-listed-games">
                         <div id="modal-results">
                         {results?.map(({name,image}, i) => (
