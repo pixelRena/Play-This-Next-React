@@ -1,7 +1,9 @@
 @import './variables';
 
 [class*="game-status"] {
-    padding: 0 5px;
+    padding: 9px 13px;
+    font-weight: bold;
+    width: min-content;
 }
 
 .game-status {

@@ -70,6 +70,9 @@
     }
 
     .card-list {
+        .card-information div {
+            margin-block: 2px;
+        }
         .card-list-item {
             display: flex;
             flex-direction: row;
@@ -93,7 +96,6 @@
             }
 
             .card-list-item-title { 
-                line-height: 20px; 
                 word-break: break-word;
                 width: 30vw;
             }

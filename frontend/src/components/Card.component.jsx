@@ -133,7 +133,7 @@ const CardList = ({data}) => {
                             style={{backgroundImage: `url(${image})`}}>     
                         </div>
                         {/* <!-- Column --> */}
-                        <div>
+                        <div className="card-information">
                             <div className="card-list-item-title">{name}</div>
                             {
                             isCardFlipped ?
@@ -146,10 +146,8 @@ const CardList = ({data}) => {
                                             <a href={`https://www.twitch.tv/${username}`} target="_blank" rel="noreferrer">{username}</a>
                                         </strong>
                                     </div>
-                                    <div>
-                                        <strong className={`game-status-${status}`}>
+                                    <div className={`game-status-${status}`}>
                                         {status}
-                                        </strong>
                                     </div>
                                 </div>
                             }
