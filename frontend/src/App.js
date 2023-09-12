@@ -8,41 +8,40 @@ import ParticlesContainer from "./components/ParticlesContainer.component";
 import { CardContext } from "./context/card.context";
 import { useContext } from "react";
 import { ModalContext } from "./context/modal.context";
-
-// ? Font sizes to go from px to rem?
+import Username from "./components/username.component";
 
 const App = () => {
-  const {
-    isCardFlipped, 
-    setIsCardFlipped,
-    buttonTitle,
-  } = useContext(CardContext);
-  const {setOpen} = useContext(ModalContext)
+  const { isCardFlipped, setIsCardFlipped, buttonTitle } =
+    useContext(CardContext);
+  const { setOpen } = useContext(ModalContext);
 
   return (
     <>
-      <Notification/>      
+      <Notification />
+      <Username />
       <main>
         <section>
-          <Overlay/>
+          <Overlay />
         </section>
 
         <section>
-            <AvatarContainer/>
-            <Button onClick={() => setIsCardFlipped(!isCardFlipped)}>
-              {buttonTitle}
-            </Button>
-          <Button variant="light" onClick={() => setOpen(true)}>Submit Game Suggestion</Button>
-            <Card/>
+          <AvatarContainer />
+          <Button onClick={() => setIsCardFlipped(!isCardFlipped)}>
+            {buttonTitle}
+          </Button>
+          <Button variant="light" onClick={() => setOpen(true)}>
+            Submit Game Suggestion
+          </Button>
+          <Card />
         </section>
 
         <section>
-            <Modal/>
+          <Modal />
         </section>
       </main>
-      <ParticlesContainer/>
+      <ParticlesContainer />
     </>
   );
-}
+};
 
 export default App;
