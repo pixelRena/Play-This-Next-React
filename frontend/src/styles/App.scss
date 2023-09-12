@@ -1,154 +1,186 @@
-@import url('https://fonts.googleapis.com/css2?family=Bungee+Hairline&display=swap');
-@import './_variables';
+@import url("https://fonts.googleapis.com/css2?family=Bungee+Hairline&display=swap");
+@import "./_variables";
 
 * {
-    box-sizing: border-box;
-    line-height: 1.2;
+  box-sizing: border-box;
+  line-height: 1.2;
 }
 
 @keyframes shine {
-    100% {
-        transform: rotateZ(60deg) translate(1em, -20em);
-    }
+  100% {
+    transform: rotateZ(60deg) translate(1em, -20em);
+  }
 }
 
-a { 
-    text-decoration: none;
-    color: rgb(122, 105, 255);
-    &:hover { text-decoration: underline; }
+a {
+  text-decoration: none;
+  color: rgb(122, 105, 255);
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
-li { list-style-type: circle; }
+li {
+  list-style-type: circle;
+}
 
-html, body {
-    width: 100%;
-    margin: 0;
-    font-family: 'Bungee Hairline', monospace;
-    font-size: 22px;
-    color: white;
-    background-color: black;
+html,
+body {
+  width: 100%;
+  margin: 0;
+  font-family: "Bungee Hairline", monospace;
+  font-size: 22px;
+  color: white;
+  background-color: black;
 }
 
 body {
-    height: 100vh;
+  height: 100vh;
 }
 
-.hidden { display: none; }
+.hidden {
+  display: none;
+}
 
 #notification {
-    position: fixed;
-    z-index: 99;
-    top: 5%;
-    left: 50%;
-    width: 40%;
-    transform: translate(-50%,-5%);
-    box-shadow: 2px 5px white;
-    padding: 5px 20px;
-    background-color: $secondary-color;
-    color: white;
-    border: 1px solid white;
-    border-radius: $custom-border-box;
+  position: fixed;
+  z-index: 99;
+  top: 5%;
+  left: 50%;
+  width: 40%;
+  transform: translate(-50%, -5%);
+  box-shadow: 2px 5px white;
+  padding: 5px 20px;
+  background-color: $secondary-color;
+  color: white;
+  border: 1px solid white;
+  border-radius: $custom-border-box;
 }
 
 .overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    background-color: rgba(0,0,0,0.2);
-    z-index: 1;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: 1;
 }
 
 main {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 
-    section {
-        &:nth-child(2) {
-            width: 45vw;
-            position: relative;
-            z-index: 2;
-        }
+  section {
+    &:nth-child(2) {
+      width: 45vw;
+      position: relative;
+      z-index: 2;
     }
+  }
 
-    .avatar-container {
-        display: block;
-        margin: 0 auto;
-        margin-bottom: 20px;
-        overflow: hidden;
-        width: 130px;
-        height: 130px;
-        border-radius: 9000px;
-        border: 5px solid black;
-        .avatar {
-            background: url(https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/0f37c36a-d254-4e52-b427-08fc2280e223/dfh15lo-85d25daf-debb-4b7b-b63d-cdd58a0f8a8e.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzBmMzdjMzZhLWQyNTQtNGU1Mi1iNDI3LTA4ZmMyMjgwZTIyM1wvZGZoMTVsby04NWQyNWRhZi1kZWJiLTRiN2ItYjYzZC1jZGQ1OGEwZjhhOGUuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.76Ad_cds7lAihIixqC-qdKPHY947iLuqbPLxEcUUQhY);
-            background-color: $primary-color;
-            background-position: center;
-            background-size: cover;
-            width: 100%;
-            height: 100%;
-            background-repeat: no-repeat;
-        }
+  .avatar-container {
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 20px;
+    overflow: hidden;
+    width: 130px;
+    height: 130px;
+    border-radius: 9000px;
+    border: 5px solid black;
+    .avatar {
+      background: url(https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/0f37c36a-d254-4e52-b427-08fc2280e223/dfh15lo-85d25daf-debb-4b7b-b63d-cdd58a0f8a8e.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzBmMzdjMzZhLWQyNTQtNGU1Mi1iNDI3LTA4ZmMyMjgwZTIyM1wvZGZoMTVsby04NWQyNWRhZi1kZWJiLTRiN2ItYjYzZC1jZGQ1OGEwZjhhOGUuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.76Ad_cds7lAihIixqC-qdKPHY947iLuqbPLxEcUUQhY);
+      background-color: $primary-color;
+      background-position: center;
+      background-size: cover;
+      width: 100%;
+      height: 100%;
+      background-repeat: no-repeat;
     }
+  }
 }
 
 @media (max-width: 768px) {
-    * { font-weight: bold; }
-    body { background-position: center; }
-    #notification { width: 80%; }
+  * {
+    font-weight: bold;
+  }
+  body {
+    background-position: center;
+  }
+  #notification {
+    width: 80%;
+  }
 
-    main {
-        section {
-            &:nth-child(2) { width: 90vw; }
-        }
-
-        .submit-modal {
-            width: 90%;
-            .modal-body {
-                .search-wrapper input { border-radius: 0; }
-                #filter-games-btn { 
-                    margin-top: 5px; 
-                    width: 100%;
-                }
-            }
-            .modal-header { padding: unset; }
-            .modal-footer {
-                display: flex;
-                flex-direction: column;
-                gap: 5px;
-                margin-bottom: 10px;
-            }
-        }
+  .username-container {
+    left: 50% !important;
+    transform: translateX(-50%);
+    text-align: center;
+    width: 100%;
+    & * {
+      padding: 5px;
     }
+  }
+
+  main {
+    section {
+      &:nth-child(2) {
+        margin-top: 90px;
+        width: 90vw;
+      }
+    }
+
+    .submit-modal {
+      width: 90%;
+      .modal-body {
+        .search-wrapper input {
+          border-radius: 0;
+        }
+        #filter-games-btn {
+          margin-top: 5px;
+          width: 100%;
+        }
+      }
+      .modal-header {
+        padding: unset;
+      }
+      .modal-footer {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        margin-bottom: 10px;
+      }
+    }
+  }
 }
 
 @media (min-width: 2560px) {
-    main {
-        section:nth-child(2) {
-            display: flex;
-            flex-direction: column;
-            gap: 50px;
-            width: 30vw;
-        }
-
-        .avatar-container {
-            width: 200px;
-            height: 200px;
-        }
-
-        .submit-modal {
-            height: 100%;
-            .modal-body { 
-                height: 70%; 
-                .modal-listed-games { 
-                    height: 80%; 
-                    .game-box { height: 100%; }
-                }
-            }
-        }
+  main {
+    section:nth-child(2) {
+      display: flex;
+      flex-direction: column;
+      gap: 50px;
+      width: 30vw;
     }
+
+    .avatar-container {
+      width: 200px;
+      height: 200px;
+    }
+
+    .submit-modal {
+      height: 100%;
+      .modal-body {
+        height: 70%;
+        .modal-listed-games {
+          height: 80%;
+          .game-box {
+            height: 100%;
+          }
+        }
+      }
+    }
+  }
 }

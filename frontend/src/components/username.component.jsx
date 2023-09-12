@@ -43,7 +43,7 @@ const Username = () => {
   };
 
   return (
-    <div style={style}>
+    <div className="username-container" style={style}>
       <Text size="small">
         Your Twitch Username:
         <Text color="lawngreen" bold={true} inline={true} size="small">

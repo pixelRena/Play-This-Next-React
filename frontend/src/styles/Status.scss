@@ -1,29 +1,35 @@
-@import './variables';
+@import "./variables";
 
 [class*="game-status"] {
-    padding: 9px 13px;
-    font-weight: bold;
-    width: min-content;
+  padding: 9px 13px;
+  font-weight: bold;
+  width: min-content;
 }
 
 .game-status {
-    &-completed {
-        background-color: $status-completed-background;
-        color: $status-completed-color;
-    }
+  &-completed {
+    background-color: $status-completed-background;
+    color: $status-completed-color;
+  }
 
-    &-next {
-        color: $status-next-color;
-        background-color: $status-next-background;
-    }
+  &-next {
+    color: $status-next-color;
+    background-color: $status-next-background;
+  }
 
-    &-declined {
-        background-color: $status-declined-background;
-        color: $status-declined-color; 
-    }
+  &-declined {
+    background-color: $status-declined-background;
+    color: $status-declined-color;
+  }
 
-    &-queue {
-        background-color: $status-queue-background;
-        color: $status-queue-color; 
-    }
+  &-queue {
+    background-color: $status-queue-background;
+    color: $status-queue-color;
+  }
+}
+
+@media (max-width: 786px) {
+  [class*="game-status"] {
+    padding: 8px;
+  }
 }
