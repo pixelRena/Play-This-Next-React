@@ -58,27 +58,32 @@ app.get("/steam-games-collection", async (req, res) => {
 
 // Updates steam games in firebase DB
 app.post("/seed-steam-games", async (req, res) => {
-  const { gamesList } = req.body;
-  let gamesInDB = [];
+  try {
+    const { data } = await axios.get(
+      "https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=" +
+        process.env.STEAM_WEB_API_KEY +
+        "&steamid=" +
+        process.env.STEAM_ID +
+        "&include_appinfo=true&format=json"
+    );
 
-  gamesList.map(({ appid, img_icon_url, name }) => {
-    steamDB.doc(String(appid)).set({
-      appid,
-      name,
-      image:
-        "http://media.steampowered.com/steamcommunity/public/images/apps/" +
-        appid +
-        "/" +
-        img_icon_url +
-        ".jpg",
+    data["response"]["games"].map(({ appid, img_icon_url, name }) => {
+      steamDB.doc(String(appid)).set({
+        appid,
+        name,
+        image:
+          "http://media.steampowered.com/steamcommunity/public/images/apps/" +
+          appid +
+          "/" +
+          img_icon_url +
+          ".jpg",
+      });
     });
-  });
 
-  await steamDB.get().then((snapshot) => {
-    snapshot.forEach((snap) => gamesInDB.push(snap.data()));
-  });
-
-  res.send(gamesInDB);
+    res.status(500);
+  } catch (e) {
+    res.status(404).send("error");
+  }
 });
 
 // Gets results from search input of adding a game
@@ -164,7 +169,7 @@ app.post("/update-username", async (req, res) => {
 
   await Promise.all(updatePromises);
 
-  res.status(200).json({ message: "Usernames updated successfully" });
+  res.status(200);
 });
 
 app.use(express.static(path.join(__dirname, "../frontend/build")));
