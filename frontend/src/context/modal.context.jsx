@@ -6,7 +6,7 @@ export const ModalContext = createContext({
 });
 
 export const ModalContextProvider = ({ children }) => {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const value = { open, setOpen };
 
   return (
