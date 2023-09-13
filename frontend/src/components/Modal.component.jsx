@@ -12,12 +12,14 @@ const Modal = () => {
   const [text, setText] = useState("");
   const [games, setGames] = useState([]);
   const [results, setResults] = useState([]);
+  const [isFiltered, setIsFiltered] = useState(false);
 
   const onSearchHandler = async (event) => {
-    event.preventDefault();
+    event?.preventDefault();
 
     let { data } = await axios.get(`/search-games?term=${text}`);
     setResults(data);
+    setIsFiltered(false);
   };
 
   const addGameHandler = (name, image) => {
@@ -56,15 +58,29 @@ const Modal = () => {
         username: username ?? userInput,
       });
 
-      alert("Game(s) added to suggested list successfully");
+      alert(
+        `${games.map(({ name }) =>
+          JSON.stringify(name)
+        )} added to suggested list successfully!`
+      );
       setText("");
       setGames([]);
       setResults();
       setOpen(false);
       setPostRequest(true);
     } catch (error) {
-      alert("Unable to add game to list. Try again later.");
+      alert("Unable to add game to list. Try again later, System may be down.");
     }
+  };
+
+  const currentGamesHandler = () => {
+    if (results === games) {
+      onSearchHandler();
+    }
+
+    setResults(games);
+    setIsFiltered(true);
+    return;
   };
 
   return (
@@ -74,10 +90,7 @@ const Modal = () => {
           <h2 className="modal-header">Suggest a game</h2>
           <div className="modal-body">
             <div>
-              <form
-                className="search-wrapper"
-                onSubmit={(event) => onSearchHandler(event)}
-              >
+              <form className="search-wrapper" onSubmit={onSearchHandler}>
                 <input
                   className="search-field"
                   type="text"
@@ -95,10 +108,9 @@ const Modal = () => {
                   variant="modalInput"
                   id="filter-games-btn"
                   type="button"
-                  disabled
-                  // onClick={() => setResults(results === games ? []: games ) }
+                  onClick={currentGamesHandler}
                 >
-                  Filter (disabled)
+                  Selected Games
                 </Button>
               </div>
             </div>
@@ -139,6 +151,14 @@ const Modal = () => {
                     </div>
                   </div>
                 ))}
+                {isFiltered && !games.length ? (
+                  <div>
+                    No games selected. Search for games to add before
+                    submitting.
+                  </div>
+                ) : (
+                  !results.length && <div>Start searching for games!</div>
+                )}
               </div>
             </div>
           </div>
