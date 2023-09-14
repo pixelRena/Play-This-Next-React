@@ -69,7 +69,7 @@ const Modal = () => {
       setOpen(false);
       setPostRequest(true);
     } catch (error) {
-      alert("Unable to add game to list. Try again later, System may be down.");
+      alert(error["response"]["data"]["message"]);
     }
   };
 

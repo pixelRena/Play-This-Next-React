@@ -11,7 +11,7 @@ firebase.initializeApp({
   credential: firebase.credential.cert({
     projectId: process.env.FIREBASE_PROJECT_ID,
     clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-    privateKey: JSON.parse(process.env.FIREBASE_PRIVATE_KEY),
+    privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n"),
     privateKeyId: process.env.FIREBASE_PRIVATE_KEY_ID,
     token_uri: "https://oauth2.googleapis.com/token",
   }),
@@ -20,7 +20,6 @@ firebase.initializeApp({
 const db = firebase.firestore();
 // Firebase collections:
 const steamDB = db.collection("steam");
-const suggestedDB = db.collection("suggested").orderBy("next");
 const docs = db.collection("suggested");
 
 const app = express();
@@ -132,20 +131,33 @@ app.post("/add-suggested-game", async (req, res) => {
   let updatedSuggestedGames = db.collection("suggested");
   let gamesInDB = [];
 
-  games.map(({ name, image }) => {
-    updatedSuggestedGames.doc(name).set({
-      username: username || "User not provided",
-      name,
-      image,
-      status: "queue",
+  games.map(async ({ name, image }) => {
+    // Check for duplications
+    let nameQuery = await updatedSuggestedGames.where("name", "==", name);
+
+    if (nameQuery.empty) {
+      updatedSuggestedGames.doc(name).set({
+        username: username || "User not provided",
+        name,
+        image,
+        status: "queue",
+      });
+    }
+  });
+
+  // If games are already on the list
+  if (!gamesInDB.length) {
+    res.status(406).json({
+      message:
+        "Game(s) selected are already on the list. Please remove them and search for different games.",
     });
-  });
+  } else {
+    await updatedSuggestedGames.get().then((snapshot) => {
+      snapshot.forEach((snap) => gamesInDB.push(snap.data()));
+    });
 
-  await updatedSuggestedGames.get().then((snapshot) => {
-    snapshot.forEach((snap) => gamesInDB.push(snap.data()));
-  });
-
-  res.send(gamesInDB);
+    res.send(gamesInDB);
+  }
 });
 
 app.post("/update-username", async (req, res) => {

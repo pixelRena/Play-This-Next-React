@@ -24,7 +24,10 @@
 </ul>
 
 Features to come:
+'\*' - Priority
 
-- Ability to not duplicate games
-- Allow users to hide certain statuses from view
-- add ScrollToTop upon changing statuses
+- Allow users to hide certain statuses from view\*
+- Portal for other users
+- Lazy Loading\*
+- Hint Displays
+- Proper alert/notification box\*
