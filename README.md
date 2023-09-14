@@ -1,11 +1,11 @@
 <div align="center">
   <a href="https://github.com/pixelRena/">
-    <img src="./assets/images/favicon.svg" alt="Logo" width="80">
+    <img src="frontend/public/favicon.svg" alt="Logo" width="80">
   </a>
 
 <h2 align="center">Recommend Games</h2>
   <p align="center">
-    This is an application created and cloned from my previous Play This Next, but is in ReactJS isntead of HTML. Allows users/followers from twitch to suggest games and view games that are owned through steam.
+    This is an application created and cloned from my previous Play This Next, but is in ReactJS instead of HTML. Allows users/followers from twitch to suggest games and view games that are owned through steam.
     <br />
     <a href="http://nuygames.xyz/">View Demo</a>
     ·
