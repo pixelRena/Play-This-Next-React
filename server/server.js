@@ -128,35 +128,33 @@ app.get("/suggested-games-collection", async (req, res) => {
 // Adds new suggested game to firebase DB
 app.post("/add-suggested-game", async (req, res) => {
   const { games, username } = req.body;
-  let updatedSuggestedGames = db.collection("suggested");
-  let gamesInDB = [];
+  let suggestedCollection = db.collection("suggested");
+  let gamesAdded = [];
 
   games.map(async ({ name, image }) => {
     // Check for duplications
-    let nameQuery = await updatedSuggestedGames.where("name", "==", name);
+    let nameQuery = await suggestedCollection.where("name", "==", name).get();
 
+    // If game doesn't exist in collection, add the game
     if (nameQuery.empty) {
-      updatedSuggestedGames.doc(name).set({
+      suggestedCollection.doc(name).set({
         username: username || "User not provided",
         name,
         image,
         status: "queue",
       });
+      gamesAdded.push(name);
     }
   });
 
-  // If games are already on the list
-  if (!gamesInDB.length) {
+  // If game(s) are already on the list
+  if (!gamesAdded.length) {
     res.status(406).json({
       message:
         "Game(s) selected are already on the list. Please remove them and search for different games.",
     });
   } else {
-    await updatedSuggestedGames.get().then((snapshot) => {
-      snapshot.forEach((snap) => gamesInDB.push(snap.data()));
-    });
-
-    res.send(gamesInDB);
+    res.send(gamesAdded);
   }
 });
 

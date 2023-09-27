@@ -1,4 +1,5 @@
 import { Store } from "../context/store.context";
+import { NotificationContext } from "../context/notification.context";
 import { useContext } from "react";
 import Button from "./Button.component";
 import Text from "./Text.component";
@@ -6,6 +7,7 @@ import axios from "axios";
 
 const Username = () => {
   const { state, dispatch } = useContext(Store);
+  const { notification } = useContext(NotificationContext);
   const { username } = state;
 
   const handleUpdate = async () => {
@@ -23,13 +25,13 @@ const Username = () => {
               type: "username",
               payload: newUsername,
             });
-            alert("Username updated!");
+            notification("Username updated!");
           });
       } else {
         throw new Error();
       }
     } catch (e) {
-      alert(
+      notification(
         "Username was not updated because the request was cancelled or failed."
       );
     }

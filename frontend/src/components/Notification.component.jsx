@@ -1,17 +1,19 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { NotificationContext } from "../context/notification.context";
 
 const Notification = () => {
-    const {isVisible, setIsVisible, text, setText} = useContext(NotificationContext);
+  const { isVisible, text, clear } = useContext(NotificationContext);
 
-    if(isVisible) {
-        setTimeout(() => {
-            setIsVisible(false);
-            setText("");
-        },6000)
+  useEffect(() => {
+    if (isVisible) {
+      setTimeout(() => {
+        clear();
+      }, 6000);
     }
+    // eslint-disable-next-line
+  }, [isVisible]);
 
-    return isVisible && <div id="notification">{text}</div>;
-}
- 
+  return isVisible && <div id="notification">{text}</div>;
+};
+
 export default Notification;

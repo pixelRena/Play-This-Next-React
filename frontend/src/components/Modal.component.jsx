@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import { ModalContext } from "../context/modal.context";
 import { Store } from "../context/store.context";
+import { NotificationContext } from "../context/notification.context";
 import Button from "./Button.component";
 import axios from "axios";
 import "../styles/Modal.scss";
@@ -8,6 +9,7 @@ import "../styles/Modal.scss";
 const Modal = () => {
   const { open, setOpen } = useContext(ModalContext);
   const { state, dispatch, setPostRequest } = useContext(Store);
+  const { notification } = useContext(NotificationContext);
   const { username } = state;
   const [text, setText] = useState("");
   const [games, setGames] = useState([]);
@@ -58,7 +60,7 @@ const Modal = () => {
         username: username ?? userInput,
       });
 
-      alert(
+      notification(
         `${games.map(({ name }) =>
           JSON.stringify(name)
         )} added to suggested list successfully!`
@@ -69,7 +71,7 @@ const Modal = () => {
       setOpen(false);
       setPostRequest(true);
     } catch (error) {
-      alert(error["response"]["data"]["message"]);
+      notification(error["response"]["data"]["message"]);
     }
   };
 
