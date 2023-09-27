@@ -1,9 +1,9 @@
 import { Store } from "../context/store.context";
 import { NotificationContext } from "../context/notification.context";
 import { useContext } from "react";
-import Button from "./Button.component";
 import Text from "./Text.component";
 import axios from "axios";
+import Pencil from "./icons/Pencil";
 
 const Username = () => {
   const { state, dispatch } = useContext(Store);
@@ -38,6 +38,8 @@ const Username = () => {
   };
 
   const style = {
+    display: "flex",
+    gap: 10,
     position: "absolute",
     top: "15px",
     left: "15px",
@@ -52,9 +54,13 @@ const Username = () => {
           {username || "Not Provided"}
         </Text>
       </Text>
-      <Button variant="modalInput" onClick={handleUpdate}>
-        Update Username
-      </Button>
+      <Pencil
+        fill="#fff"
+        stroke="#fff"
+        width="17px"
+        height="auto"
+        onClick={handleUpdate}
+      />
     </div>
   );
 };

@@ -6,6 +6,10 @@
   line-height: 1.2;
 }
 
+svg {
+  cursor: pointer;
+}
+
 @keyframes shine {
   100% {
     transform: rotateZ(60deg) translate(1em, -20em);
