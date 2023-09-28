@@ -46,21 +46,6 @@ body {
   display: none;
 }
 
-#notification {
-  position: fixed;
-  z-index: 99;
-  top: 5%;
-  left: 50%;
-  width: 40%;
-  transform: translate(-50%, -5%);
-  box-shadow: 2px 5px white;
-  padding: 5px 20px;
-  background-color: $secondary-color;
-  color: white;
-  border: 1px solid white;
-  border-radius: $custom-border-box;
-}
-
 .overlay {
   position: fixed;
   top: 0;

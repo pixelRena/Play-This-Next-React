@@ -1,0 +1,34 @@
+@import "./_variables";
+
+#notification {
+  position: fixed;
+  z-index: 99;
+  top: 5%;
+  left: 50%;
+  width: 40%;
+  transform: translate(-50%, -5%);
+  box-shadow: 2px 5px white;
+  padding: 15px 20px;
+  background-color: $secondary-color;
+  color: white;
+  border: 1px solid white;
+  border-radius: $custom-border-box;
+
+  & .input-box {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  & input {
+    border: 0;
+    border-bottom: 1px solid white;
+    background-color: rgba(0, 0, 0, 0);
+    color: inherit;
+    font-family: inherit;
+    font-weight: bolder;
+    &:focus {
+      outline: 0;
+    }
+  }
+}

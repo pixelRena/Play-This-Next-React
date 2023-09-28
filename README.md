@@ -21,6 +21,7 @@
   <li>Steam API</li>
   <li>Icons8</li>
   <li>Loading.io</li>
+  <li>iconsvg.xyz</li>
 </ul>
 
 Features to come:

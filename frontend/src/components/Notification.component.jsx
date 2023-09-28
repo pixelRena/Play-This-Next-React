@@ -1,7 +1,8 @@
 import { useContext, useEffect } from "react";
 import { NotificationContext } from "../context/notification.context";
+import "../styles/Notifications.scss";
 
-const Notification = () => {
+const Notification = ({ children }) => {
   const { isVisible, text, clear } = useContext(NotificationContext);
 
   useEffect(() => {
@@ -13,7 +14,14 @@ const Notification = () => {
     // eslint-disable-next-line
   }, [isVisible]);
 
-  return isVisible && <div id="notification">{text}</div>;
+  return (
+    isVisible && (
+      <div id="notification">
+        <div>{text}</div>
+        {children && <div class="input-box">{children}</div>}
+      </div>
+    )
+  );
 };
 
 export default Notification;
