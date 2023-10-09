@@ -131,31 +131,33 @@ app.post("/add-suggested-game", async (req, res) => {
   let suggestedCollection = db.collection("suggested");
   let gamesAdded = [];
 
-  games.map(async ({ name, image }) => {
+  const promises = games.map(async ({ name, image }) => {
     // Check for duplications
     let nameQuery = await suggestedCollection.where("name", "==", name).get();
 
     // If game doesn't exist in collection, add the game
     if (nameQuery.empty) {
+      gamesAdded.push(name);
       suggestedCollection.doc(name).set({
         username: username || "User not provided",
         name,
         image,
         status: "queue",
       });
-      gamesAdded.push(name);
     }
   });
 
-  // If game(s) are already on the list
-  if (!gamesAdded.length) {
-    res.status(406).json({
-      message:
-        "Game(s) selected are already on the list. Please remove them and search for different games.",
-    });
-  } else {
-    res.send(gamesAdded);
-  }
+  Promise.all(promises).then(() => {
+    // If game(s) are already on the list
+    if (!gamesAdded.length) {
+      res.status(406).json({
+        message:
+          "Game(s) selected are already on the list. Please remove them and search for different games.",
+      });
+    } else {
+      res.send(gamesAdded);
+    }
+  });
 });
 
 app.post("/update-username", async (req, res) => {

@@ -1,4 +1,8 @@
-@import "./_variables";
+@import "../../styles/_variables";
+
+.mobile {
+  display: none;
+}
 
 #card {
   background-color: $secondary-color;
@@ -42,6 +46,11 @@
     #status-container {
       font-size: 13px;
       font-weight: bold;
+      .desktop {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
       #status-selection {
         background-image: none;
         border: 0;
@@ -122,6 +131,12 @@
 }
 
 @media (max-width: 767px) {
+  .desktop {
+    display: none;
+  }
+  .mobile {
+    display: unset;
+  }
   #card {
     font-size: 15px;
     #card-search-input {
@@ -163,6 +178,12 @@
 }
 
 @media (min-width: 2560px) {
+  .desktop {
+    display: none;
+  }
+  .mobile {
+    display: unset;
+  }
   #card {
     #card-body {
       flex-direction: unset;

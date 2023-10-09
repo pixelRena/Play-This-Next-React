@@ -1,8 +1,13 @@
+import React from "react";
 import { useContext, useEffect } from "react";
-import { NotificationContext } from "../context/notification.context";
-import "../styles/Notifications.scss";
+import { NotificationContext } from "./Notification.context";
+import "./Notifications.scss";
 
-const Notification = ({ children }) => {
+export type Props = {
+  children?: React.ReactNode;
+};
+
+const Notification = ({ children }: Props) => {
   const { isVisible, text, clear } = useContext(NotificationContext);
 
   useEffect(() => {
@@ -18,7 +23,7 @@ const Notification = ({ children }) => {
     isVisible && (
       <div id="notification">
         <div>{text}</div>
-        {children && <div class="input-box">{children}</div>}
+        {children && <div className="input-box">{children}</div>}
       </div>
     )
   );

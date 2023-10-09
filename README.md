@@ -27,8 +27,7 @@
 Features to come:
 '\*' - Priority
 
-- Allow users to hide certain statuses from view\*
 - Portal for other users
 - Lazy Loading\*
 - Hint Displays
-- Proper alert/notification box\*
+- Proper alert box\*

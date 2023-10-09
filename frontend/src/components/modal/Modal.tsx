@@ -1,88 +1,98 @@
-import { useContext, useState } from "react";
-import { ModalContext } from "../context/modal.context";
-import { Store } from "../context/store.context";
-import { NotificationContext } from "../context/notification.context";
-import Button from "./Button.component";
+import React, { useContext } from "react";
+import { NotificationContext } from "../notification/Notification.context";
+import { ModalContext } from "./Modal.context";
+import { Store } from "../../context/Store.context";
+import { useSetUsername } from "../username/Username.utils";
+import "./Modal.scss";
+import Button from "../button/Button";
 import axios from "axios";
-import "../styles/Modal.scss";
 
 const Modal = () => {
-  const { open, setOpen } = useContext(ModalContext);
-  const { state, dispatch, setPostRequest } = useContext(Store);
+  const { open, modalAttrs, setModalVisibility, setModalDetails } =
+    useContext(ModalContext);
+  const { state, setPostRequest } = useContext(Store);
   const { notification } = useContext(NotificationContext);
   const { username } = state;
-  const [text, setText] = useState("");
-  const [games, setGames] = useState([]);
-  const [results, setResults] = useState([]);
-  const [isFiltered, setIsFiltered] = useState(false);
+  const setUsername = useSetUsername();
 
-  const onSearchHandler = async (event) => {
-    event?.preventDefault();
+  const formRef = React.useRef<HTMLFormElement>(null);
 
-    let { data } = await axios.get(`/search-games?term=${text}`);
-    setResults(data);
-    setIsFiltered(false);
+  const onSearchHandler = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    let { data } = await axios.get(
+      `http://www.localhost:3001/search-games?term=${modalAttrs["text"]}`
+    );
+    setModalDetails("results", data);
+    setModalDetails("filtered", false);
   };
 
-  const addGameHandler = (name, image) => {
-    setGames([
-      ...games,
+  const addGameHandler = (name: string, image: string) => {
+    let games = [
+      ...modalAttrs["games"],
       {
         name: name,
         image: image,
       },
-    ]);
+    ];
+    setModalDetails("games", games);
   };
 
-  const removeGameHandler = (name, image) => {
-    setGames(
-      games.filter((game) => game.name !== name && game.image !== image)
+  const removeGameHandler = (name: string, image: string) => {
+    let games: any = modalAttrs["games"]?.filter(
+      (game: any) => game.name !== name && game.image !== image
     );
+
+    setModalDetails("games", games);
   };
-  const gameAdded = (name) => {
-    return games.some((game) => game.name === name);
+
+  const gameAdded = (name: string) => {
+    return modalAttrs["games"]?.some((game: any) => game.name === name);
   };
 
   const onSubmitHandler = async () => {
     let userInput;
     try {
       if (!username) {
-        userInput = prompt("Enter your twitch username: ");
-        localStorage.setItem("username-serenuy-games-ttv", userInput);
-        dispatch({
-          type: "username",
-          payload: userInput,
-        });
+        setUsername();
       }
 
       await axios.post("/add-suggested-game", {
-        games,
+        games: modalAttrs["games"],
         username: username ?? userInput,
       });
 
       notification(
-        `${games.map(({ name }) =>
+        `${modalAttrs["games"].map(({ name }) =>
           JSON.stringify(name)
         )} added to suggested list successfully!`
       );
-      setText("");
-      setGames([]);
-      setResults();
-      setOpen(false);
+
+      setModalDetails("text", "");
+      setModalDetails("games", []);
+      setModalDetails("results", []);
+      setModalVisibility();
       setPostRequest(true);
     } catch (error) {
       notification(error["response"]["data"]["message"]);
     }
   };
 
-  const currentGamesHandler = () => {
-    if (results === games) {
-      onSearchHandler();
+  const setFilteredList = () => {
+    // If user is currently seeing their "suggested games to add list, change results to output new search according to text"
+    if (modalAttrs["results"] === modalAttrs["games"]) {
+      const syntheticEvent = new Event("submit", {
+        bubbles: true,
+        cancelable: true,
+      });
+      const formEvent =
+        syntheticEvent as unknown as React.FormEvent<HTMLFormElement>;
+      onSearchHandler(formEvent);
     }
 
-    setResults(games);
-    setIsFiltered(true);
-    return;
+    // Shows user their games in queue to add
+    setModalDetails("results", modalAttrs["games"] || []);
+    setModalDetails("filtered", true);
   };
 
   return (
@@ -92,13 +102,19 @@ const Modal = () => {
           <h2 className="modal-header">Suggest a game</h2>
           <div className="modal-body">
             <div>
-              <form className="search-wrapper" onSubmit={onSearchHandler}>
+              <form
+                className="search-wrapper"
+                onSubmit={onSearchHandler}
+                ref={formRef}
+              >
                 <input
                   className="search-field"
                   type="text"
                   placeholder="Search a game..."
-                  value={text}
-                  onChange={(event) => setText(event.target.value)}
+                  value={modalAttrs["text"]}
+                  onChange={(event) =>
+                    setModalDetails("text", event.target.value)
+                  }
                 />
                 <Button variant="modalInput" type="submit">
                   Search
@@ -106,11 +122,15 @@ const Modal = () => {
               </form>
               <div>
                 <Button
-                  className={results === games && "selected"}
                   variant="modalInput"
+                  className={
+                    modalAttrs["results"] === modalAttrs["games"]
+                      ? "selected"
+                      : undefined
+                  }
                   id="filter-games-btn"
                   type="button"
-                  onClick={currentGamesHandler}
+                  onClick={setFilteredList}
                 >
                   Selected Games
                 </Button>
@@ -118,7 +138,7 @@ const Modal = () => {
             </div>
             <div className="modal-listed-games">
               <div id="modal-results">
-                {results?.map(({ name, image }, i) => (
+                {modalAttrs["results"]?.map(({ name, image }: any, i) => (
                   <div
                     className="modal-results-item"
                     key={`${name}-game-results-${i}`}
@@ -153,13 +173,15 @@ const Modal = () => {
                     </div>
                   </div>
                 ))}
-                {isFiltered && !games.length ? (
+                {modalAttrs["filtered"] && !modalAttrs["games"]?.length ? (
                   <div>
                     No games selected. Search for games to add before
                     submitting.
                   </div>
                 ) : (
-                  !results.length && <div>Start searching for games!</div>
+                  !modalAttrs["results"]?.length && (
+                    <div>Start searching for games!</div>
+                  )
                 )}
               </div>
             </div>
@@ -167,12 +189,12 @@ const Modal = () => {
           <div className="modal-footer">
             <Button
               variant="modalToggle"
-              disabled={!games.length}
+              disabled={!modalAttrs["games"]?.length}
               onClick={() => onSubmitHandler()}
             >
               Submit Game Suggestion
             </Button>
-            <Button variant="modalToggle" onClick={() => setOpen(false)}>
+            <Button variant="modalToggle" onClick={setModalVisibility}>
               Close
             </Button>
           </div>

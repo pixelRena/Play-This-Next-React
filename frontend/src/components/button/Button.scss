@@ -1,4 +1,4 @@
-@import "./_variables";
+@import "../../styles/_variables";
 
 .button-container {
   cursor: pointer;
@@ -123,6 +123,38 @@
     &:hover {
       background-color: #fff;
       color: #000;
+    }
+  }
+
+  &.next-status {
+    background-color: rgba($status-next-background, 0.5);
+    border: 1px solid $status-next-color;
+  }
+
+  &.complete-status {
+    background-color: rgba($status-completed-background, 0.5);
+    border: 1px solid $status-completed-color;
+  }
+
+  &.queue-status {
+    background-color: rgba($status-queue-background, 0.5);
+    border: 1px solid $status-queue-color;
+  }
+
+  &.declined-status {
+    background-color: rgba($status-declined-background, 0.5);
+    border: 1px solid $status-declined-color;
+  }
+
+  &[class*="-status"] {
+    font-size: 11px;
+    font-weight: bolder;
+    color: #fff;
+    padding: 4px;
+
+    &:hover,
+    &.selected {
+      opacity: 0.5;
     }
   }
 }
