@@ -84,7 +84,7 @@ const Card = () => {
             value="next"
             onClick={handleStatus}
           >
-            Playing Next
+            Next
           </Button>
           <Button
             className={selected === "declined" && "selected"}
@@ -100,7 +100,7 @@ const Card = () => {
             value="queue"
             onClick={handleStatus}
           >
-            In Queue
+            Queue
           </Button>
           <Button
             className={selected === "completed" && "selected"}
@@ -119,9 +119,9 @@ const Card = () => {
             defaultValue=""
             onChange={handleStatus}
           >
-            <option value="next">Playing Next</option>
+            <option value="next">Next</option>
             <option value="">Show All</option>
-            <option value="queue">In Queue</option>
+            <option value="queue">Queue</option>
             <option value="completed">Completed</option>
             <option value="declined">Declined</option>
           </select>

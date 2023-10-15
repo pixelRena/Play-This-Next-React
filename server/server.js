@@ -110,7 +110,8 @@ app.get("/search-games", async (req, res) => {
 
 // Gets the suggested games from firebase DB
 app.get("/suggested-games-collection", async (req, res) => {
-  const nextStatusQuery = docs.where("status", "==", "next").orderBy("next");
+  // Todo: Change this to only one const that orders by next then displays the rest
+  const nextStatusQuery = docs.where("status", "==", "next");
   const otherStatusQuery = docs.where("status", "!=", "next");
   let gamesInDB = [];
 
