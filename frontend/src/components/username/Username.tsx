@@ -20,18 +20,18 @@ const Username = () => {
   return (
     <div className="username-container" style={style}>
       <Text size="small">
-        Your Twitch Username:
+        Your Twitch Username: &nbsp;
         <Text color="lawngreen" bold={true} inline={true} size="small">
           {state.username || "Not Provided"}
         </Text>
       </Text>
-      <Pencil
+      {/* <Pencil
         fill="#fff"
         stroke="#fff"
         width="17px"
         height="auto"
         onClick={setUsername}
-      />
+      /> */}
     </div>
   );
 };
