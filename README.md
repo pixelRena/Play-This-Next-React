@@ -23,11 +23,3 @@
   <li>Loading.io</li>
   <li>iconsvg.xyz</li>
 </ul>
-
-Features to come:
-'\*' - Priority
-
-- Portal for other users
-- Lazy Loading\*
-- Hint Displays
-- Proper alert box\*
