@@ -130,13 +130,16 @@ export const StoreProvider = ({ children }: { children?: React.ReactNode }) => {
 
   useEffect(() => {
     const fetchGameData = async () => {
-      await api("/suggested-games-collection", "SUGGESTED");
+      await api(
+        "http://www.localhost:3001/suggested-games-collection",
+        "SUGGESTED"
+      );
       await api("/steam-games-collection", "STEAM");
     };
-
     fetchGameData();
     // eslint-disable-next-line
   }, [postRequest]);
+  console.log(state.suggested.data);
 
   const value = {
     state,

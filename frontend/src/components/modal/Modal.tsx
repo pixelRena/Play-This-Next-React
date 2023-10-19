@@ -105,7 +105,11 @@ const Modal = () => {
                 onSubmit={onSearchHandler}
                 ref={formRef}
               >
+                <label htmlFor="modal-search-input" hidden>
+                  Search for a game
+                </label>
                 <input
+                  id="modal-search-input"
                   className="search-field"
                   type="text"
                   placeholder="Search a game..."

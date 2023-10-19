@@ -183,6 +183,9 @@ const Card = () => {
   return (
     <div id="card">
       <CardHeader />
+      <label htmlFor="card-search-input" hidden>
+        Search For Games
+      </label>
       <input
         value={text}
         type="text"
