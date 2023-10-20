@@ -298,6 +298,10 @@ const CardList = ({ data }) => {
                 className={`${
                   isCardFlipped ? "card-list-image-steam" : "card-list-image"
                 }`}
+                role="img"
+                aria-label={`${
+                  isCardFlipped ? name + " Steam Icon" : name + " Image Cover"
+                }`}
                 style={{ backgroundImage: `url(${image})` }}
               ></div>
             </div>
