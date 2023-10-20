@@ -254,6 +254,7 @@ const Card = (props) => {
       <Button
         variant="add"
         title="Start searching for games to add!"
+        data-tooltip-id="helper-tooltip"
         onClick={setModalVisibility}
         style={{ padding: "5px" }}
       >

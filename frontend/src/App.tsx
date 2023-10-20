@@ -27,6 +27,7 @@ const App = () => {
         </section>
 
         <section>
+          <Tooltip />
           <AvatarContainer />
           <Button onClick={() => setCardInformation(!isCardFlipped)}>
             {buttonTitle}
