@@ -133,7 +133,7 @@ app.get("/suggested-games-collection", async (req, res) => {
   res.send(gamesInDB)
 })
 
-// Adds new suggested game to firebase DB
+// Adds new suggested game(s) to firebase DB
 app.post("/add-suggested-game", async (req, res) => {
   const { games, username } = req.body
   let suggestedCollection = db.collection("suggested")
@@ -179,6 +179,7 @@ app.post("/add-suggested-game", async (req, res) => {
   })
 })
 
+// Updates username in DB
 app.post("/update-username", async (req, res) => {
   const { newUsername, oldUsername } = req.body
 
