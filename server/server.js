@@ -139,7 +139,7 @@ app.post("/add-suggested-game", async (req, res) => {
     // If game doesn't exist in collection, add the game
     if (nameQuery.empty) {
       gamesAdded.push(name);
-      suggestedCollection.doc(name).set({
+      suggestedCollection.doc(String(name)).set({
         username: username || "User not provided",
         name,
         image,

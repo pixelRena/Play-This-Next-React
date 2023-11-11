@@ -72,7 +72,7 @@ const Modal = () => {
       setModalVisibility();
       setPostRequest(true);
     } catch (error) {
-      notification(error["response"]["data"]["message"]);
+      notification(error["response"]["data"]["message"] || "Unable to add game right now. Try again later.");
     }
   };
 
