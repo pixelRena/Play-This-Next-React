@@ -132,7 +132,18 @@ app.post("/add-suggested-game", async (req, res) => {
   let suggestedCollection = db.collection("suggested");
   let gamesAdded = [];
 
+  const removeSlashes = (inputString) => {
+    if (inputString.includes('/')) {
+      return inputString.replace(/\//g, '');
+    } else {
+      return inputString;
+    }
+  }
+
   const promises = games.map(async ({ name, image }) => {
+    // Todo: Modify to handle unknown errors
+    name = removeSlashes(name)
+
     // Check for duplications
     let nameQuery = await suggestedCollection.where("name", "==", name).get();
 
