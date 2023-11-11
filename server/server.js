@@ -11,7 +11,7 @@ firebase.initializeApp({
   credential: firebase.credential.cert({
     projectId: process.env.FIREBASE_PROJECT_ID,
     clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-    privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n"),
+    privateKey: JSON.parse(process.env.FIREBASE_PRIVATE_KEY),
     privateKeyId: process.env.FIREBASE_PRIVATE_KEY_ID,
     token_uri: "https://oauth2.googleapis.com/token",
   }),
