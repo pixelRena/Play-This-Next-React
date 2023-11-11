@@ -50,10 +50,11 @@ const Modal = () => {
 
   const onSubmitHandler = async () => {
     let userInput;
+    if (!username) {
+      setUsername();
+    }
+    
     try {
-      if (!username) {
-        setUsername();
-      }
 
       await axios.post("/add-suggested-game", {
         games: modalAttrs["games"],
