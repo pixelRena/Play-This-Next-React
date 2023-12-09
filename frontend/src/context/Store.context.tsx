@@ -131,10 +131,10 @@ export const StoreProvider = ({ children }: { children?: React.ReactNode }) => {
   useEffect(() => {
     const fetchGameData = async () => {
       await api(
-        "/suggested-games-collection",
+        "http://www.localhost:3000/suggested-games-collection",
         "SUGGESTED"
       );
-      await api("/steam-games-collection", "STEAM");
+      await api("http://www.localhost:3000/steam-games-collection", "STEAM");
     };
     fetchGameData();
     // eslint-disable-next-line

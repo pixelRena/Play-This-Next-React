@@ -23,7 +23,6 @@ const Card = () => {
     useContext(CardContext);
   const [card, setCard] = useState(cardInformation);
   const [selected, setSelected] = useState<any>("");
-  const cardWindow = useRef(null);
   const { setModalVisibility } = useContext(ModalContext);
   const { state } = useContext(Store);
   const { suggested, steam } = state;
@@ -75,63 +74,65 @@ const Card = () => {
     <div id="card-header-container">
       <h3 id="card-header">{cardHeader}</h3>
 
-      <div id="status-container">
-        <div className="desktop">
-          <label htmlFor="status">Sort by:</label>
-          <Button
-            className={selected === "next" && "selected"}
-            variant="nextStatus"
-            value="next"
-            onClick={handleStatus}
-          >
-            Next
-          </Button>
-          <Button
-            className={selected === "declined" && "selected"}
-            variant="declinedStatus"
-            value="declined"
-            onClick={handleStatus}
-          >
-            Declined
-          </Button>
-          <Button
-            className={selected === "queue" && "selected"}
-            variant="queueStatus"
-            value="queue"
-            onClick={handleStatus}
-          >
-            Queue
-          </Button>
-          <Button
-            className={selected === "completed" && "selected"}
-            variant="completeStatus"
-            value="completed"
-            onClick={handleStatus}
-          >
-            Completed
-          </Button>
+      {!isCardFlipped && (
+        <div id="status-container">
+          <div className="desktop">
+            <label htmlFor="status">Sort by:</label>
+            <Button
+              className={selected === "next" && "selected"}
+              variant="nextStatus"
+              value="next"
+              onClick={handleStatus}
+            >
+              Next
+            </Button>
+            <Button
+              className={selected === "declined" && "selected"}
+              variant="declinedStatus"
+              value="declined"
+              onClick={handleStatus}
+            >
+              Declined
+            </Button>
+            <Button
+              className={selected === "queue" && "selected"}
+              variant="queueStatus"
+              value="queue"
+              onClick={handleStatus}
+            >
+              Queue
+            </Button>
+            <Button
+              className={selected === "completed" && "selected"}
+              variant="completeStatus"
+              value="completed"
+              onClick={handleStatus}
+            >
+              Completed
+            </Button>
+          </div>
+          <div className="mobile">
+            <label htmlFor="status">Sort by:</label>
+            <select
+              name="status"
+              id="status-selection"
+              defaultValue=""
+              onChange={handleStatus}
+            >
+              <option value="next">Next</option>
+              <option value="">Show All</option>
+              <option value="queue">Queue</option>
+              <option value="completed">Completed</option>
+              <option value="declined">Declined</option>
+            </select>
+          </div>
         </div>
-        <div className="mobile">
-          <label htmlFor="status">Sort by:</label>
-          <select
-            name="status"
-            id="status-selection"
-            defaultValue=""
-            onChange={handleStatus}
-          >
-            <option value="next">Next</option>
-            <option value="">Show All</option>
-            <option value="queue">Queue</option>
-            <option value="completed">Completed</option>
-            <option value="declined">Declined</option>
-          </select>
-        </div>
-      </div>
+      )}
     </div>
   );
 
   const CardBody = () => (
-    <div id="card-body" ref={cardWindow}>
+    <div id="card-body">
       {/* <!-- Loop card items --> */}
       {suggested.loading ? <Loader /> : <CardList data={data} />}
     </div>
@@ -149,7 +150,6 @@ const Card = () => {
   }, [suggested]);
 
   useEffect(() => {
-    cardWindow.current.scrollTo(0, 0);
     if (data === suggested.data || isCardFlipped) {
       setCard((prev) => ({ ...prev, data: steam.data }));
     } else if (data === steam.data || !isCardFlipped) {
