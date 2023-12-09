@@ -238,6 +238,7 @@ const CardList = ({ data }) => {
                         target="_blank"
                         rel="noreferrer"
                         title={`Checkout ${username} on Twitch!`}
+                        aria-label={`Game ${name} posted by ${username}. Status is in ${status}. Click to visit ${username} on twitch!`}
                       >
                         {username}
                       </a>
