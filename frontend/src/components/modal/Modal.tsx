@@ -6,6 +6,7 @@ import { useSetUsername } from "../username/Username.utils";
 import "./Modal.scss";
 import Button from "../button/Button";
 import axios from "axios";
+import FocusTrap from "focus-trap-react";
 
 const Modal = () => {
   const { open, modalAttrs, setModalVisibility, setModalDetails } =
@@ -53,9 +54,8 @@ const Modal = () => {
     if (!username) {
       setUsername();
     }
-    
-    try {
 
+    try {
       await axios.post("/add-suggested-game", {
         games: modalAttrs["games"],
         username: username ?? userInput,
@@ -73,7 +73,10 @@ const Modal = () => {
       setModalVisibility();
       setPostRequest(true);
     } catch (error) {
-      notification(error["response"]["data"]["message"] || "Unable to add game right now. Try again later.");
+      notification(
+        error["response"]["data"]["message"] ||
+          "Unable to add game right now. Try again later."
+      );
     }
   };
 
@@ -96,113 +99,121 @@ const Modal = () => {
 
   return (
     open && (
-      <div id="modal-container">
-        <div className="submit-modal">
-          <h2 className="modal-header">Suggest a game</h2>
-          <div className="modal-body">
-            <div>
-              <form
-                className="search-wrapper"
-                onSubmit={onSearchHandler}
-                ref={formRef}
-              >
-                <label htmlFor="modal-search-input" hidden>
-                  Search for a game
-                </label>
-                <input
-                  id="modal-search-input"
-                  className="search-field"
-                  type="text"
-                  placeholder="Search a game..."
-                  value={modalAttrs["text"]}
-                  onChange={(event) =>
-                    setModalDetails("text", event.target.value)
-                  }
-                />
-                <Button variant="modalInput" type="submit">
-                  Search
-                </Button>
-              </form>
+      <FocusTrap>
+        <div
+          id="modal-container"
+          role="dialog"
+          aria-modal="true"
+          aria-hidden={open}
+          tabIndex={-1}
+        >
+          <div className="submit-modal">
+            <h2 className="modal-header">Suggest a game</h2>
+            <div className="modal-body">
               <div>
-                <Button
-                  variant="modalInput"
-                  className={
-                    modalAttrs["results"] === modalAttrs["games"]
-                      ? "selected"
-                      : undefined
-                  }
-                  id="filter-games-btn"
-                  type="button"
-                  onClick={setFilteredList}
+                <form
+                  className="search-wrapper"
+                  onSubmit={onSearchHandler}
+                  ref={formRef}
                 >
-                  Selected Games
-                </Button>
-              </div>
-            </div>
-            <div className="modal-listed-games">
-              <div id="modal-results">
-                {modalAttrs["results"]?.map(({ name, image }: any, i) => (
-                  <div
-                    className="modal-results-item"
-                    key={`${name}-game-results-${i}`}
+                  <label htmlFor="modal-search-input" hidden>
+                    Search for a game
+                  </label>
+                  <input
+                    id="modal-search-input"
+                    className="search-field"
+                    type="text"
+                    placeholder="Search a game..."
+                    value={modalAttrs["text"]}
+                    onChange={(event) =>
+                      setModalDetails("text", event.target.value)
+                    }
+                  />
+                  <Button variant="modalInput" type="submit">
+                    Search
+                  </Button>
+                </form>
+                <div>
+                  <Button
+                    variant="modalInput"
+                    className={
+                      modalAttrs["results"] === modalAttrs["games"]
+                        ? "selected"
+                        : undefined
+                    }
+                    id="filter-games-btn"
+                    type="button"
+                    onClick={setFilteredList}
                   >
-                    {/* <!-- Column --> */}
-                    <div className="modal-results-image">
-                      <img
-                        src={image}
-                        alt={`${name}-game-cover`}
-                        height="100%"
-                        width="100%"
-                      />
+                    Selected Games
+                  </Button>
+                </div>
+              </div>
+              <div className="modal-listed-games">
+                <div id="modal-results">
+                  {modalAttrs["results"]?.map(({ name, image }: any, i) => (
+                    <div
+                      className="modal-results-item"
+                      key={`${name}-game-results-${i}`}
+                    >
+                      {/* <!-- Column --> */}
+                      <div className="modal-results-image">
+                        <img
+                          src={image}
+                          alt={`${name}-game-cover`}
+                          height="100%"
+                          width="100%"
+                        />
+                      </div>
+                      {/* <!-- Column --> */}
+                      <div>
+                        <div className="modal-results-title">{name}</div>
+                        <Button
+                          hidden={gameAdded(name)}
+                          variant="modalAdd"
+                          onClick={() => addGameHandler(name, image)}
+                        >
+                          Add
+                        </Button>
+                        <Button
+                          className="selected"
+                          hidden={!gameAdded(name)}
+                          variant="modalAdd"
+                          onClick={() => removeGameHandler(name, image)}
+                        >
+                          Remove
+                        </Button>
+                      </div>
                     </div>
-                    {/* <!-- Column --> */}
+                  ))}
+                  {modalAttrs["filtered"] && !modalAttrs["games"]?.length ? (
                     <div>
-                      <div className="modal-results-title">{name}</div>
-                      <Button
-                        hidden={gameAdded(name)}
-                        variant="modalAdd"
-                        onClick={() => addGameHandler(name, image)}
-                      >
-                        Add
-                      </Button>
-                      <Button
-                        className="selected"
-                        hidden={!gameAdded(name)}
-                        variant="modalAdd"
-                        onClick={() => removeGameHandler(name, image)}
-                      >
-                        Remove
-                      </Button>
+                      No games selected. Search for games to add before
+                      submitting.
                     </div>
-                  </div>
-                ))}
-                {modalAttrs["filtered"] && !modalAttrs["games"]?.length ? (
-                  <div>
-                    No games selected. Search for games to add before
-                    submitting.
-                  </div>
-                ) : (
-                  !modalAttrs["results"]?.length && (
-                    <div>Start searching for games!</div>
-                  )
-                )}
+                  ) : (
+                    !modalAttrs["results"]?.length && (
+                      <div>Start searching for games!</div>
+                    )
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-          <div className="modal-footer">
-            <Button
-              variant="modalToggle"
-              disabled={!modalAttrs["games"]?.length}
-              onClick={() => onSubmitHandler()}
-            >
-              Submit Game Suggestion
-            </Button>
-            <Button variant="modalToggle" onClick={setModalVisibility}>
-              Close
-            </Button>
+            <div className="modal-footer">
+              <Button
+                variant="modalToggle"
+                disabled={!modalAttrs["games"]?.length}
+                onClick={() => onSubmitHandler()}
+              >
+                Submit Game Suggestion
+              </Button>
+              <Button variant="modalToggle" onClick={setModalVisibility}>
+                Close
+              </Button>
+            </div>
           </div>
         </div>
-      </div>
+      </FocusTrap>
     )
   );
 };

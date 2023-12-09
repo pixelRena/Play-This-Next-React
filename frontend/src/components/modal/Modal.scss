@@ -17,6 +17,7 @@
     height: 100%;
     background-color: rgba(0, 0, 0, 0.8);
     z-index: 5;
+    pointer-events: none;
   }
 
   .submit-modal {
@@ -62,11 +63,6 @@
           padding: 10px;
           border: 1px solid $primary-color;
           width: 100%;
-
-          &:focus {
-            outline: 0;
-            border: 1px solid #5f2aff;
-          }
         }
       }
 
