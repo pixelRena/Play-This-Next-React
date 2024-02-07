@@ -18,6 +18,8 @@
     "express-generator": "^4.16.1",
     "firebase-admin": "^11.9.0",
     "nodemon": "^2.0.22",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "querystring": "^0.2.1",
+    "twitch-api": "^0.5.0"
   }
 }

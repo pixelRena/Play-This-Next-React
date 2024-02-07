@@ -4,10 +4,10 @@ import {
   useState,
   useReducer,
   useContext,
-} from "react";
-import { CardContext } from "../components/card/Card.context";
-import axios from "axios";
-import * as T from "./Store.types";
+} from "react"
+import { CardContext } from "../components/card/Card.context"
+import axios from "axios"
+import * as T from "./Store.types"
 
 const initialState: T.State = {
   suggested: {
@@ -26,24 +26,24 @@ const initialState: T.State = {
     error: "",
   },
   username: localStorage.getItem("username-serenuy-games-ttv") ?? null,
-};
+}
 
 export const Store = createContext<T.ContextValue>({
   state: initialState,
   dispatch: () => null,
-});
+})
 
 // Todo: Adjust action properties
 const reducer = (state: T.State, action: T.Action) => {
-  let name = action.type.split("_").pop()?.toLowerCase() || "";
-  let nameType = action.type.split("_").pop() || "";
+  let name = action.type.split("_").pop()?.toLowerCase() || ""
+  let nameType = action.type.split("_").pop() || ""
 
   switch (action.type) {
     case `FETCH_REQUEST_FOR_${nameType}`:
       return {
         ...state,
         [name]: { ...(state[name as keyof T.State] as T.Data) },
-      };
+      }
     case `FETCH_SUCCESS_FOR_${nameType}`:
       return {
         ...state,
@@ -53,7 +53,7 @@ const reducer = (state: T.State, action: T.Action) => {
           loading: false,
           error: "",
         },
-      };
+      }
     case `FETCH_FAIL_FOR_${nameType}`:
       return {
         ...state,
@@ -62,47 +62,47 @@ const reducer = (state: T.State, action: T.Action) => {
           loading: false,
           error: action.payload,
         },
-      };
+      }
     case "username":
       return {
         ...state,
         username: action.payload,
-      };
+      }
     default:
-      return state;
+      return state
   }
-};
+}
 
 export const StoreProvider = ({ children }: { children?: React.ReactNode }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const { setCount } = useContext(CardContext);
-  const [postRequest, setPostRequest] = useState(false);
+  const [state, dispatch] = useReducer(reducer, initialState)
+  const { setCount } = useContext(CardContext)
+  const [postRequest, setPostRequest] = useState(false)
 
   const api = async (url: string, actionType: string) => {
-    dispatch({ type: `FETCH_REQUEST_FOR_${actionType}` });
+    dispatch({ type: `FETCH_REQUEST_FOR_${actionType}` })
     try {
-      const { data } = await axios.get(url);
+      const { data } = await axios.get(url)
       dispatch({
         type: `FETCH_SUCCESS_FOR_${actionType}`,
         payload: data,
-      });
+      })
       if (actionType === "SUGGESTED") {
         let c = data.reduce((c, type) => {
-          if (type.status === "completed") return c + 1;
+          if (type.status === "completed") return c + 1
 
-          return c;
-        }, 0);
-        setCount("gamesCompleted", c);
+          return c
+        }, 0)
+        setCount("gamesCompleted", c)
       } else {
-        setCount("ownedGames", data.length);
+        setCount("ownedGames", data.length)
       }
     } catch (error) {
       dispatch({
         type: `FETCH_FAIL_FOR_${actionType}`,
         payload: error.message,
-      });
+      })
     }
-  };
+  }
 
   const usernameApi = async (newUsername: string) => {
     try {
@@ -113,36 +113,36 @@ export const StoreProvider = ({ children }: { children?: React.ReactNode }) => {
             newUsername,
           })
           .then(() => {
-            localStorage.setItem("username-serenuy-games-ttv", newUsername);
-          });
+            localStorage.setItem("username-serenuy-games-ttv", newUsername)
+          })
 
         dispatch({
           type: "username",
           payload: newUsername,
-        });
-        return 1;
+        })
+        return 1
       }
-      throw new Error();
+      throw new Error()
     } catch (e) {
-      return 0;
+      return 0
     }
-  };
+  }
 
   useEffect(() => {
     const fetchGameData = async () => {
-      await api("/suggested-games-collection", "SUGGESTED");
-      await api("/steam-games-collection", "STEAM");
-    };
-    fetchGameData();
+      await api("/suggested-games-collection", "SUGGESTED")
+      await api("/steam-games-collection", "STEAM")
+    }
+    fetchGameData()
     // eslint-disable-next-line
-  }, [postRequest]);
+  }, [postRequest])
 
   const value = {
     state,
     dispatch,
     setPostRequest,
     usernameApi,
-  };
+  }
 
-  return <Store.Provider value={value}>{children}</Store.Provider>;
-};
+  return <Store.Provider value={value}>{children}</Store.Provider>
+}

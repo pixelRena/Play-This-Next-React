@@ -1,74 +1,75 @@
-import { ModalContext } from "../../components/modal/Modal.context";
-import { CardContext } from "./Card.context";
-import { useContext, useEffect, useState, useRef } from "react";
-import { Store } from "../../context/Store.context";
-import Text from "../text/Text";
-import Button from "../../components/button/Button";
-import Loader from "../../components/loader/Loader";
-import "./Card.scss";
-import "../../styles/Status.scss";
+import { ModalContext } from "../../components/modal/Modal.context"
+import { CardContext } from "./Card.context"
+import { useContext, useEffect, useState, useRef } from "react"
+import { Store } from "../../context/Store.context"
+import Text from "../text/Text"
+import Button from "../../components/button/Button"
+import Loader from "../../components/loader/Loader"
+import "./Card.scss"
+import "../../styles/Status.scss"
+import axios from "axios"
 
 const cardInformation: {
-  data: string[];
-  text: string;
-  status: "next" | "completed" | "declined" | "queue";
+  data: string[]
+  text: string
+  status: "next" | "completed" | "declined" | "queue" | null
 } = {
   data: [],
   text: "",
-  status: "queue",
-};
+  status: null,
+}
 
 const Card = () => {
   const { cardHeader, cardFooter, ownedGames, gamesCompleted, isCardFlipped } =
-    useContext(CardContext);
-  const [card, setCard] = useState(cardInformation);
-  const [selected, setSelected] = useState<any>("");
-  const { setModalVisibility } = useContext(ModalContext);
-  const { state } = useContext(Store);
-  const { suggested, steam } = state;
-  const { data, text, status } = card;
+    useContext(CardContext)
+  const [card, setCard] = useState(cardInformation)
+  const [selected, setSelected] = useState<any>("")
+  const { setModalVisibility } = useContext(ModalContext)
+  const { state } = useContext(Store)
+  const { suggested, steam } = state
+  const { data, text, status } = card
 
   const handleSearch = (e) => {
     //  Todo: need to fix text field 'select all + delete' not responding
-    let dataCopy = isCardFlipped ? steam.data : suggested.data;
-    setCard((prev) => ({ ...prev, text: e.target.value }));
+    let dataCopy = isCardFlipped ? steam.data : suggested.data
+    setCard((prev) => ({ ...prev, text: e.target.value }))
 
     if (text === "" || !text.length) {
-      setCard((prev) => ({ ...prev, status: "queue" }));
+      setCard((prev) => ({ ...prev, status: "queue" }))
     } else {
-      let results;
+      let results
       if (selected) {
         results = dataCopy.filter((game: any) => {
           return (
             game.name.toLowerCase().includes(text.toLowerCase()) &&
             game.status === selected
-          );
-        });
-        setCard((prev) => ({ ...prev, status: selected }));
+          )
+        })
+        setCard((prev) => ({ ...prev, status: selected }))
       } else {
         results = dataCopy.filter((game: any) => {
-          return game.name.toLowerCase().includes(text.toLowerCase());
-        });
+          return game.name.toLowerCase().includes(text.toLowerCase())
+        })
       }
-      setCard((prev) => ({ ...prev, data: results }));
+      setCard((prev) => ({ ...prev, data: results }))
     }
-  };
+  }
 
   const handleStatus = (e) => {
     let results = suggested.data.filter((game: any) => {
-      return game.status === e.target.value;
-    });
+      return game.status === e.target.value
+    })
 
     if (selected === e.target.value || !e.target.value) {
       // Reset selected filter
-      setSelected("");
-      setCard((prev) => ({ ...prev, data: suggested.data }));
-      return;
+      setSelected("")
+      setCard((prev) => ({ ...prev, data: suggested.data }))
+      return
     } else {
-      setSelected(e.target.value);
+      setSelected(e.target.value)
     }
-    setCard((prev) => ({ ...prev, data: results }));
-  };
+    setCard((prev) => ({ ...prev, data: results }))
+  }
 
   const CardHeader = () => (
     <div id="card-header-container">
@@ -129,56 +130,63 @@ const Card = () => {
         </div>
       )}
     </div>
-  );
+  )
 
   const CardBody = () => (
     <div id="card-body">
       {/* <!-- Loop card items --> */}
       {suggested.loading ? <Loader /> : <CardList data={data} />}
     </div>
-  );
+  )
 
   const CardFooter = () => (
     <div id="card-footer">
       {cardFooter}: {isCardFlipped ? ownedGames : gamesCompleted}
     </div>
-  );
+  )
 
   useEffect(() => {
     // Sorts data when user types text to match suggested data
-    setCard((prev) => ({ ...prev, data: suggested.data }));
-  }, [suggested]);
+    setCard((prev) => ({ ...prev, data: suggested.data }))
+  }, [suggested])
 
   useEffect(() => {
     if (data === suggested.data || isCardFlipped) {
-      setCard((prev) => ({ ...prev, data: steam.data }));
+      setCard((prev) => ({ ...prev, data: steam.data }))
     } else if (data === steam.data || !isCardFlipped) {
-      setCard((prev) => ({ ...prev, data: suggested.data }));
+      setCard((prev) => ({ ...prev, data: suggested.data }))
     }
     // Empties textfield if card is flipped to different section
-    setCard((prev) => ({ ...prev, text: "" }));
+    setCard((prev) => ({ ...prev, text: "" }))
+    setSelected("")
 
     // eslint-disable-next-line
-  }, [isCardFlipped]);
+  }, [isCardFlipped])
 
   useEffect(() => {
     // Copies data into a different variable
-    let dataCopy = isCardFlipped ? steam.data : suggested.data;
+    let dataCopy = isCardFlipped ? steam.data : suggested.data
 
     // Sorts data according to status selected
     if (dataCopy === suggested.data) {
       let results = dataCopy.sort((a: any, b: any) => {
-        if (a.status === status && b.status !== status) return -1;
-        if (a.status !== status && b.status === status) return 1;
-        return a.status.localeCompare(b.status);
-      });
+        if (a.status === status && b.status !== status) return -1
+        if (a.status !== status && b.status === status) return 1
+        return a.status.localeCompare(b.status)
+      })
 
-      setCard((prev) => ({ ...prev, data: results }));
-      return;
+      setCard((prev) => ({ ...prev, data: results }))
+      return
     }
-    setCard((prev) => ({ ...prev, data: dataCopy }));
+    setCard((prev) => ({ ...prev, data: dataCopy }))
     // eslint-disable-next-line
-  }, [status]);
+  }, [status])
+
+  const authorize = async () => {
+    const res = await axios.get("/oauth")
+
+    console.log(res)
+  }
 
   return (
     <div id="card">
@@ -196,20 +204,20 @@ const Card = () => {
       <Button
         variant="add"
         title="Start searching for games to add!"
-        onClick={setModalVisibility}
+        onClick={() => authorize()}
       >
         +
       </Button>
       <CardBody />
       <CardFooter />
     </div>
-  );
-};
+  )
+}
 
-export default Card;
+export default Card
 
 const CardList = ({ data }) => {
-  const { isCardFlipped } = useContext(CardContext);
+  const { isCardFlipped } = useContext(CardContext)
 
   return (
     <div className="card-list">
@@ -254,5 +262,5 @@ const CardList = ({ data }) => {
         <Text size="large">No Games Found</Text>
       )}
     </div>
-  );
-};
+  )
+}

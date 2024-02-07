@@ -21,7 +21,9 @@ const Modal = () => {
   const onSearchHandler = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    let { data } = await axios.get(`/search-games?term=${modalAttrs["text"]}`);
+    let { data } = await axios.get(
+      `http://www.localhost:3000/search-games?term=${modalAttrs["text"]}`
+    );
     setModalDetails("results", data);
     setModalDetails("filtered", false);
   };
@@ -56,7 +58,7 @@ const Modal = () => {
     }
 
     try {
-      await axios.post("/add-suggested-game", {
+      await axios.post("http://www.localhost:3000/add-suggested-game", {
         games: modalAttrs["games"],
         username: username ?? userInput,
       });
