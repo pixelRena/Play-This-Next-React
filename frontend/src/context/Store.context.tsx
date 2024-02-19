@@ -141,7 +141,7 @@ export const StoreProvider = ({ children }: { children?: React.ReactNode }) => {
 
   const authorize = async () =>
     window.location.replace(
-      `https://id.twitch.tv/oauth2/authorize?client_id=8h55e8b7evg28b8f1ybsb3sin8b883&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}&response_type=token&scope=user_read`
+      `https://id.twitch.tv/oauth2/authorize?client_id=8h55e8b7evg28b8f1ybsb3sin8b883&redirect_uri=https://oauth-nuy-358484881adb.herokuapp.com/callback&response_type=token&scope=user_read`
     )
 
   const value = {
