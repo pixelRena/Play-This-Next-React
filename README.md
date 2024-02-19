@@ -7,7 +7,7 @@
   <p align="center">
     This is an application created and cloned from my previous Play This Next, but is in ReactJS instead of HTML. Allows users/followers from twitch to suggest games and view games that are owned through steam.
     <br />
-    <a href="http://nuygames.xyz/">View Demo</a>
+    <a href="https://nuygames.xyz/">View Demo</a>
     ·
     <a href="https://github.com/pixelRena/play-this-next-react/issues">Report Bug</a>
   </p>
