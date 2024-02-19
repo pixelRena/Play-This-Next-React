@@ -212,7 +212,7 @@ const Modal = () => {
                           </Text>
                           <Button
                             variant="modalToggle"
-                            style={{ width: "50%" }}
+                            style={{ width: "75%" }}
                             onClick={authorize}
                           >
                             Authorize with Twitch
