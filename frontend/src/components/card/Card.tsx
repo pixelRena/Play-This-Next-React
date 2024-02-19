@@ -187,7 +187,9 @@ const Card = () => {
     const access_token = params?.get("#access_token")
     const collectUsername = async () => {
       try {
-        const res = await axios.get(`/callback?access_token=${access_token}`)
+        const res = await axios.get(
+          `/callback-oauth?access_token=${access_token}`
+        )
         const twitchUsername = res?.["data"]
         usernameApi(twitchUsername)
         setModalVisibility()

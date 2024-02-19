@@ -197,7 +197,7 @@ app.post("/update-username", async (req, res) => {
   res.status(200)
 })
 
-app.get("/callback", async (req, res) => {
+app.get("/callback-oauth", async (req, res) => {
   const { access_token } = req.query
 
   try {
