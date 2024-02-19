@@ -25,7 +25,7 @@ const initialState: T.State = {
     loading: true,
     error: "",
   },
-  username: localStorage.getItem("username-serenuy-games-ttv") ?? null,
+  username: localStorage.getItem("ttv-username") ?? null,
 }
 
 export const Store = createContext<T.ContextValue>({
@@ -107,14 +107,16 @@ export const StoreProvider = ({ children }: { children?: React.ReactNode }) => {
   const usernameApi = async (newUsername: string) => {
     try {
       if (newUsername) {
-        await axios
-          .post("/update-username", {
-            oldUsername: state.username,
-            newUsername,
-          })
-          .then(() => {
-            localStorage.setItem("username-serenuy-games-ttv", newUsername)
-          })
+        // TODO: update username for existing
+        // await axios
+        //   .post("/update-username", {
+        //     oldUsername: state.username,
+        //     newUsername,
+        //   })
+        //   .then(() => {
+        //     localStorage.setItem("ttv-username", newUsername)
+        //   })
+        localStorage.setItem("ttv-username", newUsername)
 
         dispatch({
           type: "username",
@@ -123,7 +125,7 @@ export const StoreProvider = ({ children }: { children?: React.ReactNode }) => {
         return 1
       }
       throw new Error()
-    } catch (e) {
+    } catch (error) {
       return 0
     }
   }
@@ -137,11 +139,17 @@ export const StoreProvider = ({ children }: { children?: React.ReactNode }) => {
     // eslint-disable-next-line
   }, [postRequest])
 
+  const authorize = async () =>
+    window.location.replace(
+      `https://id.twitch.tv/oauth2/authorize?client_id=8h55e8b7evg28b8f1ybsb3sin8b883&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}&response_type=token&scope=user_read`
+    )
+
   const value = {
     state,
     dispatch,
     setPostRequest,
     usernameApi,
+    authorize,
   }
 
   return <Store.Provider value={value}>{children}</Store.Provider>

@@ -1,6 +1,6 @@
 import { ModalContext } from "../../components/modal/Modal.context"
 import { CardContext } from "./Card.context"
-import { useContext, useEffect, useState, useRef } from "react"
+import { useContext, useEffect, useState } from "react"
 import { Store } from "../../context/Store.context"
 import Text from "../text/Text"
 import Button from "../../components/button/Button"
@@ -25,7 +25,7 @@ const Card = () => {
   const [card, setCard] = useState(cardInformation)
   const [selected, setSelected] = useState<any>("")
   const { setModalVisibility } = useContext(ModalContext)
-  const { state } = useContext(Store)
+  const { state, usernameApi } = useContext(Store)
   const { suggested, steam } = state
   const { data, text, status } = card
 
@@ -182,11 +182,23 @@ const Card = () => {
     // eslint-disable-next-line
   }, [status])
 
-  const authorize = async () => {
-    const res = await axios.get("/oauth")
+  useEffect(() => {
+    const params = new URLSearchParams(document.location.hash)
+    const access_token = params?.get("#access_token")
+    const collectUsername = async () => {
+      try {
+        const res = await axios.get(`/callback?access_token=${access_token}`)
+        const twitchUsername = res?.["data"]
+        usernameApi(twitchUsername)
+        setModalVisibility()
+      } catch (error) {
+        console.error(error)
+      }
+    }
 
-    console.log(res)
-  }
+    if (access_token) collectUsername()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <div id="card">
@@ -204,7 +216,7 @@ const Card = () => {
       <Button
         variant="add"
         title="Start searching for games to add!"
-        onClick={() => authorize()}
+        onClick={setModalVisibility}
       >
         +
       </Button>

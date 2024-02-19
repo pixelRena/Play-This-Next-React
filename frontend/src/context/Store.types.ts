@@ -1,9 +1,9 @@
-import type React from "react";
+import type React from "react"
 
 export interface Data {
-  data: string[];
-  loading: boolean;
-  error: string;
+  data: string[]
+  loading: boolean
+  error: string
 }
 
 export enum ActionType {
@@ -21,20 +21,21 @@ export enum ActionType {
 
 export type Action = {
   // Todo: SHOULD BE USING ACTION TYPE TO GET VARIANT
-  type: string;
-  payload?: any;
-};
+  type: string
+  payload?: any
+}
 
 export type State = {
-  suggested: Data;
-  steam: Data;
-  rawg: Data;
-  username: string | null;
-};
+  suggested: Data
+  steam: Data
+  rawg: Data
+  username: string | null
+}
 
 export interface ContextValue {
-  state: State;
-  dispatch: React.Dispatch<Action>;
-  setPostRequest?: React.Dispatch<React.SetStateAction<boolean>>;
-  usernameApi?: (value: string) => {};
+  state: State
+  dispatch: React.Dispatch<Action>
+  setPostRequest?: React.Dispatch<React.SetStateAction<boolean>>
+  usernameApi?: (value: string) => {}
+  authorize?: () => void
 }

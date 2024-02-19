@@ -25,20 +25,8 @@ const docs = db.collection("suggested")
 
 const app = express()
 
-app.use(
-  cors({
-    origin: "http://localhost:3001",
-  })
-)
+app.use(cors())
 app.use(express.json())
-
-// var TwitchApi = require("twitch-api")
-// var twitch = new TwitchApi({
-//   clientId: process.env.TWITCH_CLIENT_ID,
-//   clientSecret: process.env.TWITCH_SECRET_ID,
-//   redirectUri: "http://localhost:3001",
-//   scopes: "user_read",
-// })
 
 // Fetches steam games
 app.get("/steam-games", async (req, res) => {
@@ -191,7 +179,7 @@ app.post("/update-username", async (req, res) => {
   const querySnapshot = await docs.where("username", "==", oldUsername).get()
 
   if (!oldUsername || querySnapshot.empty)
-    return res.status(200).send("No username found")
+    return res.status(404).send("No username found")
 
   const updatePromises = querySnapshot.docs.map(async (snapshot) => {
     const docRef = snapshot.ref
@@ -209,48 +197,23 @@ app.post("/update-username", async (req, res) => {
   res.status(200)
 })
 
-// Twitch authentication
-app.get("/oauth", (req, res) => {
-  const scope = "user_read" // Specify the required scope
-  console.log("redirecting")
-  res.redirect(
-    `https://id.twitch.tv/oauth2/authorize?client_id=${process.env.TWITCH_CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URL}&response_type=code&scope=${scope}`
-  )
-})
-
-// Redirection from Twitch authentication
 app.get("/callback", async (req, res) => {
-  const { code } = req.query
+  const { access_token } = req.query
 
-  const tokenResponse = await axios.post(
-    "https://id.twitch.tv/oauth2/token",
-    querystring.stringify({
-      client_id: process.env.TWITCH_CLIENT_ID,
-      client_secret: process.env.TWITCH_SECRET_ID,
-      code,
-      grant_type: "authorization_code",
-      redirect_uri: process.env.REDIRECT_URL,
-    }),
-    {
+  try {
+    const userResponse = await axios.get("https://api.twitch.tv/helix/users", {
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
+        Authorization: `Bearer ${access_token}`,
+        "Client-ID": process.env.TWITCH_CLIENT_ID,
       },
-    }
-  )
+    })
 
-  const accessToken = tokenResponse.data.access_token
+    const twitchUsername = userResponse.data.data[0].login
 
-  // Use the access token to make requests to the Twitch API
-  const userResponse = await axios.get("https://api.twitch.tv/helix/users", {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      "Client-ID": process.env.TWITCH_CLIENT_ID,
-    },
-  })
-
-  const twitchUsername = userResponse.data.data[0].login
-
-  res.status(200).send(twitchUsername)
+    res.status(200).send(twitchUsername)
+  } catch (error) {
+    res.status(404).send("Unable to fetch twitch username. Try again later.")
+  }
 })
 
 app.use(express.static(path.join(__dirname, "../frontend/build")))

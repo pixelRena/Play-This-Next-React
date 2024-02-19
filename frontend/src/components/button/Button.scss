@@ -1,8 +1,15 @@
 @import "../../styles/_variables";
 
 .button-container {
-  cursor: pointer;
   font-family: inherit;
+
+  &:not(:disabled) {
+    cursor: pointer;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
 
   &.primary {
     position: relative;
@@ -65,7 +72,7 @@
     background-color: transparent;
     border: 1px solid $primary-color;
 
-    &:hover,
+    &:hover:not(:disabled),
     &.selected {
       background-color: white;
       color: black;

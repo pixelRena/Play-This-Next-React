@@ -63,6 +63,9 @@
           padding: 10px;
           border: 1px solid $primary-color;
           width: 100%;
+          &:disabled {
+            cursor: not-allowed;
+          }
         }
       }
 

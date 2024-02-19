@@ -14,6 +14,8 @@ const Username = () => {
     zIndex: "5",
   }
 
+  console.log(state.username)
+
   return (
     <div className="username-container" style={style}>
       <Text size="small">
