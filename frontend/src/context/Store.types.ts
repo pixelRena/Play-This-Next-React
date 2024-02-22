@@ -13,9 +13,6 @@ export enum ActionType {
   FETCH_REQUEST_FOR_STEAM = `FETCH_REQUEST_FOR_STEAM`,
   FETCH_SUCCESS_FOR_STEAM = `FETCH_SUCCESS_FOR_STEAM`,
   FETCH_FAIL_FOR_STEAM = `FETCH_FAIL_FOR_STEAM`,
-  FETCH_REQUEST_FOR_RAWG = `FETCH_REQUEST_FOR_RAWG`,
-  FETCH_SUCCESS_FOR_RAWG = `FETCH_SUCCESS_FOR_RAWG`,
-  FETCH_FAIL_FOR_RAWG = `FETCH_FAIL_FOR_RAWG`,
   username = `username`,
 }
 
@@ -28,7 +25,6 @@ export type Action = {
 export type State = {
   suggested: Data
   steam: Data
-  rawg: Data
   user: {
     username: string | null
     token: string | null

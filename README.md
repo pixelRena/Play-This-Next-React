@@ -17,7 +17,7 @@
 <ul>
   <li>Figma</li>
   <li>Firestore/Firebase</li>
-  <li>RAWG API</li>
+  <li>Twitch API</li>
   <li>Steam API</li>
   <li>Icons8</li>
   <li>Loading.io</li>

@@ -20,12 +20,6 @@ const initialState: T.State = {
     loading: true,
     error: "",
   },
-  rawg: {
-    data: [],
-    loading: true,
-    error: "",
-  },
-  // Todo: Combine username and token into one
   user: {
     username: localStorage.getItem("ttv-username") ?? null,
     token: localStorage.getItem("ttv-token") ?? null,

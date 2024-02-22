@@ -1,4 +1,3 @@
-const querystring = require("querystring")
 const express = require("express")
 const axios = require("axios")
 const firebase = require("firebase-admin")
@@ -28,6 +27,7 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
+// Gets results from search input of adding a game
 app.get("/search-games", async (req, res) => {
   const { name, token } = req.query
 
@@ -113,29 +113,6 @@ app.post("/seed-steam-games", async (req, res) => {
     res.status(404).send("error")
   }
 })
-
-// Gets results from search input of adding a game
-// app.get("/search-games", async (req, res) => {
-//   const { term } = req.query
-//   try {
-//     const { data } = await axios.get(
-//       `https://api.rawg.io/api/games?search=${term}&key=${process.env.RAWG_API_KEY}`,
-//       { headers: { "Accept-Encoding": "gzip,deflate,compress" } }
-//     )
-//     let dataReceived = data.results
-//     let dataArr = []
-//     dataReceived.map(({ name, released, background_image }) =>
-//       dataArr.push({
-//         name: name,
-//         released: released,
-//         image: background_image,
-//       })
-//     )
-//     res.send(dataArr)
-//   } catch (error) {
-//     res.send(error)
-//   }
-// })
 
 // Gets the suggested games from firebase DB
 app.get("/suggested-games-collection", async (req, res) => {
