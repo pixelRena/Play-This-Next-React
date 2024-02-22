@@ -185,13 +185,13 @@ const Card = () => {
   useEffect(() => {
     const params = new URLSearchParams(document.location.hash)
     const access_token = params?.get("#access_token")
+
     const collectUsername = async () => {
       try {
-        const res = await axios.get(
+        const { data } = await axios.get(
           `/callback-oauth?access_token=${access_token}`
         )
-        const twitchUsername = res?.["data"]
-        usernameApi(twitchUsername)
+        usernameApi(data.twitchUsername, access_token, data.expires_in)
         setModalVisibility()
       } catch (error) {
         console.error(error)

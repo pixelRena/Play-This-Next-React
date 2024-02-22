@@ -13,16 +13,30 @@ const Modal = () => {
     useContext(ModalContext)
   const { state, setPostRequest, authorize } = useContext(Store)
   const { notification } = useContext(NotificationContext)
-  const { username } = state
+  const { username, token } = state["user"]
 
   const formRef = React.useRef<HTMLFormElement>(null)
 
   const onSearchHandler = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    let { data } = await axios.get(`/search-games?term=${modalAttrs["text"]}`)
-    setModalDetails("results", data)
-    setModalDetails("filtered", false)
+    try {
+      if (modalAttrs["text"] && modalAttrs["text"] !== " ") {
+        let { data } = await axios.get(
+          `/search-games?name=${modalAttrs["text"]}&token=${token}`
+        )
+        setModalDetails("results", data)
+        setModalDetails("filtered", false)
+        return
+      }
+      throw new Error()
+    } catch (error) {
+      setModalDetails("results", [])
+      notification(
+        "Please make sure the input field is not empty or try again later."
+      )
+      console.error(error)
+    }
   }
 
   const addGameHandler = (name: string, image: string) => {
@@ -44,9 +58,8 @@ const Modal = () => {
     setModalDetails("games", games)
   }
 
-  const gameAdded = (name: string) => {
-    return modalAttrs["games"]?.some((game: any) => game.name === name)
-  }
+  const gameAdded = (name: string) =>
+    modalAttrs["games"]?.some((game: any) => game.name === name)
 
   // TODO: Refactor
   const onSubmitHandler = async () => {
@@ -77,7 +90,10 @@ const Modal = () => {
 
   const setFilteredList = () => {
     // If user is currently seeing their "suggested games to add list, change results to output new search according to text"
-    if (modalAttrs["results"] === modalAttrs["games"]) {
+    if (
+      modalAttrs["results"] === modalAttrs["games"] ||
+      modalAttrs["filtered"]
+    ) {
       const syntheticEvent = new Event("submit", {
         bubbles: true,
         cancelable: true,
@@ -85,11 +101,11 @@ const Modal = () => {
       const formEvent =
         syntheticEvent as unknown as React.FormEvent<HTMLFormElement>
       onSearchHandler(formEvent)
+    } else {
+      // Shows user their games in queue to add
+      setModalDetails("results", modalAttrs["games"] || [])
+      setModalDetails("filtered", true)
     }
-
-    // Shows user their games in queue to add
-    setModalDetails("results", modalAttrs["games"] || [])
-    setModalDetails("filtered", true)
   }
 
   return (
@@ -136,11 +152,7 @@ const Modal = () => {
                 <div>
                   <Button
                     variant="modalInput"
-                    className={
-                      modalAttrs["results"] === modalAttrs["games"]
-                        ? "selected"
-                        : undefined
-                    }
+                    className={modalAttrs["filtered"] ? "selected" : undefined}
                     id="filter-games-btn"
                     type="button"
                     onClick={setFilteredList}
@@ -152,7 +164,7 @@ const Modal = () => {
               </div>
               <div className="modal-listed-games">
                 <div id="modal-results">
-                  {modalAttrs["results"]?.map(({ name, image }: any, i) => (
+                  {modalAttrs["results"].map(({ name, image }: any, i) => (
                     <div
                       className="modal-results-item"
                       key={`${name}-game-results-${i}`}
@@ -187,45 +199,42 @@ const Modal = () => {
                       </div>
                     </div>
                   ))}
-                  {modalAttrs["filtered"] && !modalAttrs["games"]?.length ? (
-                    <Text size="large">
-                      No games selected. Search for games to add before
-                      submitting.
-                    </Text>
-                  ) : (
-                    <div
-                      style={{
-                        height: "100%",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        flexDirection: "column",
-                        gap: "25px",
-                        textAlign: "center",
-                      }}
-                    >
-                      {!username ? (
-                        <>
-                          <Text size="medium">
-                            Authorize with twitch to be able to search for games
-                            and to have your username saved:
-                          </Text>
-                          <Button
-                            variant="modalToggle"
-                            style={{ width: "75%" }}
-                            onClick={authorize}
-                          >
-                            Authorize with Twitch
-                          </Button>
-                        </>
-                      ) : (
+                  <div
+                    style={{
+                      height: "100%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexDirection: "column",
+                      gap: "25px",
+                      textAlign: "center",
+                    }}
+                  >
+                    {!token && (
+                      <>
+                        <Text size="medium">
+                          Authorize with twitch to be able to search for games
+                          and to have your username saved:
+                        </Text>
+                        <Button
+                          variant="modalToggle"
+                          style={{ width: "75%" }}
+                          onClick={authorize}
+                        >
+                          Authorize with Twitch
+                        </Button>
+                      </>
+                    )}
+
+                    {token &&
+                      (!modalAttrs["results"]?.length ||
+                        !modalAttrs["filtered"]) && (
                         <Text size="medium">
                           You are now authorized {username}. Start searching for
                           games!
                         </Text>
                       )}
-                    </div>
-                  )}
+                  </div>
                 </div>
               </div>
             </div>

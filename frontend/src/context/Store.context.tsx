@@ -25,7 +25,12 @@ const initialState: T.State = {
     loading: true,
     error: "",
   },
-  username: localStorage.getItem("ttv-username") ?? null,
+  // Todo: Combine username and token into one
+  user: {
+    username: localStorage.getItem("ttv-username") ?? null,
+    token: localStorage.getItem("ttv-token") ?? null,
+    expires_in: null,
+  },
 }
 
 export const Store = createContext<T.ContextValue>({
@@ -63,10 +68,10 @@ const reducer = (state: T.State, action: T.Action) => {
           error: action.payload,
         },
       }
-    case "username":
+    case "user":
       return {
         ...state,
-        username: action.payload,
+        user: action.payload,
       }
     default:
       return state
@@ -104,33 +109,50 @@ export const StoreProvider = ({ children }: { children?: React.ReactNode }) => {
     }
   }
 
-  const usernameApi = async (newUsername: string) => {
+  const usernameApi = async (newUsername, token, expires_in) => {
     try {
-      if (newUsername) {
-        // TODO: update username for existing
-        // await axios
-        //   .post("/update-username", {
-        //     oldUsername: state.username,
-        //     newUsername,
-        //   })
-        //   .then(() => {
-        //     localStorage.setItem("ttv-username", newUsername)
-        //   })
-        localStorage.setItem("ttv-username", newUsername)
-
-        dispatch({
-          type: "username",
-          payload: newUsername,
-        })
-        return 1
-      }
-      throw new Error()
+      // TODO: update username for existing docs in firebase
+      // await axios
+      //   .post("/update-username", {
+      //     oldUsername: state.username,
+      //     newUsername,
+      //   })
+      //   .then(() => {
+      //     localStorage.setItem("ttv-username", newUsername)
+      //   })
+      localStorage.setItem("ttv-username", newUsername)
+      localStorage.setItem("ttv-token", token)
+      localStorage.setItem("ttv-token-expires-in", expires_in)
+      dispatch({
+        type: "user",
+        payload: {
+          username: newUsername,
+          token,
+          expires_in,
+        },
+      })
+      return
     } catch (error) {
-      return 0
+      return
     }
   }
 
   useEffect(() => {
+    const tokenToDate = Date.now() + state.user.expires_in * 1000
+    const tokenExpired = new Date(tokenToDate) > new Date()
+    if (tokenExpired) {
+      localStorage.removeItem("ttv-token")
+      localStorage.removeItem("ttv-token-expires-in")
+      localStorage.removeItem("ttv-username")
+      dispatch({
+        type: "user",
+        payload: {
+          username: null,
+          token: null,
+          expires_in: null,
+        },
+      })
+    }
     const fetchGameData = async () => {
       await api("/suggested-games-collection", "SUGGESTED")
       await api("/steam-games-collection", "STEAM")

@@ -29,13 +29,17 @@ export type State = {
   suggested: Data
   steam: Data
   rawg: Data
-  username: string | null
+  user: {
+    username: string | null
+    token: string | null
+    expires_in: number | null
+  }
 }
 
 export interface ContextValue {
   state: State
   dispatch: React.Dispatch<Action>
   setPostRequest?: React.Dispatch<React.SetStateAction<boolean>>
-  usernameApi?: (value: string) => {}
+  usernameApi?: (value: string, token: string, expires_in: number) => {}
   authorize?: () => void
 }

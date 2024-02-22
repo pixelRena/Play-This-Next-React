@@ -28,6 +28,34 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
+app.get("/search-games", async (req, res) => {
+  const { name, token } = req.query
+
+  try {
+    const { data } = await axios.get(
+      `https://api.twitch.tv/helix/search/categories?query=${name}`,
+      {
+        headers: {
+          "Client-ID": process.env.TWITCH_CLIENT_ID,
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
+    let dataReceived = data["data"]
+    let dataArr = []
+    dataReceived.map(({ name, box_art_url }) =>
+      dataArr.push({
+        name: name,
+        image: box_art_url.replace("52x72", "150x200"),
+      })
+    )
+    res.send(dataArr)
+  } catch (e) {
+    // Todo: Account for if token needs to be re-validated
+    res.send(e)
+  }
+})
+
 // Fetches steam games
 app.get("/steam-games", async (req, res) => {
   try {
@@ -87,27 +115,27 @@ app.post("/seed-steam-games", async (req, res) => {
 })
 
 // Gets results from search input of adding a game
-app.get("/search-games", async (req, res) => {
-  const { term } = req.query
-  try {
-    const { data } = await axios.get(
-      `https://api.rawg.io/api/games?search=${term}&key=${process.env.RAWG_API_KEY}`,
-      { headers: { "Accept-Encoding": "gzip,deflate,compress" } }
-    )
-    let dataReceived = data.results
-    let dataArr = []
-    dataReceived.map(({ name, released, background_image }) =>
-      dataArr.push({
-        name: name,
-        released: released,
-        image: background_image,
-      })
-    )
-    res.send(dataArr)
-  } catch (error) {
-    res.send(error)
-  }
-})
+// app.get("/search-games", async (req, res) => {
+//   const { term } = req.query
+//   try {
+//     const { data } = await axios.get(
+//       `https://api.rawg.io/api/games?search=${term}&key=${process.env.RAWG_API_KEY}`,
+//       { headers: { "Accept-Encoding": "gzip,deflate,compress" } }
+//     )
+//     let dataReceived = data.results
+//     let dataArr = []
+//     dataReceived.map(({ name, released, background_image }) =>
+//       dataArr.push({
+//         name: name,
+//         released: released,
+//         image: background_image,
+//       })
+//     )
+//     res.send(dataArr)
+//   } catch (error) {
+//     res.send(error)
+//   }
+// })
 
 // Gets the suggested games from firebase DB
 app.get("/suggested-games-collection", async (req, res) => {
@@ -208,9 +236,19 @@ app.get("/callback-oauth", async (req, res) => {
       },
     })
 
-    const twitchUsername = userResponse.data.data[0].login
+    const validateToken = await axios.get(
+      "https://id.twitch.tv/oauth2/validate",
+      {
+        headers: {
+          Authorization: `OAuth ${access_token}`,
+        },
+      }
+    )
 
-    res.status(200).send(twitchUsername)
+    res.status(200).json({
+      twitchUsername: userResponse.data.data[0].login,
+      expires_in: validateToken["data"]["expires_in"],
+    })
   } catch (error) {
     res.status(404).send("Unable to fetch twitch username. Try again later.")
   }

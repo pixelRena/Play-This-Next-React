@@ -19,7 +19,7 @@ const Username = () => {
       <Text size="small">
         Your Twitch Username: &nbsp;
         <Text color="lawngreen" bold={true} inline={true} size="small">
-          {state.username || "Not Provided"}
+          {state["user"]["username"] || "Not Provided"}
         </Text>
       </Text>
     </div>
