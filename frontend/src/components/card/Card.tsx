@@ -232,6 +232,11 @@ export default Card
 
 const CardList = ({ data }) => {
   const { isCardFlipped } = useContext(CardContext)
+  const generateDirectoryURL = (name) =>
+    `https://twitch.tv/directory/category/${name
+      .replaceAll(" ", "-")
+      .replaceAll(":", "")
+      .toLowerCase()}`
 
   return (
     <div className="card-list">
@@ -249,7 +254,14 @@ const CardList = ({ data }) => {
             </div>
             {/* <!-- Column --> */}
             <div className="card-information">
-              <div className="card-list-item-title">{name}</div>
+              <a
+                href={generateDirectoryURL(name)}
+                target="_blank"
+                rel="noreferrer"
+                className="card-list-item-title"
+              >
+                {name}
+              </a>
               {isCardFlipped ? null : (
                 <div className="card-list-extra-information">
                   <div>
