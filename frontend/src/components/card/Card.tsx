@@ -254,14 +254,18 @@ const CardList = ({ data }) => {
             </div>
             {/* <!-- Column --> */}
             <div className="card-information">
-              <a
-                href={generateDirectoryURL(name)}
-                target="_blank"
-                rel="noreferrer"
-                className="card-list-item-title"
-              >
-                {name}
-              </a>
+              {isCardFlipped ? (
+                <div className="card-list-item-title">{name}</div>
+              ) : (
+                <a
+                  href={generateDirectoryURL(name)}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="card-list-item-title"
+                >
+                  {name}
+                </a>
+              )}
               {isCardFlipped ? null : (
                 <div className="card-list-extra-information">
                   <div>
