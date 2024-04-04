@@ -85,8 +85,13 @@
   }
 
   .card-list {
-    .card-information div {
-      margin-block: 2px;
+    .card-information {
+      div {
+        margin-block: 2px;
+      }
+      .link {
+        color: rgb(243, 243, 243);
+      }
     }
     .card-list-item {
       display: flex;

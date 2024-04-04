@@ -8,6 +8,7 @@ import Loader from "../../components/loader/Loader"
 import "./Card.scss"
 import "../../styles/Status.scss"
 import axios from "axios"
+import Link from "svg/link"
 
 const cardInformation: {
   data: string[]
@@ -261,9 +262,9 @@ const CardList = ({ data }) => {
                   href={generateDirectoryURL(name)}
                   target="_blank"
                   rel="noreferrer"
-                  className="card-list-item-title"
+                  className="card-list-item-title link"
                 >
-                  {name}
+                  {name} <Link />
                 </a>
               )}
               {isCardFlipped ? null : (
