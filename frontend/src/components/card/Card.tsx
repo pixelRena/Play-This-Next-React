@@ -233,10 +233,11 @@ export default Card
 
 const CardList = ({ data }) => {
   const { isCardFlipped } = useContext(CardContext)
+
   const generateDirectoryURL = (name) =>
     `https://twitch.tv/directory/category/${name
-      .replaceAll(" ", "-")
-      .replaceAll(":", "")
+      .replace(/[:()]/g, "")
+      .replaceAll(/\s/g, "-")
       .toLowerCase()}`
 
   return (
@@ -266,7 +267,7 @@ const CardList = ({ data }) => {
                     className="card-list-item-title link"
                     title={name}
                   >
-                    {name}{" "}
+                    {name}
                   </a>
                   <span>
                     <Link />
