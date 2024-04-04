@@ -258,14 +258,20 @@ const CardList = ({ data }) => {
               {isCardFlipped ? (
                 <div className="card-list-item-title">{name}</div>
               ) : (
-                <a
-                  href={generateDirectoryURL(name)}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="card-list-item-title link"
-                >
-                  {name} <Link />
-                </a>
+                <div style={{ display: "flex", gap: "5px" }}>
+                  <a
+                    href={generateDirectoryURL(name)}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="card-list-item-title link"
+                    title={name}
+                  >
+                    {name}{" "}
+                  </a>
+                  <span>
+                    <Link />
+                  </span>
+                </div>
               )}
               {isCardFlipped ? null : (
                 <div className="card-list-extra-information">
