@@ -114,9 +114,11 @@ main {
   * {
     font-weight: bold;
   }
+
   body {
     background-position: center;
   }
+
   #notification {
     width: 80%;
   }
@@ -136,6 +138,9 @@ main {
       &:nth-child(2) {
         margin-top: 90px;
         width: 90vw;
+      }
+      .avatar-container {
+        display: none;
       }
     }
 
