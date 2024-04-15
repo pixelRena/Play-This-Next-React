@@ -9,6 +9,8 @@ import "./Card.scss"
 import "../../styles/Status.scss"
 import axios from "axios"
 import Link from "svg/link"
+import Refresh from "svg/refresh"
+import { NotificationContext } from "../notification/Notification.context"
 
 const cardInformation: {
   data: string[]
@@ -26,7 +28,9 @@ const Card = () => {
   const [card, setCard] = useState(cardInformation)
   const [selected, setSelected] = useState<any>("")
   const { setModalVisibility } = useContext(ModalContext)
-  const { state, usernameApi } = useContext(Store)
+  const { state, usernameApi, dispatch, setPostRequest } = useContext(Store)
+  const { notification } = useContext(NotificationContext)
+  const { setCardInformation } = useContext(CardContext)
   const { suggested, steam } = state
   const { data, text, status } = card
 
@@ -72,11 +76,37 @@ const Card = () => {
     setCard((prev) => ({ ...prev, data: results }))
   }
 
+  const RefreshSteamGames = async () => {
+    dispatch({
+      type: "FETCH_REQUEST_FOR_STEAM",
+    })
+    try {
+      const { data } = await axios.post("/seed-steam-games")
+      dispatch({
+        type: "FETCH_SUCCESS_FOR_STEAM",
+        payload: data,
+      })
+      notification("Owned games successfully updated!")
+      // Todo: Temp fix card resetting to suggested games as data
+      setCardInformation(false)
+      setPostRequest(true)
+    } catch (error) {
+      dispatch({
+        type: "FETCH_FAIL_FOR_STEAM",
+        payload: error,
+      })
+      notification("Unable to update owned games. Please try again later.")
+      setPostRequest(false)
+    }
+  }
+
   const CardHeader = () => (
     <div id="card-header-container">
       <h3 id="card-header">{cardHeader}</h3>
 
-      {!isCardFlipped && (
+      {isCardFlipped ? (
+        <Refresh title="Refresh owned games" onClick={RefreshSteamGames} />
+      ) : (
         <div id="status-container">
           <div className="desktop">
             <label htmlFor="status">Sort by:</label>
@@ -242,7 +272,8 @@ const CardList = ({ data }) => {
 
   return (
     <div className="card-list">
-      {data.length ? (
+      {/* Todo: Temp fix for data turning into string */}
+      {data && Array.isArray(data) ? (
         data?.map(({ name, image, username, status }) => (
           <div className="card-list-item" key={`${name}-id`}>
             {/* <!-- Column --> */}
@@ -280,6 +311,7 @@ const CardList = ({ data }) => {
                     Posted by:&nbsp;
                     <strong>
                       <a
+                        className="username-link"
                         href={`https://www.twitch.tv/${username}`}
                         target="_blank"
                         rel="noreferrer"

@@ -85,6 +85,14 @@
   }
 
   .card-list {
+    .card-refresh-items {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 10px;
+      background-color: $secondary-color;
+    }
     .card-information {
       div {
         margin-block: 2px;
@@ -124,6 +132,14 @@
         display: flex;
         flex-direction: column;
         font-size: 17px;
+        .username-link {
+          vertical-align: bottom;
+          max-width: 15vw;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
+          display: inline-block;
+        }
       }
     }
   }
@@ -171,6 +187,9 @@
         }
         .card-list-extra-information {
           font-size: 13px;
+          .username-link {
+            max-width: 150px;
+          }
         }
         .card-list-item-title {
           font-style: italic;
@@ -178,6 +197,11 @@
         }
         .card-list-image {
           width: 100px;
+        }
+      }
+      .card-information {
+        .link {
+          max-width: 120px;
         }
       }
     }

@@ -50,9 +50,9 @@ app.get("/search-games", async (req, res) => {
       })
     )
     res.send(dataArr)
-  } catch (e) {
+  } catch (error) {
     // Todo: Account for if token needs to be re-validated
-    res.send(e)
+    res.send(error)
   }
 })
 
@@ -108,9 +108,9 @@ app.post("/seed-steam-games", async (req, res) => {
       })
     })
 
-    res.status(500)
+    res.status(200).send("Fetch complete.")
   } catch (e) {
-    res.status(404).send("error")
+    res.status(404).send(e)
   }
 })
 

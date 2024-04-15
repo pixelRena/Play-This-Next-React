@@ -9,6 +9,7 @@ import Username from "./components/username/Username"
 import { ModalContext } from "./components/modal/Modal.context"
 import { CardContext } from "./components/card/Card.context"
 import { useContext } from "react"
+import Refresh from "svg/refresh"
 
 const App = () => {
   const { setCardInformation, buttonTitle, isCardFlipped } =
