@@ -1,4 +1,4 @@
-import * as T from "./Text.types";
+import * as T from "./Text.types"
 
 const Text = ({
   children,
@@ -6,6 +6,7 @@ const Text = ({
   bold,
   inline,
   color = "white",
+  textStyle = {},
   ...otherProps
 }: T.TextProps) => {
   const style: React.CSSProperties = {
@@ -13,13 +14,14 @@ const Text = ({
     color: color,
     ...(bold && { fontWeight: "bold" }),
     ...(inline && { display: "inline" }),
-  };
+    ...textStyle,
+  }
 
   return (
     <div style={style} {...otherProps}>
       {children}
     </div>
-  );
-};
+  )
+}
 
-export default Text;
+export default Text

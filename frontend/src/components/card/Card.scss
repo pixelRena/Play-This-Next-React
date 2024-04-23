@@ -39,15 +39,25 @@
   }
 
   #card-header-container {
+    position: relative;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     flex-wrap: wrap;
     align-items: center;
     padding-top: 12px;
+    gap: 5px;
+    height: 80px;
     #card-header {
       font-weight: unset;
       margin: 0;
+    }
+
+    #refresh-button {
+      position: absolute;
+      right: 35px;
+      top: 50%;
+      transform: translateY(-50%);
     }
 
     #status-container {
@@ -172,11 +182,12 @@
       justify-content: space-around;
       align-items: flex-start;
       gap: 5px;
-      #card-header {
-        margin-top: 10px;
-        &::after {
-          margin-top: unset;
-        }
+      #card-header::after {
+        margin-top: unset;
+      }
+      #refresh-button svg {
+        width: 17px;
+        height: 17px;
       }
     }
 

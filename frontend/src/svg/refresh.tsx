@@ -1,5 +1,5 @@
 const Refresh = ({
-  size = 17,
+  size = 20,
   color = "#fafafa",
   title = "Refresh",
   onClick = () => {},

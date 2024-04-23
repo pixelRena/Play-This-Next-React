@@ -1,4 +1,3 @@
-import React from "react"
 const Link = ({ size = 15, color = "#fafafa" }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"

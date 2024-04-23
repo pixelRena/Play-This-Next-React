@@ -10,6 +10,7 @@ import "../../styles/Status.scss"
 import axios from "axios"
 import Link from "svg/link"
 import Refresh from "svg/refresh"
+import PlusCircle from "svg/plus-circle"
 import { NotificationContext } from "../notification/Notification.context"
 
 const cardInformation: {
@@ -105,7 +106,9 @@ const Card = () => {
       <h3 id="card-header">{cardHeader}</h3>
 
       {isCardFlipped ? (
-        <Refresh title="Refresh owned games" onClick={RefreshSteamGames} />
+        <div id="refresh-button">
+          <Refresh title="Refresh owned games" onClick={RefreshSteamGames} />
+        </div>
       ) : (
         <div id="status-container">
           <div className="desktop">
@@ -250,8 +253,25 @@ const Card = () => {
         variant="add"
         title="Start searching for games to add!"
         onClick={setModalVisibility}
+        style={{ padding: "5px" }}
       >
-        +
+        <PlusCircle
+          style={{
+            display: "block",
+            margin: "0 auto",
+          }}
+        />
+      </Button>
+      <Button
+        className="backlog-button"
+        variant="add"
+        title="Check for games that are already considered!"
+        onClick={setModalVisibility}
+        style={{ width: "fit-content", padding: "10px" }}
+      >
+        <Text size="small" color="#0C0C0C">
+          Backlog
+        </Text>
       </Button>
       <CardBody />
       <CardFooter />
