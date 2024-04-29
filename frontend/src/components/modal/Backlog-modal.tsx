@@ -65,8 +65,9 @@ const BacklogModal = (props) => {
           <div className="modal-content">
             <h2 className="modal-header">Backlog</h2>
             <div className="modal-body">
-              <Text textStyle={{ textAlign: "center" }}>
-                A list of games that I already own outside of steam (PS1/PS2).
+              <Text textStyle={{ textAlign: "center" }} bold>
+                A combined list of PS1/PS2 games along with a few steam games
+                being considered or already completed
               </Text>
               <div
                 className="modal-listed-games"
@@ -105,7 +106,7 @@ const BacklogModal = (props) => {
                     width: "100%",
                   }}
                 >
-                  {backlog ? (
+                  {backlog.length ? (
                     backlog.map(({ name, image, played }: any, i) => (
                       <div
                         className="modal-results-item"
@@ -146,7 +147,7 @@ const BacklogModal = (props) => {
                       </div>
                     ))
                   ) : (
-                    <Text>Backlog isn't available at this time.</Text>
+                    <Text>Backlog is not available at this time.</Text>
                   )}
                 </div>
               </div>
