@@ -11,7 +11,7 @@ import Text from "../text/Text"
 const Modal = () => {
   const { open, modalAttrs, setModalVisibility, setModalDetails } =
     useContext(ModalContext)
-  const { state, setPostRequest, authorize } = useContext(Store)
+  const { state, setPostRequest, authorize, dispatch } = useContext(Store)
   const { notification } = useContext(NotificationContext)
   const { username, token } = state["user"]
 
@@ -25,17 +25,33 @@ const Modal = () => {
         let { data } = await axios.get(
           `/search-games?name=${modalAttrs["text"]}&token=${token}`
         )
+
+        if (data.status === 401) {
+          localStorage.removeItem("ttv-token")
+          localStorage.removeItem("ttv-token-expires-in")
+          localStorage.removeItem("ttv-username")
+          dispatch({
+            type: "user",
+            payload: {
+              username: null,
+              token: null,
+              expires_in: null,
+            },
+          })
+          throw new Error(
+            "You need to re-authenticate with twitch before you can search for games."
+          )
+        }
         setModalDetails("results", data)
         setModalDetails("filtered", false)
         return
       }
-      throw new Error()
-    } catch (error) {
-      setModalDetails("results", [])
-      notification(
+      throw new Error(
         "Please make sure the input field is not empty or try again later."
       )
-      console.error(error)
+    } catch (error) {
+      setModalDetails("results", [])
+      notification(error.message)
     }
   }
 

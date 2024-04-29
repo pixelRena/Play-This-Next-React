@@ -127,26 +127,12 @@ export const StoreProvider = ({ children }: { children?: React.ReactNode }) => {
       })
       return
     } catch (error) {
+      console.error(error)
       return
     }
   }
 
   useEffect(() => {
-    const tokenToDate = Date.now() + state.user.expires_in * 1000
-    const tokenExpired = new Date(tokenToDate) > new Date()
-    if (tokenExpired) {
-      localStorage.removeItem("ttv-token")
-      localStorage.removeItem("ttv-token-expires-in")
-      localStorage.removeItem("ttv-username")
-      dispatch({
-        type: "user",
-        payload: {
-          username: null,
-          token: null,
-          expires_in: null,
-        },
-      })
-    }
     const fetchGameData = async () => {
       await api("/suggested-games-collection", "SUGGESTED")
       await api("/steam-games-collection", "STEAM")
