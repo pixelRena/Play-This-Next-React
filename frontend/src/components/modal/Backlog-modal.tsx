@@ -66,8 +66,8 @@ const BacklogModal = (props) => {
             <h2 className="modal-header">Backlog</h2>
             <div className="modal-body">
               <Text textStyle={{ textAlign: "center" }} bold>
-                A combined list of PS1/PS2 games along with a few steam games
-                being considered or already completed
+                A combined list of PS1/PS2 games that I currently own, along
+                with a few steam games being considered or already completed
               </Text>
               <div
                 className="modal-listed-games"
