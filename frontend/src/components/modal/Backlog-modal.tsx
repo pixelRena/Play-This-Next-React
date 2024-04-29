@@ -65,6 +65,9 @@ const BacklogModal = (props) => {
           <div className="modal-content">
             <h2 className="modal-header">Backlog</h2>
             <div className="modal-body">
+              <Text textStyle={{ textAlign: "center" }}>
+                A list of games that I already own outside of steam (PS1/PS2).
+              </Text>
               <div
                 className="modal-listed-games"
                 style={{
