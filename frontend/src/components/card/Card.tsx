@@ -37,12 +37,13 @@ const Card = (props) => {
   const { data, text, status } = card
 
   const handleSearch = (e) => {
-    //  Todo: need to fix text field 'select all + delete' not responding
     let dataCopy = isCardFlipped ? steam.data : suggested.data
+
     setCard((prev) => ({ ...prev, text: e.target.value }))
 
-    if (text === "" || !text.length) {
-      setCard((prev) => ({ ...prev, status: "queue" }))
+    if (e.target.value === "" || e.target.value.length === 0) {
+      setCard((prev) => ({ ...prev, status: "queue", data: dataCopy }))
+      setSelected("")
     } else {
       let results
       if (selected) {
