@@ -12,6 +12,7 @@ import Link from "svg/link"
 import Refresh from "svg/refresh"
 import PlusCircle from "svg/plus-circle"
 import { NotificationContext } from "../notification/Notification.context"
+import { generateDirectoryURL } from "utils"
 
 const cardInformation: {
   data: string[]
@@ -23,7 +24,7 @@ const cardInformation: {
   status: null,
 }
 
-const Card = () => {
+const Card = (props) => {
   const { cardHeader, cardFooter, ownedGames, gamesCompleted, isCardFlipped } =
     useContext(CardContext)
   const [card, setCard] = useState(cardInformation)
@@ -266,7 +267,7 @@ const Card = () => {
         className="backlog-button"
         variant="add"
         title="Check for games that are already considered!"
-        onClick={setModalVisibility}
+        onClick={props.openBacklog}
         style={{ width: "fit-content", padding: "10px" }}
       >
         <Text size="small" color="#0C0C0C">
@@ -283,12 +284,6 @@ export default Card
 
 const CardList = ({ data }) => {
   const { isCardFlipped } = useContext(CardContext)
-
-  const generateDirectoryURL = (name) =>
-    `https://twitch.tv/directory/category/${name
-      .replace(/[:()]/g, "")
-      .replaceAll(/\s/g, "-")
-      .toLowerCase()}`
 
   return (
     <div className="card-list">

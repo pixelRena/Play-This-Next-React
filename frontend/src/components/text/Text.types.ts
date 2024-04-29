@@ -9,6 +9,7 @@ export type TextProps = {
   inline?: boolean
   color?: string
   textStyle?: React.CSSProperties
+  [x: string]: any
 }
 
 export const TEXT_SIZES = {

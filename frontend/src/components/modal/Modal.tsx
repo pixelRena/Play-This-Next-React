@@ -118,7 +118,7 @@ const Modal = () => {
           aria-hidden={open}
           tabIndex={-1}
         >
-          <div className="submit-modal">
+          <div className="modal-content">
             <h2 className="modal-header">Suggest a game</h2>
             <div className="modal-body">
               <div>
@@ -163,7 +163,7 @@ const Modal = () => {
                 </div>
               </div>
               <div className="modal-listed-games">
-                <div id="modal-results">
+                <div className="modal-results">
                   {modalAttrs["results"].map(({ name, image }: any, i) => (
                     <div
                       className="modal-results-item"

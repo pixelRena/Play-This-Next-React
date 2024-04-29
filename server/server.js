@@ -21,6 +21,7 @@ const db = firebase.firestore()
 // Firebase collections:
 const steamDB = db.collection("steam")
 const docs = db.collection("suggested")
+const backlogDB = db.collection("backlog")
 
 const app = express()
 
@@ -229,6 +230,15 @@ app.get("/callback-oauth", async (req, res) => {
   } catch (error) {
     res.status(404).send("Unable to fetch twitch username. Try again later.")
   }
+})
+
+app.get("/backlog", async (req, res) => {
+  let gamesInDB = []
+
+  await backlogDB.get().then((snapshot) => {
+    snapshot.forEach((snap) => gamesInDB.push(snap.data()))
+  })
+  res.send(gamesInDB)
 })
 
 app.use(express.static(path.join(__dirname, "../frontend/build")))

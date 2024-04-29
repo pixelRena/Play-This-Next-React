@@ -134,6 +134,8 @@ main {
   }
 
   main {
+    justify-content: unset;
+
     section {
       &:nth-child(2) {
         margin-top: 90px;
@@ -142,6 +144,10 @@ main {
       .avatar-container {
         display: none;
       }
+    }
+
+    .modal-container {
+      height: 100vh;
     }
 
     .submit-modal {

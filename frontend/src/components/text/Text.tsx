@@ -7,7 +7,7 @@ const Text = ({
   inline,
   color = "white",
   textStyle = {},
-  ...otherProps
+  ...rest
 }: T.TextProps) => {
   const style: React.CSSProperties = {
     fontSize: T.TEXT_SIZES[size],
@@ -18,7 +18,7 @@ const Text = ({
   }
 
   return (
-    <div style={style} {...otherProps}>
+    <div style={style} {...rest}>
       {children}
     </div>
   )
