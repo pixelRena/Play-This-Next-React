@@ -39,15 +39,25 @@
   }
 
   #card-header-container {
+    position: relative;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     flex-wrap: wrap;
     align-items: center;
     padding-top: 12px;
+    gap: 5px;
+    height: 80px;
     #card-header {
       font-weight: unset;
       margin: 0;
+    }
+
+    #refresh-button {
+      position: absolute;
+      right: 35px;
+      top: 50%;
+      transform: translateY(-50%);
     }
 
     #status-container {
@@ -85,16 +95,33 @@
   }
 
   .card-list {
-    .card-information div {
-      margin-block: 2px;
+    .card-refresh-items {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 10px;
+      background-color: $secondary-color;
+    }
+    .card-information {
+      div {
+        margin-block: 2px;
+      }
+      .link {
+        max-width: 350px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        display: inline-block;
+        color: rgb(243, 243, 243);
+      }
     }
     .card-list-item {
       display: flex;
       flex-direction: row;
       margin-bottom: 20px;
-
+      gap: 20px;
       .card-list-image {
-        margin-right: 15px;
         background-size: cover;
         background-position: center;
         overflow: hidden;
@@ -115,6 +142,14 @@
         display: flex;
         flex-direction: column;
         font-size: 17px;
+        .username-link {
+          vertical-align: bottom;
+          max-width: 15vw;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
+          display: inline-block;
+        }
       }
     }
   }
@@ -147,11 +182,12 @@
       justify-content: space-around;
       align-items: flex-start;
       gap: 5px;
-      #card-header {
-        margin-top: 10px;
-        &::after {
-          margin-top: unset;
-        }
+      #card-header::after {
+        margin-top: unset;
+      }
+      #refresh-button svg {
+        width: 17px;
+        height: 17px;
       }
     }
 
@@ -162,6 +198,9 @@
         }
         .card-list-extra-information {
           font-size: 13px;
+          .username-link {
+            max-width: 150px;
+          }
         }
         .card-list-item-title {
           font-style: italic;
@@ -169,6 +208,11 @@
         }
         .card-list-image {
           width: 100px;
+        }
+      }
+      .card-information {
+        .link {
+          max-width: 120px;
         }
       }
     }

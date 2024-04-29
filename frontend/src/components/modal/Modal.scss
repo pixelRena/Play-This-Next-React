@@ -20,7 +20,7 @@
     pointer-events: none;
   }
 
-  .submit-modal {
+  .modal-content {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -63,6 +63,9 @@
           padding: 10px;
           border: 1px solid $primary-color;
           width: 100%;
+          &:disabled {
+            cursor: not-allowed;
+          }
         }
       }
 
@@ -71,7 +74,36 @@
         margin: 10px 0 10px 0;
         width: 100%;
 
-        #modal-results {
+        #status-container {
+          .desktop {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            button {
+              width: 100%;
+            }
+          }
+          #status-selection {
+            background-image: none;
+            border: 0;
+            cursor: pointer;
+            outline: none;
+            background-color: transparent;
+            color: white;
+            font-family: inherit;
+            font-size: inherit;
+            font-weight: inherit;
+            &:hover {
+              text-decoration: underline;
+            }
+            option {
+              background-color: $secondary-color;
+              font-weight: bolder;
+            }
+          }
+        }
+
+        .modal-results {
           padding: 15px;
           display: flex;
           flex-direction: column;
@@ -93,6 +125,22 @@
               line-height: 20px;
               word-break: break-word;
               width: 30vw;
+
+              .link {
+                max-width: 180px;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+              }
+
+              &.backlog {
+                display: flex;
+                gap: 5px;
+                flex-wrap: wrap;
+                width: 200px;
+                overflow: hidden;
+                align-items: center;
+              }
             }
 
             img {
@@ -102,6 +150,13 @@
 
             .modal-results-extra-information {
               font-size: 17px;
+            }
+
+            .modal-results-description {
+              display: flex;
+              flex-direction: column;
+              gap: 5px;
+              width: fit-content;
             }
           }
         }
@@ -127,15 +182,35 @@
       }
     }
 
-    .submit-modal {
+    .modal-content {
       width: 90%;
       .modal-body {
+        #status-container {
+          display: none;
+        }
         .search-wrapper input {
           border-radius: 0;
         }
         #filter-games-btn {
           margin-top: 5px;
           width: 100%;
+        }
+        .modal-listed-games {
+          .modal-results {
+            .modal-results-item {
+              .modal-results-image {
+                width: 50px;
+              }
+              .modal-results-title {
+                .link {
+                  max-width: 120px;
+                }
+                &.backlog {
+                  width: 150px;
+                }
+              }
+            }
+          }
         }
       }
       .modal-header {
@@ -153,7 +228,7 @@
 
 @media (min-width: 2560px) {
   main {
-    .submit-modal {
+    .modal-content {
       height: 100%;
       .modal-body {
         height: 70%;

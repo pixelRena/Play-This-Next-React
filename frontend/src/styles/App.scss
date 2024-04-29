@@ -114,9 +114,11 @@ main {
   * {
     font-weight: bold;
   }
+
   body {
     background-position: center;
   }
+
   #notification {
     width: 80%;
   }
@@ -132,11 +134,20 @@ main {
   }
 
   main {
+    justify-content: unset;
+
     section {
       &:nth-child(2) {
         margin-top: 90px;
         width: 90vw;
       }
+      .avatar-container {
+        display: none;
+      }
+    }
+
+    .modal-container {
+      height: 100vh;
     }
 
     .submit-modal {

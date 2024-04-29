@@ -1,12 +1,9 @@
-import { Store } from "context/Store.context";
-import { useContext } from "react";
-import { useSetUsername } from "./Username.utils";
-import Text from "components/text/Text";
-import Pencil from "components/icons/Pencil";
+import { Store } from "context/Store.context"
+import { useContext } from "react"
+import Text from "components/text/Text"
 
 const Username = () => {
-  const { state } = useContext(Store);
-  const setUsername = useSetUsername();
+  const { state } = useContext(Store)
 
   const style: React.CSSProperties = {
     display: "flex",
@@ -15,25 +12,18 @@ const Username = () => {
     top: "15px",
     left: "15px",
     zIndex: "5",
-  };
+  }
 
   return (
     <div className="username-container" style={style}>
       <Text size="small">
         Your Twitch Username: &nbsp;
         <Text color="lawngreen" bold={true} inline={true} size="small">
-          {state.username || "Not Provided"}
+          {state["user"]["username"] || "Not Provided"}
         </Text>
       </Text>
-      {/* <Pencil
-        fill="#fff"
-        stroke="#fff"
-        width="17px"
-        height="auto"
-        onClick={setUsername}
-      /> */}
     </div>
-  );
-};
+  )
+}
 
-export default Username;
+export default Username
