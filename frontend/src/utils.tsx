@@ -1,5 +1,5 @@
 export const generateDirectoryURL = (name) =>
   `https://twitch.tv/directory/category/${name
-    .replace(/[:()]/g, "")
+    .replace(/[.:()]/g, "")
     .replaceAll(/\s/g, "-")
     .toLowerCase()}`
