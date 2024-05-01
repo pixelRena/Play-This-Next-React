@@ -273,7 +273,7 @@ const Card = (props) => {
         style={{ width: "fit-content", padding: "10px" }}
       >
         <Text size="small" color="#0C0C0C">
-          Backlog
+          BACKLOG
         </Text>
       </Button>
       <CardBody />
