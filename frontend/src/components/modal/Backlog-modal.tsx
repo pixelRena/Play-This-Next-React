@@ -1,6 +1,6 @@
 import FocusTrap from "focus-trap-react"
 import "./Modal.scss"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import axios from "axios"
 import Text from "../../components/text/Text"
 import Button from "../../components/button/Button"
@@ -12,6 +12,7 @@ const BacklogModal = (props) => {
   const [backlog, setBacklog] = useState<string[]>([])
   const [selected, setSelected] = useState<any>("")
   const [error, setError] = useState<boolean>(false)
+  const resultsRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const fetchGames = async () => {
@@ -50,6 +51,8 @@ const BacklogModal = (props) => {
           ...backlog.sort((a: any, b: any) => a.name.localeCompare(b.name)),
         ])
       : setBacklog(results)
+
+    resultsRef?.current?.scrollTo(0, 0)
   }
 
   return (
@@ -102,6 +105,7 @@ const BacklogModal = (props) => {
                 </div>
                 <div
                   className="modal-results"
+                  ref={resultsRef}
                   style={{
                     alignItems: "center",
                     width: "100%",
