@@ -66,8 +66,9 @@ const BacklogModal = (props) => {
             <h2 className="modal-header">Backlog</h2>
             <div className="modal-body">
               <Text textStyle={{ textAlign: "center" }} bold>
-                A combined list of PS1/PS2 games that I currently own, along
-                with a few steam games being considered or already completed
+                This list contains PS1/PS2 games that have not been suggested,
+                but are being considered. This list includes steam games that
+                are being considered as well.
               </Text>
               <div
                 className="modal-listed-games"
@@ -87,7 +88,7 @@ const BacklogModal = (props) => {
                       value="false"
                       onClick={handleStatus}
                     >
-                      Haven't Played
+                      Queue
                     </Button>
                     <Button
                       className={`${selected === "completed" && "selected"}`}
@@ -141,13 +142,13 @@ const BacklogModal = (props) => {
                             size="small"
                             textStyle={{ width: "auto" }}
                           >
-                            {played ? "Completed" : "Haven't Played"}
+                            {played ? "Completed" : "Queue"}
                           </Text>
                         </div>
                       </div>
                     ))
                   ) : (
-                    <Text>Backlog is not available at this time.</Text>
+                    <Text>Backlog games are not available at this time.</Text>
                   )}
                 </div>
               </div>
