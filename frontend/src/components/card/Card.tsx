@@ -37,13 +37,17 @@ const Card = (props) => {
   const { data, text, status } = card
 
   const handleSearch = (e) => {
-    let dataCopy = isCardFlipped ? steam.data : suggested.data
+    const dataCopy = isCardFlipped ? steam.data : suggested.data
 
     setCard((prev) => ({ ...prev, text: e.target.value }))
 
     if (e.target.value === "" || e.target.value.length === 0) {
-      setCard((prev) => ({ ...prev, status: "queue", data: dataCopy }))
-      setSelected("")
+      setCard((prev) => ({
+        ...prev,
+        data: dataCopy.filter((data) =>
+          selected ? data["status"] === selected : data
+        ),
+      }))
     } else {
       let results
       if (selected) {
