@@ -142,8 +142,11 @@ app.get("/suggested-games-collection", async (req, res) => {
 // Adds new suggested game(s) to firebase DB
 app.post("/add-suggested-game", async (req, res) => {
   const { games, username } = req.body
-  let suggestedCollection = db.collection("suggested")
-  let gamesAdded = []
+  const suggestedCollection = db.collection("suggested")
+  const backlogCollection = db.collection("backlog")
+  const gamesAdded = []
+  const duplicates = []
+  const gamesAddedArray = []
 
   const removeSlashes = (inputString) => {
     if (inputString.includes("/")) {
@@ -158,28 +161,40 @@ app.post("/add-suggested-game", async (req, res) => {
     name = removeSlashes(name)
 
     // Check for duplications
-    let nameQuery = await suggestedCollection.where("name", "==", name).get()
+    const nameQuerySuggested = await suggestedCollection
+      .where("name", "==", name)
+      .get()
+    const nameQueryBacklog = await backlogCollection
+      .where("name", "==", name)
+      .get()
 
     // If game doesn't exist in collection, add the game
-    if (nameQuery.empty) {
+    if (nameQuerySuggested.empty && nameQueryBacklog.empty) {
       gamesAdded.push(name)
-      suggestedCollection.doc(String(name)).set({
+      gamesAddedArray.push({
         username: username || "User not provided",
         name,
         image,
         status: "queue",
+        created_at: new Date(),
       })
+    } else {
+      duplicates.push(name)
     }
   })
 
   Promise.all(promises).then(() => {
     // If game(s) are already on the list
-    if (!gamesAdded.length) {
+    if (!!duplicates.length) {
       res.status(406).json({
-        message:
-          "Game(s) selected are already on the list. Please remove them and search for different games.",
+        message: `"${duplicates.join(
+          ", "
+        )}" is already on the suggested or backlog list. Please remove them and search for different games.`,
       })
     } else {
+      gamesAddedArray.map((obj) => {
+        suggestedCollection.doc(String(obj.name)).set(obj)
+      })
       res.send(gamesAdded)
     }
   })
