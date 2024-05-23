@@ -30,9 +30,9 @@ const Card = (props) => {
   const [card, setCard] = useState(cardInformation)
   const [selected, setSelected] = useState<any>("")
   const { setModalVisibility } = useContext(ModalContext)
-  const { state, usernameApi, dispatch, setPostRequest } = useContext(Store)
+  const { state, usernameApi, dispatch } = useContext(Store)
   const { notification } = useContext(NotificationContext)
-  const { setCardInformation } = useContext(CardContext)
+  const { setCount } = useContext(CardContext)
   const { suggested, steam } = state
   const { data, text, status } = card
 
@@ -94,16 +94,14 @@ const Card = (props) => {
         payload: data,
       })
       notification("Owned games successfully updated!")
-      // Todo: Temp fix card resetting to suggested games as data
-      setCardInformation(false)
-      setPostRequest(true)
+      setCard((prev) => ({ ...prev, data }))
+      setCount("ownedGames", data.length)
     } catch (error) {
       dispatch({
         type: "FETCH_FAIL_FOR_STEAM",
         payload: error,
       })
       notification("Unable to update owned games. Please try again later.")
-      setPostRequest(false)
     }
   }
 
@@ -293,7 +291,6 @@ const CardList = ({ data }) => {
 
   return (
     <div className="card-list">
-      {/* Todo: Temp fix for data turning into string */}
       {data && Array.isArray(data) ? (
         data?.map(({ name, image, username, status }) => (
           <div className="card-list-item" key={`${name}-id`}>

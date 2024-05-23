@@ -8,8 +8,12 @@
   "main": "index.js",
   "scripts": {
     "build": "cd server && npm install && cd ../frontend && npm install && npm run build",
-    "start": "node server/server.js"
+    "start": "node server/server.js",
+    "test": "concurrently \"cd server && npm run watch arg\" \"cd frontend && npm start arg\""
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
 }

@@ -12,6 +12,7 @@ firebase.initializeApp({
     projectId: process.env.FIREBASE_PROJECT_ID,
     clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
     privateKey: JSON.parse(process.env.FIREBASE_PRIVATE_KEY),
+    // privateKey: process.env.FIREBASE_PRIVATE_KEY,
     privateKeyId: process.env.FIREBASE_PRIVATE_KEY_ID,
     token_uri: "https://oauth2.googleapis.com/token",
   }),
@@ -88,6 +89,7 @@ app.get("/steam-games-collection", async (req, res) => {
 // Updates steam games in firebase DB
 app.post("/seed-steam-games", async (req, res) => {
   try {
+    let gamesInDB = []
     const { data } = await axios.get(
       "https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=" +
         process.env.STEAM_WEB_API_KEY +
@@ -109,7 +111,11 @@ app.post("/seed-steam-games", async (req, res) => {
       })
     })
 
-    res.status(200).send("Fetch complete.")
+    await steamDB.get().then((snapshot) => {
+      snapshot.forEach((snap) => gamesInDB.push(snap.data()))
+    })
+
+    res.status(200).send(gamesInDB)
   } catch (e) {
     res.status(404).send(e)
   }
@@ -248,6 +254,6 @@ app.get("*", (req, res) =>
   res.sendFile(path.join(__dirname, "../frontend/build/index.html"))
 )
 
-app.listen(process.env.PORT || 3000, () => {
-  console.log("listening on port.." + process.env.PORT)
+app.listen(process.env.PORT || 3001, () => {
+  console.log("listening on port.. 3001")
 })

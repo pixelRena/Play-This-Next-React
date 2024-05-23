@@ -50,7 +50,6 @@ const reducer = (state: T.State, action: T.Action) => {
           ...(state[name as keyof T.State] as T.Data),
           data: action.payload,
           loading: false,
-          error: "",
         },
       }
     case `FETCH_FAIL_FOR_${nameType}`:
