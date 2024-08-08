@@ -155,7 +155,7 @@ const Card = (props) => {
             <select
               name="status"
               id="status-selection"
-              defaultValue=""
+              defaultValue={selected}
               onChange={handleStatus}
             >
               <option value="next">Next</option>
