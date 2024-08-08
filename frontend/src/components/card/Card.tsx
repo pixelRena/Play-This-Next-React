@@ -12,7 +12,7 @@ import Link from "svg/link"
 import Refresh from "svg/refresh"
 import PlusCircle from "svg/plus-circle"
 import { NotificationContext } from "../notification/Notification.context"
-import { generateDirectoryURL } from "utils"
+import { generateDirectoryURL, isWithinLast24Hours } from "utils"
 
 const cardInformation: {
   data: string[]
@@ -292,14 +292,14 @@ const CardList = ({ data }) => {
   return (
     <div className="card-list">
       {data && Array.isArray(data) ? (
-        data?.map(({ name, image, username, status }) => (
+        data?.map(({ name, image, username, status, posted_date }) => (
           <div className="card-list-item" key={`${name}-id`}>
             {/* <!-- Column --> */}
             <div>
               <div
                 className={`${
                   isCardFlipped ? "card-list-image-steam" : "card-list-image"
-                }`}
+                } ${isWithinLast24Hours(posted_date) && "new-post"}`}
                 role="img"
                 aria-label={`${
                   isCardFlipped ? name + " Steam Icon" : name + " Image Cover"
