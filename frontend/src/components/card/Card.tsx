@@ -340,7 +340,8 @@ const CardList = ({ data }) => {
                     </strong>
                   </div>
                   <div className={`game-status-${status}`}>{status}</div>
-                  {status === "queue" && (
+                  {/* Todo: Update to prevent users from voting if token expired and only allow one vote, user must also be signed in */}
+                  {/* {status === "queue" && (
                     <div className="upvote-container">
                       <Button
                         className={`upvote ${isUserVoter(voters) && "active"}`}
@@ -356,7 +357,7 @@ const CardList = ({ data }) => {
                         {voteCount ? "+" + voteCount : 0}
                       </Text>
                     </div>
-                  )}
+                  )} */}
                 </div>
               </div>
             </div>
