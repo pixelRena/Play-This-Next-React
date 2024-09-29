@@ -9,10 +9,10 @@ import "./Card.scss"
 import "../../styles/Status.scss"
 import axios from "axios"
 import Link from "svg/link"
-import Refresh from "svg/refresh"
 import PlusCircle from "svg/plus-circle"
 import { NotificationContext } from "../notification/Notification.context"
 import { generateDirectoryURL, isWithinLast24Hours } from "utils"
+import UpArrow from "svg/arrow-up"
 
 const cardInformation: {
   data: string[]
@@ -25,19 +25,17 @@ const cardInformation: {
 }
 
 const Card = (props) => {
-  const { cardHeader, cardFooter, ownedGames, gamesCompleted, isCardFlipped } =
-    useContext(CardContext)
+  const { cardHeader, cardFooter, gamesCompleted } = useContext(CardContext)
   const [card, setCard] = useState(cardInformation)
   const [selected, setSelected] = useState<any>("")
   const { setModalVisibility } = useContext(ModalContext)
-  const { state, usernameApi, dispatch } = useContext(Store)
+  const { state, usernameApi } = useContext(Store)
   const { notification } = useContext(NotificationContext)
-  const { setCount } = useContext(CardContext)
-  const { suggested, steam } = state
+  const { suggested } = state
   const { data, text, status } = card
 
   const handleSearch = (e) => {
-    const dataCopy = isCardFlipped ? steam.data : suggested.data
+    const dataCopy = suggested.data
 
     setCard((prev) => ({ ...prev, text: e.target.value }))
 
@@ -83,90 +81,62 @@ const Card = (props) => {
     setCard((prev) => ({ ...prev, data: results }))
   }
 
-  const RefreshSteamGames = async () => {
-    dispatch({
-      type: "FETCH_REQUEST_FOR_STEAM",
-    })
-    try {
-      const { data } = await axios.post("/seed-steam-games")
-      dispatch({
-        type: "FETCH_SUCCESS_FOR_STEAM",
-        payload: data,
-      })
-      notification("Owned games successfully updated!")
-      setCard((prev) => ({ ...prev, data }))
-      setCount("ownedGames", data.length)
-    } catch (error) {
-      dispatch({
-        type: "FETCH_FAIL_FOR_STEAM",
-        payload: error,
-      })
-      notification("Unable to update owned games. Please try again later.")
-    }
-  }
-
   const CardHeader = () => (
     <div id="card-header-container">
       <h3 id="card-header">{cardHeader}</h3>
 
-      {isCardFlipped ? (
-        <div id="refresh-button">
-          <Refresh title="Refresh owned games" onClick={RefreshSteamGames} />
+      <div id="status-container">
+        <div className="desktop">
+          <label htmlFor="status">Sort by:</label>
+          <Button
+            className={selected === "next" && "selected"}
+            variant="nextStatus"
+            value="next"
+            onClick={handleStatus}
+          >
+            Next
+          </Button>
+          <Button
+            className={selected === "declined" && "selected"}
+            variant="declinedStatus"
+            value="declined"
+            onClick={handleStatus}
+          >
+            Declined
+          </Button>
+          <Button
+            className={selected === "queue" && "selected"}
+            variant="queueStatus"
+            value="queue"
+            onClick={handleStatus}
+          >
+            Queue
+          </Button>
+          <Button
+            className={selected === "completed" && "selected"}
+            variant="completeStatus"
+            value="completed"
+            onClick={handleStatus}
+          >
+            Completed
+          </Button>
         </div>
-      ) : (
-        <div id="status-container">
-          <div className="desktop">
-            <label htmlFor="status">Sort by:</label>
-            <Button
-              className={selected === "next" && "selected"}
-              variant="nextStatus"
-              value="next"
-              onClick={handleStatus}
-            >
-              Next
-            </Button>
-            <Button
-              className={selected === "declined" && "selected"}
-              variant="declinedStatus"
-              value="declined"
-              onClick={handleStatus}
-            >
-              Declined
-            </Button>
-            <Button
-              className={selected === "queue" && "selected"}
-              variant="queueStatus"
-              value="queue"
-              onClick={handleStatus}
-            >
-              Queue
-            </Button>
-            <Button
-              className={selected === "completed" && "selected"}
-              variant="completeStatus"
-              value="completed"
-              onClick={handleStatus}
-            >
-              Completed
-            </Button>
-          </div>
-          <div className="mobile">
-            <label htmlFor="status">Sort by:</label>
-            <select
-              name="status"
-              id="status-selection"
-              defaultValue={selected}
-              onChange={handleStatus}
-            >
-              <option value="next">Next</option>
-              <option value="">Show All</option>
-              <option value="queue">Queue</option>
-              <option value="completed">Completed</option>
-              <option value="declined">Declined</option>
-            </select>
-          </div>
+        <div className="mobile">
+          <label htmlFor="status">Sort by:</label>
+          <select
+            name="status"
+            id="status-selection"
+            defaultValue={selected}
+            onChange={handleStatus}
+          >
+            <option value="next">Next</option>
+            <option value="">Show All</option>
+            <option value="queue">Queue</option>
+            <option value="completed">Completed</option>
+            <option value="declined">Declined</option>
+          </select>
         </div>
-      )}
+      </div>
     </div>
   )
 
@@ -179,44 +149,41 @@ const Card = (props) => {
 
   const CardFooter = () => (
     <div id="card-footer">
-      {cardFooter}: {isCardFlipped ? ownedGames : gamesCompleted}
+      {cardFooter}: {gamesCompleted}
     </div>
   )
 
+  const modalVisibility = () => {
+    setModalVisibility()
+    notification("Please try to recommend only retro or old school games.")
+  }
+
   useEffect(() => {
-    // Sorts data when user types text to match suggested data
-    setCard((prev) => ({ ...prev, data: suggested.data }))
+    // Prevent card data from resetting after voting
+    let results = suggested.data.filter((game: any) => {
+      return game.status === selected
+    })
+
+    setCard((prev) => ({
+      ...prev,
+      data: selected === "" ? suggested.data : results,
+    }))
+    // eslint-disable-next-line
   }, [suggested])
 
   useEffect(() => {
-    if (data === suggested.data || isCardFlipped) {
-      setCard((prev) => ({ ...prev, data: steam.data }))
-    } else if (data === steam.data || !isCardFlipped) {
-      setCard((prev) => ({ ...prev, data: suggested.data }))
-    }
-    // Empties textfield if card is flipped to different section
-    setCard((prev) => ({ ...prev, text: "" }))
-    setSelected("")
-
-    // eslint-disable-next-line
-  }, [isCardFlipped])
-
-  useEffect(() => {
     // Copies data into a different variable
-    let dataCopy = isCardFlipped ? steam.data : suggested.data
+    let dataCopy = suggested.data
 
     // Sorts data according to status selected
-    if (dataCopy === suggested.data) {
-      let results = dataCopy.sort((a: any, b: any) => {
-        if (a.status === status && b.status !== status) return -1
-        if (a.status !== status && b.status === status) return 1
-        return a.status.localeCompare(b.status)
-      })
+    let results = dataCopy.sort((a: any, b: any) => {
+      if (a.status === status && b.status !== status) return -1
+      if (a.status !== status && b.status === status) return 1
+      return a.status.localeCompare(b.status)
+    })
 
-      setCard((prev) => ({ ...prev, data: results }))
-      return
-    }
-    setCard((prev) => ({ ...prev, data: dataCopy }))
+    setCard((prev) => ({ ...prev, data: results }))
+
     // eslint-disable-next-line
   }, [status])
 
@@ -257,7 +224,7 @@ const Card = (props) => {
         variant="add"
         title="Start searching for games to add!"
         data-tooltip-id="helper-tooltip"
-        onClick={setModalVisibility}
+        onClick={modalVisibility}
         style={{ padding: "5px" }}
       >
         <PlusCircle
@@ -287,31 +254,60 @@ const Card = (props) => {
 export default Card
 
 const CardList = ({ data }) => {
-  const { isCardFlipped } = useContext(CardContext)
+  const { state, api } = useContext(Store)
+  const { notification } = useContext(NotificationContext)
+  const { user } = state
+
+  const setVote = async (name, voteCount, userVoted) => {
+    const data = await axios.put("/suggested-game", {
+      name,
+      voteCount: voteCount ? voteCount : 0,
+      username: user.username,
+      isUserVoter: userVoted,
+    })
+
+    if (data.status === 200) {
+      notification(
+        userVoted ? "Vote removed successfully" : "Vote added successfully"
+      )
+    } else {
+      notification(
+        "Failed to update vote. Please try again later or contact admin."
+      )
+    }
+    await api("/suggested-games-collection", "SUGGESTED")
+  }
+
+  const isUserVoter = (voters) =>
+    voters ? voters.includes(user.username) : false
 
   return (
     <div className="card-list">
       {data && Array.isArray(data) ? (
-        data?.map(({ name, image, username, status, posted_date }) => (
-          <div className="card-list-item" key={`${name}-id`}>
-            {/* <!-- Column --> */}
-            <div>
-              <div
-                className={`${
-                  isCardFlipped ? "card-list-image-steam" : "card-list-image"
-                } ${isWithinLast24Hours(posted_date) && "new-post"}`}
-                role="img"
-                aria-label={`${
-                  isCardFlipped ? name + " Steam Icon" : name + " Image Cover"
-                }`}
-                style={{ backgroundImage: `url(${image})` }}
-              ></div>
-            </div>
-            {/* <!-- Column --> */}
-            <div className="card-information">
-              {isCardFlipped ? (
-                <div className="card-list-item-title">{name}</div>
-              ) : (
+        data?.map(
+          ({
+            name,
+            image,
+            username,
+            status,
+            posted_date,
+            voteCount,
+            voters,
+          }) => (
+            <div className="card-list-item" key={`${name}-id`}>
+              {/* <!-- Column --> */}
+              <div>
+                <div
+                  className={`${"card-list-image"} ${
+                    isWithinLast24Hours(posted_date) && "new-post"
+                  }`}
+                  role="img"
+                  aria-label={`${name + " Image Cover"}`}
+                  style={{ backgroundImage: `url(${image})` }}
+                ></div>
+              </div>
+              {/* <!-- Column --> */}
+              <div className="card-information">
                 <div style={{ display: "flex", gap: "5px" }}>
                   <a
                     href={generateDirectoryURL(name)}
@@ -326,8 +322,7 @@ const CardList = ({ data }) => {
                     <Link />
                   </span>
                 </div>
-              )}
-              {isCardFlipped ? null : (
+
                 <div className="card-list-extra-information">
                   <div>
                     Posted by:&nbsp;
@@ -345,11 +340,28 @@ const CardList = ({ data }) => {
                     </strong>
                   </div>
                   <div className={`game-status-${status}`}>{status}</div>
+                  {status === "queue" && (
+                    <div className="upvote-container">
+                      <Button
+                        className={`upvote ${isUserVoter(voters) && "active"}`}
+                        variant="completeStatus"
+                        onClick={() =>
+                          setVote(name, voteCount, isUserVoter(voters))
+                        }
+                      >
+                        <UpArrow color="white" size={18} />
+                      </Button>
+                      <Text className="upvote-text" inline>
+                        {" "}
+                        {voteCount ? "+" + voteCount : 0}
+                      </Text>
+                    </div>
+                  )}
                 </div>
-              )}
+              </div>
             </div>
-          </div>
-        ))
+          )
+        )
       ) : (
         <Text size="large">No Games Found</Text>
       )}

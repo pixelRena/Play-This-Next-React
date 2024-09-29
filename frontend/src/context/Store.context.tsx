@@ -15,11 +15,6 @@ const initialState: T.State = {
     loading: true,
     error: "",
   },
-  steam: {
-    data: [],
-    loading: true,
-    error: "",
-  },
   user: {
     username: localStorage.getItem("ttv-username") ?? null,
     token: localStorage.getItem("ttv-token") ?? null,
@@ -84,16 +79,13 @@ export const StoreProvider = ({ children }: { children?: React.ReactNode }) => {
         type: `FETCH_SUCCESS_FOR_${actionType}`,
         payload: data,
       })
-      if (actionType === "SUGGESTED") {
-        let c = data.reduce((c, type) => {
-          if (type.status === "completed") return c + 1
 
-          return c
-        }, 0)
-        setCount("gamesCompleted", c)
-      } else {
-        setCount("ownedGames", data.length)
-      }
+      let c = data.reduce((c, type) => {
+        if (type.status === "completed") return c + 1
+
+        return c
+      }, 0)
+      setCount("gamesCompleted", c)
     } catch (error) {
       dispatch({
         type: `FETCH_FAIL_FOR_${actionType}`,
@@ -134,7 +126,6 @@ export const StoreProvider = ({ children }: { children?: React.ReactNode }) => {
   useEffect(() => {
     const fetchGameData = async () => {
       await api("/suggested-games-collection", "SUGGESTED")
-      await api("/steam-games-collection", "STEAM")
     }
     fetchGameData()
     // eslint-disable-next-line
@@ -151,6 +142,7 @@ export const StoreProvider = ({ children }: { children?: React.ReactNode }) => {
     setPostRequest,
     usernameApi,
     authorize,
+    api,
   }
 
   return <Store.Provider value={value}>{children}</Store.Provider>

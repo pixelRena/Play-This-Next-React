@@ -1,5 +1,3 @@
-import React from "react"
-
 const PlusCircle = ({ size = 25, color = "#000", style = {} }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"

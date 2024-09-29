@@ -10,21 +10,25 @@
   &-completed {
     background-color: $status-completed-background;
     color: $status-completed-color;
+    border: 1px solid $status-completed-color;
   }
 
   &-next {
     color: $status-next-color;
     background-color: $status-next-background;
+    border: 1px solid $status-next-color;
   }
 
   &-declined {
     background-color: $status-declined-background;
     color: $status-declined-color;
+    border: 1px solid $status-declined-color;
   }
 
   &-queue {
     background-color: $status-queue-background;
     color: $status-queue-color;
+    border: 1px solid $status-queue-color;
   }
 }
 

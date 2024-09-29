@@ -172,7 +172,7 @@
 
 @media (max-width: 768px) {
   .button-container {
-    padding: 10px 15px 10px 15px !important;
+    padding: 10px 15px 10px 15px;
 
     &.add {
       display: none;
@@ -184,6 +184,10 @@
       display: block;
       margin: 0 auto;
       margin-bottom: 5px;
+    }
+
+    .upvote {
+      padding: 3px;
     }
   }
 }

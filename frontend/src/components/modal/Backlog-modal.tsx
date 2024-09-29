@@ -11,18 +11,13 @@ import { generateDirectoryURL } from "utils"
 const BacklogModal = (props) => {
   const [backlog, setBacklog] = useState<string[]>([])
   const [selected, setSelected] = useState<any>("")
-  const [error, setError] = useState<boolean>(false)
   const resultsRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const fetchGames = async () => {
-      try {
-        const { data } = await axios.get("/backlog")
-        setError(false)
-        setBacklog(data)
-      } catch (error) {
-        setError(true)
-      }
+      const { data } = await axios.get("/backlog")
+
+      setBacklog(data)
     }
     fetchGames()
   }, [])

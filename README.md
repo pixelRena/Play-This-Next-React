@@ -5,7 +5,7 @@
 
 <h2 align="center">Recommend Games</h2>
   <p align="center">
-    This is an application created and cloned from my previous Play This Next, but is in ReactJS instead of HTML. Allows users/followers from twitch to suggest games and view games that are owned through steam.
+    This is an application created and cloned from my previous Play This Next, but is in ReactJS instead of HTML. Allows users/followers from twitch to suggest games.
     <br />
     <a href="https://nuygames.xyz/">View Demo</a>
     ·
@@ -18,7 +18,6 @@
   <li>Figma</li>
   <li>Firestore/Firebase</li>
   <li>Twitch API</li>
-  <li>Steam API</li>
   <li>Icons8</li>
   <li>Loading.io</li>
   <li>iconsvg.xyz</li>

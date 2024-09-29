@@ -20,7 +20,6 @@ firebase.initializeApp({
 
 const db = firebase.firestore()
 // Firebase collections:
-const steamDB = db.collection("steam")
 const docs = db.collection("suggested")
 const backlogDB = db.collection("backlog")
 
@@ -55,69 +54,6 @@ app.get("/search-games", async (req, res) => {
   } catch (error) {
     // Todo: Account for if token needs to be re-validated
     res.send(error)
-  }
-})
-
-// Fetches steam games
-app.get("/steam-games", async (req, res) => {
-  try {
-    const { data } = await axios.get(
-      "https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=" +
-        process.env.STEAM_WEB_API_KEY +
-        "&steamid=" +
-        process.env.STEAM_ID +
-        "&include_appinfo=true&format=json"
-    )
-    res.send(data.response)
-  } catch (error) {
-    console.log(error)
-    res.send(error)
-  }
-})
-
-// Fetches steam games stored in firebase DB
-app.get("/steam-games-collection", async (req, res) => {
-  let gamesInDB = []
-
-  await steamDB.get().then((snapshot) => {
-    snapshot.forEach((snap) => gamesInDB.push(snap.data()))
-  })
-
-  res.send(gamesInDB)
-})
-
-// Updates steam games in firebase DB
-app.post("/seed-steam-games", async (req, res) => {
-  try {
-    let gamesInDB = []
-    const { data } = await axios.get(
-      "https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=" +
-        process.env.STEAM_WEB_API_KEY +
-        "&steamid=" +
-        process.env.STEAM_ID +
-        "&include_appinfo=true&format=json"
-    )
-
-    data["response"]["games"].map(({ appid, img_icon_url, name }) => {
-      steamDB.doc(String(appid)).set({
-        appid,
-        name,
-        image:
-          "http://media.steampowered.com/steamcommunity/public/images/apps/" +
-          appid +
-          "/" +
-          img_icon_url +
-          ".jpg",
-      })
-    })
-
-    await steamDB.get().then((snapshot) => {
-      snapshot.forEach((snap) => gamesInDB.push(snap.data()))
-    })
-
-    res.status(200).send(gamesInDB)
-  } catch (e) {
-    res.status(404).send(e)
   }
 })
 
@@ -198,6 +134,33 @@ app.post("/add-suggested-game", async (req, res) => {
       res.send(gamesAdded)
     }
   })
+})
+
+// Update the vote count of a suggested game in firebase DB
+app.put("/suggested-game", async (req, res) => {
+  let { name, voteCount, username, isUserVoter } = req.body
+  const gameDocument = db.collection("suggested").doc(name)
+  const gameData = await gameDocument.get()
+  let updatedVoters
+
+  if (gameData.data().voters) {
+    updatedVoters = isUserVoter
+      ? gameData.data().voters.filter((v) => v !== username)
+      : [...gameData.data().voters, username]
+  } else {
+    updatedVoters = [username]
+  }
+
+  try {
+    await gameDocument.update({
+      voteCount: isUserVoter ? voteCount - 1 : voteCount + 1,
+      voters: updatedVoters,
+    })
+    res.status(200).send("Vote updated successfully")
+  } catch (e) {
+    console.log(e)
+    res.status(500).send(e)
+  }
 })
 
 // Updates username in DB

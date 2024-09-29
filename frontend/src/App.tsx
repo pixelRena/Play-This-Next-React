@@ -7,13 +7,10 @@ import Card from "./components/card/Card"
 import ParticlesContainer from "./components/particles/ParticlesContainer"
 import Username from "./components/username/Username"
 import { ModalContext } from "./components/modal/Modal.context"
-import { CardContext } from "./components/card/Card.context"
 import { useContext, useState } from "react"
 import BacklogModal from "./components/modal/Backlog-modal"
 
 const App = () => {
-  const { setCardInformation, buttonTitle, isCardFlipped } =
-    useContext(CardContext)
   const { setModalVisibility } = useContext(ModalContext)
   const [backlogVisibility, setBacklogVisibility] = useState(false)
 
@@ -28,9 +25,6 @@ const App = () => {
 
         <section>
           <AvatarContainer />
-          <Button onClick={() => setCardInformation(!isCardFlipped)}>
-            {buttonTitle}
-          </Button>
           <Button variant="light" onClick={setModalVisibility}>
             Submit Game Suggestion
           </Button>
