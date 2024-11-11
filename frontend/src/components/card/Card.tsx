@@ -12,7 +12,7 @@ import Link from "svg/link"
 import PlusCircle from "svg/plus-circle"
 import { NotificationContext } from "../notification/Notification.context"
 import { generateDirectoryURL, isWithinLast24Hours } from "utils"
-import UpArrow from "svg/arrow-up"
+// import UpArrow from "svg/arrow-up"
 
 const cardInformation: {
   data: string[]
@@ -193,9 +193,7 @@ const Card = (props) => {
 
     const collectUsername = async () => {
       try {
-        const { data } = await axios.get(
-          `/callback-oauth?access_token=${access_token}`
-        )
+        const { data } = await axios.get(`/auth?access_token=${access_token}`)
         usernameApi(data.twitchUsername, access_token, data.expires_in)
         setModalVisibility()
       } catch (error) {
@@ -258,28 +256,28 @@ const CardList = ({ data }) => {
   const { notification } = useContext(NotificationContext)
   const { user } = state
 
-  const setVote = async (name, voteCount, userVoted) => {
-    const data = await axios.put("/suggested-game", {
-      name,
-      voteCount: voteCount ? voteCount : 0,
-      username: user.username,
-      isUserVoter: userVoted,
-    })
+  // const setVote = async (name, voteCount, userVoted) => {
+  //   const data = await axios.put("/game/vote", {
+  //     name,
+  //     voteCount: voteCount ? voteCount : 0,
+  //     username: user.username,
+  //     isUserVoter: userVoted,
+  //   })
 
-    if (data.status === 200) {
-      notification(
-        userVoted ? "Vote removed successfully" : "Vote added successfully"
-      )
-    } else {
-      notification(
-        "Failed to update vote. Please try again later or contact admin."
-      )
-    }
-    await api("/suggested-games-collection", "SUGGESTED")
-  }
+  //   if (data.status === 200) {
+  //     notification(
+  //       userVoted ? "Vote removed successfully" : "Vote added successfully"
+  //     )
+  //   } else {
+  //     notification(
+  //       "Failed to update vote. Please try again later or contact admin."
+  //     )
+  //   }
+  //   await api("/games", "SUGGESTED")
+  // }
 
-  const isUserVoter = (voters) =>
-    voters ? voters.includes(user.username) : false
+  // const isUserVoter = (voters) =>
+  //   voters ? voters.includes(user.username) : false
 
   return (
     <div className="card-list">

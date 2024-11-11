@@ -23,7 +23,7 @@ const Modal = () => {
     try {
       if (modalAttrs["text"] && modalAttrs["text"] !== " ") {
         let { data } = await axios.get(
-          `/search-games?name=${modalAttrs["text"]}&token=${token}`
+          `/games/search?name=${modalAttrs["text"]}&token=${token}`
         )
 
         if (data.status === 401) {
@@ -80,7 +80,7 @@ const Modal = () => {
   // TODO: Refactor
   const onSubmitHandler = async () => {
     try {
-      await axios.post("/add-suggested-game", {
+      await axios.post("/game/add", {
         games: modalAttrs["games"],
         username: username,
       })

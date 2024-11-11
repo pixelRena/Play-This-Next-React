@@ -125,7 +125,7 @@ export const StoreProvider = ({ children }: { children?: React.ReactNode }) => {
 
   useEffect(() => {
     const fetchGameData = async () => {
-      await api("/suggested-games-collection", "SUGGESTED")
+      await api("/games", "SUGGESTED")
     }
     fetchGameData()
     // eslint-disable-next-line
