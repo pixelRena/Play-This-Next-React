@@ -1,5 +1,6 @@
 const express = require("express")
 const firebase = require("firebase-admin")
+const path = require("path")
 const cors = require("cors")
 const dotenv = require("dotenv")
 const games = require("./controllers/games")
@@ -82,9 +83,11 @@ app.get("/auth", (req, res) => {
   twitch.handleAuth(req, res)
 })
 
-app.get("/", (req, res) => {
-  res.send("HOSTING")
-})
+app.use(express.static(path.join(__dirname, "../frontend/build")))
+
+app.get("*", (req, res) =>
+  res.sendFile(path.join(__dirname, "../frontend/build/index.html"))
+)
 
 app.listen(process.env.PORT || 3001, () => {
   console.log("listening on port.. 3001")
