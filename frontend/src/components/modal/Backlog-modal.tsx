@@ -15,7 +15,7 @@ const BacklogModal = (props) => {
 
   useEffect(() => {
     const fetchGames = async () => {
-      const { data } = await axios.get("http://localhost:3001/games/backlog")
+      const { data } = await axios.get("/games/backlog")
 
       setBacklog(data)
     }
