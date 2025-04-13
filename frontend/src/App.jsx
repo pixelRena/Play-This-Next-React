@@ -1,10 +1,15 @@
 import DesktopCard from "./components/card/DesktopCard"
 import AbsoluteThings from "./components/particles/AbsoluteThings"
+import HelpModal from "./components/modal/HelpModal"
+import { useState } from "react"
 
 const App = () => {
+  const [showHelpModal, setShowHelpModal] = useState(false)
+
   return (
     <main>
       <AbsoluteThings />
+      {showHelpModal && <HelpModal setShowHelpModal={setShowHelpModal} />}
       <div className="menu-title d-flex justify-content-center align-items-center user-select-none">
         MENU
       </div>
@@ -19,7 +24,11 @@ const App = () => {
           <button type="button" className="btn">
             Filter by
           </button>
-          <button type="button" className="btn">
+          <button
+            type="button"
+            className="btn"
+            onClick={() => setShowHelpModal(!showHelpModal)}
+          >
             Help?
           </button>
 

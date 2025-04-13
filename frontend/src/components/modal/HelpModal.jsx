@@ -1,6 +1,6 @@
 import ModalStyles from "./Modal.scss"
 
-const HelpModal = () => {
+const HelpModal = ({ setShowHelpModal }) => {
   return (
     <>
       <div className="modal-backdrop opacity-25" />
@@ -9,7 +9,11 @@ const HelpModal = () => {
           <div class="modal-content border border-black">
             <div class="modal-header border-black">
               <h5 class="modal-title text-uppercase">How it works</h5>
-              <button type="button" className="btn ms-auto fs-5">
+              <button
+                type="button"
+                className="btn ms-auto fs-5"
+                onClick={() => setShowHelpModal(false)}
+              >
                 X
               </button>
             </div>
@@ -17,7 +21,7 @@ const HelpModal = () => {
               <ul>
                 <li>
                   TO ADD GAMES TO THE SUGGESTED LIST, YOU WILL NEED TO SIGN INTO
-                  TWITCH. oNCE LOGGED IN, THE “ADD A GAME” BUTTON WILL BE
+                  TWITCH. ONCE LOGGED IN, THE “ADD A GAME” BUTTON WILL BE
                   ENABLED.
                 </li>
                 <li>
@@ -35,7 +39,11 @@ const HelpModal = () => {
               </ul>
             </div>
             <div class="modal-footer border-black">
-              <button type="button" class="btn fs-5">
+              <button
+                type="button"
+                class="btn fs-5"
+                onClick={() => setShowHelpModal(false)}
+              >
                 OK
               </button>
             </div>
