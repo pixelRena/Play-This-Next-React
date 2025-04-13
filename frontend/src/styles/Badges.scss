@@ -1,0 +1,36 @@
+@import "./_variables";
+
+[class^="card-badge"] {
+  padding-inline: 10px;
+  padding-block: 5px;
+  font-weight: 600;
+  font-size: 12px;
+  border-radius: 10px;
+  border-width: 1px;
+  border-style: solid;
+  &[class*="game-completed"] {
+    background: $status-completed-background;
+    color: $status-completed-color;
+    border-color: $status-completed-color;
+  }
+  &[class*="game-current"] {
+    background: $status-current-background;
+    color: $status-current-color;
+    border-color: $status-current-color;
+  }
+  &[class*="game-queued"] {
+    background: $status-queue-background;
+    color: $status-queue-color;
+    border-color: $status-queue-color;
+  }
+  &[class*="game-declined"] {
+    background: $status-declined-background;
+    color: $status-declined-color;
+    border-color: $status-declined-color;
+  }
+  &[class*="twitch-username"] {
+    background: $twitch-username-background;
+    color: $twitch-username-color;
+    border-color: $twitch-username-color;
+  }
+}

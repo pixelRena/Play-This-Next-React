@@ -1,11 +1,23 @@
-$primary-color: #3500D4;
-$secondary-color: #0C0C0C; 
+$primary-color: #007fd4;
+$secondary-color: #0c0c0c;
 $custom-border-box: 0px 21px 21px 0px;
-$status-completed-color: rgb(91, 246, 74);
-$status-completed-background: #2b9a0057;
-$status-declined-color: rgb(245, 85, 85);
-$status-declined-background: #9a000057;
-$status-next-color: #ba00d4;
-$status-next-background: #a400bb47;
-$status-queue-color: #d4d000;
-$status-queue-background: #bbb20047;
+$status-completed-color: #1eb25c;
+$status-completed-background: #80ffb5;
+$status-declined-color: #b21e1e;
+$status-declined-background: #ff8080;
+// Todo: rename as currently playing
+$status-current-color: #1e8ab2;
+$status-current-background: #80ecff;
+$status-queue-color: #9cb21e;
+$status-queue-background: #e1ff80;
+$primary-blue: #36abff;
+$twitch-username-color: #7c1eb2;
+$twitch-username-background: #c880ff;
+// Shadows, Borders, Game Titles, Buttons
+$primary-blue-light: #68c0ff;
+$disabled: rgba(0, 0, 0, 30%);
+$primary-blue-border: #68c0ff;
+// Hover, Background, Border, Text
+$dark: #000000;
+$light: #ffffff;
+$twitch-purple: #9747ff;

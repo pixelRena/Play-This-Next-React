@@ -21,4 +21,5 @@
   <li>Icons8</li>
   <li>Loading.io</li>
   <li>iconsvg.xyz</li>
+  <li>Bootstrap 5</li>
 </ul>
