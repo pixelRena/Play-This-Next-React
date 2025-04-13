@@ -4,11 +4,11 @@ const HelpModal = ({ setShowHelpModal }) => {
   return (
     <>
       <div className="modal-backdrop opacity-25" />
-      <div class="modal help-modal d-block pixel-font">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-          <div class="modal-content border border-black">
-            <div class="modal-header border-black">
-              <h5 class="modal-title text-uppercase">How it works</h5>
+      <div className="modal help-modal d-block pixel-font">
+        <div className="modal-dialog modal-lg modal-dialog-centered">
+          <div className="modal-content border border-black">
+            <div className="modal-header border-black">
+              <h5 className="modal-title text-uppercase">How it works</h5>
               <button
                 type="button"
                 className="btn ms-auto fs-5"
@@ -17,7 +17,7 @@ const HelpModal = ({ setShowHelpModal }) => {
                 X
               </button>
             </div>
-            <div class="modal-body text-uppercase">
+            <div className="modal-body text-uppercase">
               <ul>
                 <li>
                   TO ADD GAMES TO THE SUGGESTED LIST, YOU WILL NEED TO SIGN INTO
@@ -38,10 +38,10 @@ const HelpModal = ({ setShowHelpModal }) => {
                 </li>
               </ul>
             </div>
-            <div class="modal-footer border-black">
+            <div className="modal-footer border-black">
               <button
                 type="button"
-                class="btn fs-5"
+                className="btn fs-5"
                 onClick={() => setShowHelpModal(false)}
               >
                 OK
