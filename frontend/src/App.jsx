@@ -2,6 +2,7 @@ import DesktopCard from "./components/card/DesktopCard"
 import AbsoluteThings from "./components/particles/AbsoluteThings"
 import HelpModal from "./components/modal/HelpModal"
 import { useState } from "react"
+import DropdownMenu from "./components/dropdown-menu/DropdownMenu"
 
 const App = () => {
   const [showHelpModal, setShowHelpModal] = useState(false)
@@ -18,38 +19,8 @@ const App = () => {
           <button type="button" className="btn" disabled>
             Add a game
           </button>
-          <div className="btn btn-group dropend">
-            <button
-              type="button"
-              className="btn bg-transparent dropdown-toggle"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              Sort by
-            </button>
-            <ul className="dropdown-menu ms-3 py-0">
-              <li className="dropdown-item">> Currently Playing</li>
-              <li className="dropdown-item">> Queue</li>
-              <li className="dropdown-item">> Completed</li>
-              <li className="dropdown-item">> Declined</li>
-            </ul>
-          </div>
-          <div className="btn btn-group dropend">
-            <button
-              type="button"
-              className="btn bg-transparent dropdown-toggle"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              Filter by
-            </button>
-            <ul className="dropdown-menu ms-3 py-0">
-              <li className="dropdown-item">> Currently Playing</li>
-              <li className="dropdown-item">> Queue</li>
-              <li className="dropdown-item">> Completed</li>
-              <li className="dropdown-item">> Declined</li>
-            </ul>
-          </div>
+          <DropdownMenu type="Sort" />
+          <DropdownMenu type="Filter" />
           <button
             type="button"
             className="btn"
