@@ -1,4 +1,4 @@
-const DropdownMenu = (type) => {
+const DropdownMenu = ({ type }) => {
   return (
     <div className="btn btn-group dropend">
       <button
