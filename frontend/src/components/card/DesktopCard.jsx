@@ -90,7 +90,12 @@ const DesktopCard = () => {
                             </a>
                           </Badge>
                           {isWithinLast24Hours(created_at) && (
-                            <Badge className="card-badge new">New!!</Badge>
+                            <Badge
+                              className="card-badge new"
+                              title="This game has been added within the last 24 hours"
+                            >
+                              New!!
+                            </Badge>
                           )}
                         </>
                       )}

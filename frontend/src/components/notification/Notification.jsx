@@ -1,6 +1,6 @@
 import { useContext, useEffect } from "react"
 import { Store } from "../../context/Store.context.jsx"
-import NotificationStyles from "../../styles/Notification.scss"
+import "../../styles/Notification.scss"
 
 const Notification = () => {
   const { state, dispatch } = useContext(Store)

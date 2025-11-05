@@ -85,6 +85,12 @@ const reducer = (state, action) => {
         toastr: action.payload,
       }
 
+    case "isBacklog":
+      return {
+        ...state,
+        isBacklog: action.payload,
+      }
+
     case "FILTER_SUGGESTED":
       return {
         ...state,

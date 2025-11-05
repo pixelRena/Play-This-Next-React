@@ -1,7 +1,11 @@
-import Badges from "../../styles/Badges.scss"
+import "../../styles/Badges.scss"
 
-const Badge = ({ className, children }) => {
-  return <div className={className}>{children}</div>
+const Badge = ({ className, children, ...props }) => {
+  return (
+    <div className={className} {...props}>
+      {children}
+    </div>
+  )
 }
 
 export default Badge
