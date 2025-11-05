@@ -1,16 +1,9 @@
-import "./Modal.scss"
-
 const HelpModal = () => {
   return (
-    <div
-      className="modal fade pixel-font"
-      id="helpModal"
-      tabIndex="-1"
-      aria-labelledby="exampleModalLabel"
-    >
+    <div className="modal fade pixel-font" id="helpModal" tabIndex="-1">
       <div className="modal-dialog modal-lg modal-dialog-centered">
-        <div className="modal-content border border-black">
-          <div className="modal-header border-black">
+        <div className="modal-content border border-dark">
+          <div className="modal-header border-dark">
             <h5 className="modal-title text-uppercase">How it works</h5>
             <button
               type="button"
@@ -41,7 +34,7 @@ const HelpModal = () => {
               </li>
             </ul>
           </div>
-          <div className="modal-footer border-black">
+          <div className="modal-footer border-dark">
             <button type="button" className="btn fs-5" data-bs-dismiss="modal">
               OK
             </button>

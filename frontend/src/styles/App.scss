@@ -88,8 +88,6 @@ main {
   display: flex;
   padding: 50px 35px;
   flex-direction: column;
-  // justify-content: center;
-  // align-items: center;
   height: 100vh;
   .menu-title {
     font-size: 96px;
@@ -202,6 +200,12 @@ body .dropdown-menu {
     }
     .menu-buttons .btn.card-flipper {
       margin-top: unset;
+    }
+    .btn.btn-twitch-login {
+      width: 100%;
+    }
+    .dropdown-menu-container {
+      display: none;
     }
   }
 }

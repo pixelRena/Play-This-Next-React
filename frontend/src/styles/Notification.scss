@@ -1,0 +1,22 @@
+@import "_variables.scss";
+
+.toast {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1056;
+  font-family: "Orbitron", sans-serif;
+  font-size: 15px;
+  font-weight: bold;
+  &.bg-success {
+    background-color: $status-completed-background !important;
+    color: $status-completed-color !important;
+    border: 1px solid $status-completed-color !important;
+  }
+  &.bg-danger {
+    background-color: $status-declined-background !important;
+    color: $status-declined-color !important;
+    border: 1px solid $status-declined-color !important;
+  }
+}

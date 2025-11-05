@@ -1,0 +1,14 @@
+@import "./_variables";
+
+#helpModal {
+  .modal-content {
+    line-height: 22px;
+    font-size: 14px;
+  }
+}
+
+#addGameModal {
+  input.form-check-input:checked {
+    background-color: $dark;
+  }
+}
