@@ -13,6 +13,7 @@ const AddGameModal = () => {
     e.preventDefault()
 
     try {
+      // !bug: "+" in search text breaks the search endpoint
       if (searchText.trim().length > 0) {
         let { data } = await axios.get(
           `http://localhost:3001/games/search?name=${searchText}&token=${state.user.token}`

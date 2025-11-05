@@ -167,6 +167,7 @@ body .dropdown-menu {
   overflow: hidden;
   width: 90%;
   z-index: -1;
+
   &.reverse {
     bottom: -70px;
     top: unset;
@@ -174,12 +175,22 @@ body .dropdown-menu {
     left: unset;
     transform: rotate(110deg) translate(-50%, -50%);
   }
+
   .scrolling-text {
     display: inline-block;
     color: rgba(248, 241, 239, 30%);
     font-size: 9rem;
     font-weight: 500;
-    animation: scroll-diagnonal 10s linear infinite;
+    animation: scroll-diagonal 20s linear infinite;
+  }
+}
+
+@keyframes scroll-diagonal {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
   }
 }
 
