@@ -8,7 +8,20 @@
 }
 
 #addGameModal {
+  .modal-dialog,
+  .modal-content {
+    height: 50%;
+  }
   input.form-check-input:checked {
     background-color: $dark;
+  }
+}
+
+@media (max-width: 768px) {
+  #addGameModal {
+    .modal-dialog,
+    .modal-content {
+      height: 100%;
+    }
   }
 }

@@ -4,6 +4,7 @@ import DropdownMenu from "./components/dropdown-menu/DropdownMenu"
 import { useContext } from "react"
 import { Store } from "./context/Store.context.jsx"
 import { cardSwitchText } from "./utils.jsx"
+import MobileCard from "./mobile/components/card/MobileCard.jsx"
 
 const App = () => {
   const { state, authorize, dispatch } = useContext(Store)
@@ -21,7 +22,7 @@ const App = () => {
       <div className="menu-title d-flex justify-content-center align-items-center user-select-none">
         MENU
       </div>
-      <div className="d-md-flex flex-row justify-content-between">
+      <div className="d-md-flex flex-row justify-content-between gap-4">
         <div className="menu-buttons d-flex flex-column gap-4 pt-5 ms-xl-5 ms-4 col-xl-3">
           <button
             type="button"
@@ -51,14 +52,24 @@ const App = () => {
 
           <button
             type="button"
-            className="btn card-flipper"
+            className="btn card-flipper d-none d-md-block"
             onClick={() => cardSwitchDispatch()}
           >
             View {cardSwitchText(isBacklog)}
           </button>
+
+          <button
+            type="button"
+            className="btn d-md-none"
+            data-bs-toggle="modal"
+            data-bs-target="#mobileGamesModal"
+          >
+            View Games
+          </button>
         </div>
         <div>
           <DesktopCard />
+          <MobileCard />
           <button
             className="btn btn-twitch-login text-uppercase mt-4 mx-md-5 p-0 ms-3"
             onClick={authorize}

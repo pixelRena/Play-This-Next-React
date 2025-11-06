@@ -95,7 +95,7 @@ const DesktopCard = () => {
 
   return (
     <div
-      className="desktop-card card rounded-0 d-none d-md-block text-uppercase"
+      className="desktop-card card rounded-0 d-none d-md-block text-uppercase mt-lg-0 mt-5"
       ref={ref}
     >
       {showButton && (
@@ -104,7 +104,7 @@ const DesktopCard = () => {
           title="Scroll to top"
           onClick={() => scrollToTop(ref)}
         >
-          <i class="bi bi-arrow-up fs-5" />
+          <i className="bi bi-arrow-up fs-5" />
         </button>
       )}
       <div className="card-body p-4">

@@ -12,14 +12,9 @@ svg {
 
 a {
   text-decoration: none;
-  // color: rgb(105, 170, 255);
   &:hover {
     text-decoration: underline;
   }
-}
-
-li {
-  list-style-type: circle;
 }
 
 ::-webkit-scrollbar {
@@ -132,7 +127,7 @@ main {
   }
 }
 
-body .dropdown-menu {
+body .dropdown-menu:not(.dropdown-menu-mobile) {
   color: $light;
   background-color: $primary-blue-light;
   border: 0;

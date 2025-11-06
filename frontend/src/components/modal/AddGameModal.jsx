@@ -103,8 +103,8 @@ const AddGameModal = () => {
       id="addGameModal"
       tabIndex="-1"
     >
-      <div className="modal-dialog modal-dialog-centered h-50">
-        <div className="modal-content border border-dark h-50">
+      <div className="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
+        <div className="modal-content border border-dark">
           <div className="modal-header border-dark">
             <h5 className="modal-title text-uppercase">Add a game</h5>
             <button
@@ -129,7 +129,14 @@ const AddGameModal = () => {
                 />
               </div>
             </form>
-            <p className="fs-6">My Games Selected ({selectedGames.length})</p>
+            <button
+              type="button"
+              className="btn btn-sm text-uppercase p-0 mb-2 border-0"
+              onClick={() => setGames(selectedGames)}
+              disabled={selectedGames.length === 0}
+            >
+              My Games Selected ({selectedGames.length})
+            </button>
             <div className="border-top pt-2">
               {games.length === 0 ? (
                 <p>Start by searching for games</p>
