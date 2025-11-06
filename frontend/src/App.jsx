@@ -28,7 +28,7 @@ const App = () => {
             className="btn"
             data-bs-toggle="modal"
             data-bs-target="#addGameModal"
-            disabled={!state.user}
+            disabled={!state.user.username}
           >
             Add a game
           </button>

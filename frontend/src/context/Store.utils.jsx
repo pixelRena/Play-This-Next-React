@@ -4,6 +4,7 @@ const initialState = {
     data: [],
     loading: true,
     error: "",
+    isFiltered: false,
   },
   backlog: {
     originalData: [],
@@ -82,6 +83,7 @@ const reducer = (state, action) => {
           data: state.suggested.originalData.filter(
             (item) => item.status === action.payload.status
           ),
+          isFiltered: true,
         },
       }
 
@@ -117,6 +119,7 @@ const reducer = (state, action) => {
             if (b.status === action.payload) return 1
             return 0
           }),
+          isFiltered: false,
         },
       }
 
@@ -126,6 +129,7 @@ const reducer = (state, action) => {
         suggested: {
           ...state.suggested,
           data: action.payload,
+          isFiltered: false,
         },
       }
 

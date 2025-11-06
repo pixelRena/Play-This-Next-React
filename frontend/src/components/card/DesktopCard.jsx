@@ -109,7 +109,7 @@ const DesktopCard = () => {
       )}
       <div className="card-body p-4">
         <div className="d-flex flex-column gap-4">
-          <div className="input-group mb-3 border-bottom">
+          <div className="input-group border-bottom">
             <span className="input-group-text bi-search border-0 bg-transparent fs-5 " />
             <input
               value={searchText}
@@ -119,7 +119,22 @@ const DesktopCard = () => {
               placeholder="Search games..."
             />
           </div>
-
+          {state.suggested.isFiltered && (
+            <div>
+              <button
+                type="button"
+                className="btn btn-sm btn-dark w-auto"
+                onClick={() =>
+                  dispatch({
+                    type: "RESET_SUGGESTED",
+                    payload: state.suggested.originalData,
+                  })
+                }
+              >
+                Reset Filter
+              </button>
+            </div>
+          )}
           {state.suggested.loading && <Loader />}
           {games.length === 0 && !state.suggested.loading ? (
             <div>No games to display. Try a different filter.</div>
