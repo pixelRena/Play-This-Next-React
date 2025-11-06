@@ -1,7 +1,7 @@
 import "../../styles/Card.scss"
 // import Results from "../../mock.json"
 import Badge from "../badge/Badge"
-import { useContext, useEffect } from "react"
+import { useContext, useEffect, useState } from "react"
 import { Store } from "../../context/Store.context.jsx"
 import axios from "axios"
 import {
@@ -12,9 +12,43 @@ import {
 } from "../../utils.jsx"
 
 const DesktopCard = () => {
-  const { usernameApi, state } = useContext(Store)
+  const { usernameApi, state, dispatch } = useContext(Store)
   const { isBacklog } = state
   const games = isBacklog ? state.backlog.data : state.suggested.data
+  const [searchText, setSearchText] = useState("")
+
+  const searchTextHandler = (e) => {
+    if (!isBacklog) {
+      if (e.target.value === "") {
+        dispatch({
+          type: "RESET_SUGGESTED",
+          payload: state.suggested.originalData,
+        })
+        setSearchText("")
+      } else {
+        setSearchText(e.target.value)
+        dispatch({
+          type: "FILTER_SUGGESTED_TEXT",
+          payload: e.target.value,
+        })
+      }
+      return
+    }
+
+    if (e.target.value === "") {
+      dispatch({
+        type: "RESET_BACKLOG",
+        payload: state.backlog.originalData,
+      })
+      setSearchText("")
+    } else {
+      setSearchText(e.target.value)
+      dispatch({
+        type: "FILTER_BACKLOG_TEXT",
+        payload: e.target.value,
+      })
+    }
+  }
 
   useEffect(() => {
     const params = new URLSearchParams(document.location.hash)
@@ -35,10 +69,25 @@ const DesktopCard = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  useEffect(() => {
+    setSearchText("")
+  }, [isBacklog])
+
   return (
     <div className="desktop-card card rounded-0 d-none d-md-block text-uppercase">
       <div className="card-body p-4">
         <div className="d-flex flex-column gap-4">
+          <div className="input-group mb-3 border-bottom">
+            <span className="input-group-text bi-search border-0 bg-transparent fs-5 " />
+            <input
+              value={searchText}
+              onChange={(e) => searchTextHandler(e)}
+              type="search"
+              className="form-control border-0 bg-transparent text-uppercase fs-6 rounded-0"
+              placeholder="Search games..."
+            />
+          </div>
+
           {games.length === 0 ? (
             <div>No games to display. Try a different filter.</div>
           ) : (

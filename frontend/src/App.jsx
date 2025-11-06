@@ -9,6 +9,12 @@ const App = () => {
   const { state, authorize, dispatch } = useContext(Store)
   const { isBacklog } = state
 
+  const cardSwitchDispatch = () => {
+    dispatch({ type: "isBacklog", payload: !isBacklog })
+    dispatch({ type: "RESET_SUGGESTED", payload: state.suggested.originalData })
+    dispatch({ type: "RESET_BACKLOG", payload: state.backlog.originalData })
+  }
+
   return (
     <main>
       <AbsoluteItems />
@@ -45,7 +51,7 @@ const App = () => {
           <button
             type="button"
             className="btn card-flipper"
-            onClick={() => dispatch({ type: "isBacklog", payload: !isBacklog })}
+            onClick={() => cardSwitchDispatch()}
           >
             View {cardSwitchText(isBacklog)}
           </button>

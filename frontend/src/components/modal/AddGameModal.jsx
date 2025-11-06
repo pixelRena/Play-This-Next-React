@@ -117,18 +117,18 @@ const AddGameModal = () => {
             </button>
           </div>
           <div className="modal-body text-uppercase h-50 overflow-y-auto">
-            <div className="input-group input-group-sm mb-3 border border-dark border-2 rounded-0">
-              <span className="input-group-text bi-search border-0 bg-transparent fs-5" />
-              <form onSubmit={onSearchHandler}>
+            <form onSubmit={onSearchHandler}>
+              <div className="input-group input-group-sm mb-3 border border-dark border-2 rounded-0">
+                <span className="input-group-text bi-search border-0 bg-transparent fs-5" />
                 <input
                   value={searchText}
                   onChange={(e) => setSearchText(e.target.value)}
                   type="search"
-                  className="form-control border-0 bg-transparent text-uppercase fs-6"
+                  className="form-control rounded-0 border-0 bg-transparent text-uppercase fs-6"
                   placeholder="Search..."
                 />
-              </form>
-            </div>
+              </div>
+            </form>
             <p className="fs-6">My Games Selected ({selectedGames.length})</p>
             <div className="border-top pt-2">
               {games.length === 0 ? (
