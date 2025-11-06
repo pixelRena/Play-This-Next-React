@@ -1,0 +1,4 @@
+/node_modules
+/firebaseKey.json
+.env
+/serenuy.json
