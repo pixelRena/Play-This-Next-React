@@ -103,7 +103,7 @@ const DesktopCard = () => {
                     ></div>
                   </div>
 
-                  <div>
+                  <div className="w-75">
                     <div className="card-game-title text-nowrap text-truncate">
                       <a
                         href={generateDirectoryURL(name)}
