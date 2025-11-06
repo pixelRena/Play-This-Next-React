@@ -16,7 +16,7 @@ const AddGameModal = () => {
       // !bug: "+" in search text breaks the search endpoint
       if (searchText.trim().length > 0) {
         let { data } = await axios.get(
-          `http://localhost:3001/games/search?name=${searchText}&token=${state.user.token}`
+          `https://play-this-next-react.vercel.app/games/search?name=${searchText}&token=${state.user.token}`
         )
 
         if (data.status === 401) {
@@ -51,10 +51,13 @@ const AddGameModal = () => {
   const onSubmitHandler = async (e) => {
     e.preventDefault()
     try {
-      const { data } = await axios.post("http://localhost:3001/game/add", {
-        games: selectedGames,
-        username: state.user.username,
-      })
+      const { data } = await axios.post(
+        "https://play-this-next-react.vercel.app/game/add",
+        {
+          games: selectedGames,
+          username: state.user.username,
+        }
+      )
       dispatch({
         type: "toastr",
         payload: {

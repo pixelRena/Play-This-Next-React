@@ -70,15 +70,18 @@ export const StoreProvider = ({ children }) => {
 
   useEffect(() => {
     const fetchGameData = async () => {
-      await api("http://localhost:3001/games", "SUGGESTED")
-      await api("http://localhost:3001/games/backlog", "BACKLOG")
+      await api("https://play-this-next-react.vercel.app/games", "SUGGESTED")
+      await api(
+        "https://play-this-next-react.vercel.app/games/backlog",
+        "BACKLOG"
+      )
     }
     fetchGameData()
   }, [postRequest])
 
   const authorize = async () =>
     window.location.replace(
-      `https://id.twitch.tv/oauth2/authorize?client_id=8h55e8b7evg28b8f1ybsb3sin8b883&redirect_uri=http://localhost:3000/callback&response_type=token&scope=user_read`
+      `https://id.twitch.tv/oauth2/authorize?client_id=8h55e8b7evg28b8f1ybsb3sin8b883&redirect_uri=https://play-this-next-react.vercel.app/callback&response_type=token&scope=user_read`
     )
 
   const value = {

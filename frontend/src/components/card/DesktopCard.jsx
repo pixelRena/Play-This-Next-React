@@ -73,7 +73,7 @@ const DesktopCard = () => {
     const collectUsername = async () => {
       try {
         const { data } = await axios.get(
-          `http://localhost:3001/auth?access_token=${access_token}`
+          `https://play-this-next-react.vercel.app/auth?access_token=${access_token}`
         )
         usernameApi(data.twitchUsername, access_token, data.expires_in)
       } catch (error) {
