@@ -1,7 +1,7 @@
 import "../../styles/Card.scss"
 // import Results from "../../mock.json"
 import Badge from "../badge/Badge"
-import { useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
 import { Store } from "../../context/Store.context.jsx"
 import axios from "axios"
 import {
@@ -9,6 +9,7 @@ import {
   backlogBadgeText,
   generateDirectoryURL,
   isWithinLast24Hours,
+  scrollToTop,
 } from "../../utils.jsx"
 import Loader from "../loader/Loader.jsx"
 
@@ -17,6 +18,9 @@ const DesktopCard = () => {
   const { isBacklog } = state
   const games = isBacklog ? state.backlog.data : state.suggested.data
   const [searchText, setSearchText] = useState("")
+  const [scrollPosition, setSrollPosition] = useState(0)
+  const [showButton, setShowButton] = useState(false)
+  const ref = useRef(null)
 
   const searchTextHandler = (e) => {
     if (!isBacklog) {
@@ -51,6 +55,17 @@ const DesktopCard = () => {
     }
   }
 
+  const handleVisibleButton = () => {
+    const position = ref.current.scrollTop
+    setSrollPosition(position)
+
+    if (scrollPosition > 600) {
+      return setShowButton(true)
+    } else if (scrollPosition < 600) {
+      return setShowButton(false)
+    }
+  }
+
   useEffect(() => {
     const params = new URLSearchParams(document.location.hash)
     const access_token = params?.get("#access_token")
@@ -74,8 +89,24 @@ const DesktopCard = () => {
     setSearchText("")
   }, [isBacklog])
 
+  useEffect(() => {
+    ref.current.addEventListener("scroll", handleVisibleButton)
+  })
+
   return (
-    <div className="desktop-card card rounded-0 d-none d-md-block text-uppercase">
+    <div
+      className="desktop-card card rounded-0 d-none d-md-block text-uppercase"
+      ref={ref}
+    >
+      {showButton && (
+        <button
+          className="btn btn-dark rounded-0 btn-sm position-fixed top-80 start-88 z-3"
+          title="Scroll to top"
+          onClick={() => scrollToTop(ref)}
+        >
+          <i class="bi bi-arrow-up fs-5" />
+        </button>
+      )}
       <div className="card-body p-4">
         <div className="d-flex flex-column gap-4">
           <div className="input-group mb-3 border-bottom">
@@ -88,6 +119,7 @@ const DesktopCard = () => {
               placeholder="Search games..."
             />
           </div>
+
           {state.suggested.loading && <Loader />}
           {games.length === 0 && !state.suggested.loading ? (
             <div>No games to display. Try a different filter.</div>

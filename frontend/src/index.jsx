@@ -7,6 +7,7 @@ import { StoreProvider } from "./context/Store.context.jsx"
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap/dist/js/bootstrap.bundle.min.js"
 import "@popperjs/core"
+import "./styles/_utilities.scss"
 
 const root = ReactDOM.createRoot(document.getElementById("root"))
 

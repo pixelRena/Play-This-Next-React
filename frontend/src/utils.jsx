@@ -22,10 +22,15 @@ const backlogBadgeText = (played) => (played ? "Completed" : "Not Started")
 const cardSwitchText = (isBacklog) =>
   isBacklog ? "Suggested Games" : "Backlog Games"
 
+const scrollToTop = (ref) => {
+  ref.current.scrollTo({ top: 0, behavior: "smooth" })
+}
+
 export {
   generateDirectoryURL,
   isWithinLast24Hours,
   backlogBadgeClass,
   backlogBadgeText,
   cardSwitchText,
+  scrollToTop,
 }

@@ -1,3 +1,19 @@
+$position-values: (
+  0: 0,
+  25: 25%,
+  50: 50%,
+  60: 60%,
+  65: 65%,
+  70: 70%,
+  75: 75%,
+  80: 80%,
+  85: 85%,
+  88: 88%,
+  90: 90%,
+  95: 95%,
+  100: 100%,
+);
+
 $primary-color: #007fd4;
 $secondary-color: #0c0c0c;
 $custom-border-box: 0px 21px 21px 0px;
@@ -5,7 +21,6 @@ $status-completed-color: #1eb25c;
 $status-completed-background: #80ffb5;
 $status-declined-color: #b21e1e;
 $status-declined-background: #ff8080;
-// Todo: rename as currently playing
 $status-current-color: #1e8ab2;
 $status-current-background: #80ecff;
 $status-queue-color: #9cb21e;
