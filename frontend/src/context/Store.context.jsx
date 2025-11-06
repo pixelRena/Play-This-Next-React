@@ -81,7 +81,7 @@ export const StoreProvider = ({ children }) => {
 
   const authorize = async () =>
     window.location.replace(
-      `https://id.twitch.tv/oauth2/authorize?client_id=8h55e8b7evg28b8f1ybsb3sin8b883&redirect_uri=https://play-this-next-react.vercel.app/callback&response_type=token&scope=user_read`
+      `https://id.twitch.tv/oauth2/authorize?client_id=8h55e8b7evg28b8f1ybsb3sin8b883&redirect_uri=https://pixelrena.github.io/Play-This-Next-React/callback&response_type=token&scope=user_read`
     )
 
   const value = {
