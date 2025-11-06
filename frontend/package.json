@@ -1,6 +1,7 @@
 {
   "name": "play-this-next-react-frontend",
   "version": "0.1.0",
+  "homepage": "https://pixelRena.github.io/Play-This-Next-React",
   "private": true,
   "dependencies": {
     "@popperjs/core": "^2.11.8",
@@ -26,6 +27,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "svgr": "svgr --icon --title-prop -d src/components/icons src/svg",
@@ -51,6 +54,7 @@
     ]
   },
   "devDependencies": {
-    "@svgr/cli": "^8.1.0"
+    "@svgr/cli": "^8.1.0",
+    "gh-pages": "^6.3.0"
   }
 }
