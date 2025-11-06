@@ -83,12 +83,16 @@ app.get("/auth", (req, res) => {
   twitch.handleAuth(req, res)
 })
 
-app.use(express.static(path.join(__dirname, "../frontend/build")))
+// app.use(express.static(path.join(__dirname, "../frontend/build")))
 
-app.get("*", (req, res) =>
-  res.sendFile(path.join(__dirname, "../frontend/build/index.html"))
-)
+// app.get("*", (req, res) =>
+//   res.sendFile(path.join(__dirname, "../frontend/build/index.html"))
+// )
 
-app.listen(process.env.PORT || 3001, () => {
-  console.log("listening on port.. 3001")
-})
+// app.listen(process.env.PORT || 3001, () => {
+//   console.log("listening on port.. 3001")
+// })
+
+app.get("/", (req, res) => res.send("Hello from Express!"))
+
+module.exports = app
