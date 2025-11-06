@@ -10,6 +10,7 @@ import {
   generateDirectoryURL,
   isWithinLast24Hours,
 } from "../../utils.jsx"
+import Loader from "../loader/Loader.jsx"
 
 const DesktopCard = () => {
   const { usernameApi, state, dispatch } = useContext(Store)
@@ -87,8 +88,8 @@ const DesktopCard = () => {
               placeholder="Search games..."
             />
           </div>
-
-          {games.length === 0 ? (
+          {state.suggested.loading && <Loader />}
+          {games.length === 0 && !state.suggested.loading ? (
             <div>No games to display. Try a different filter.</div>
           ) : (
             games.map(

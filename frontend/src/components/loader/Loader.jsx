@@ -1,10 +1,11 @@
+import "./Loader.scss"
 const Loader = () => (
-    <div id="loader-container">
-        <div id="loader">
-            <div></div>
-            <div></div>
-        </div>
+  <div id="loader-container">
+    <div id="loader">
+      <div></div>
+      <div></div>
     </div>
-);
- 
-export default Loader;
+  </div>
+)
+
+export default Loader
