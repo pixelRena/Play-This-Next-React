@@ -5,6 +5,7 @@ const initialState = {
     loading: true,
     error: "",
     isFiltered: false,
+    isSorted: false,
   },
   backlog: {
     originalData: [],
@@ -84,6 +85,7 @@ const reducer = (state, action) => {
             (item) => item.status === action.payload.status
           ),
           isFiltered: true,
+          isSorted: false,
         },
       }
 
@@ -120,6 +122,7 @@ const reducer = (state, action) => {
             return 0
           }),
           isFiltered: false,
+          isSorted: true,
         },
       }
 
@@ -130,6 +133,7 @@ const reducer = (state, action) => {
           ...state.suggested,
           data: action.payload,
           isFiltered: false,
+          isSorted: false,
         },
       }
 

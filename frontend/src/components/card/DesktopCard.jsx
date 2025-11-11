@@ -20,6 +20,7 @@ const DesktopCard = () => {
   const [searchText, setSearchText] = useState("")
   const [scrollPosition, setSrollPosition] = useState(0)
   const [showButton, setShowButton] = useState(false)
+  const [showSortedGames, setShowSortedGames] = useState(false)
   const ref = useRef(null)
 
   const searchTextHandler = (e) => {
@@ -87,11 +88,21 @@ const DesktopCard = () => {
 
   useEffect(() => {
     setSearchText("")
+    setShowSortedGames(false)
   }, [isBacklog])
 
   useEffect(() => {
     ref.current.addEventListener("scroll", handleVisibleButton)
   })
+
+  useEffect(() => {
+    const { isSorted } = state.suggested
+    if (isSorted) {
+      setShowSortedGames(true)
+    } else {
+      setShowSortedGames(false)
+    }
+  }, [state.suggested.isSorted])
 
   return (
     <div
@@ -139,68 +150,71 @@ const DesktopCard = () => {
           {games.length === 0 && !state.suggested.loading ? (
             <div>No games to display. Try a different filter.</div>
           ) : (
-            games.map(
-              ({ name, image, status, username, played, created_at }) => (
-                <div className="d-flex flex-row gap-4" key={name}>
-                  <div className="card-game-cover">
-                    <div
-                      role="img"
-                      aria-label={`${name + " Image Cover"}`}
-                      style={{ backgroundImage: `url(${image})` }}
-                    ></div>
-                  </div>
+            (showSortedGames
+              ? games
+              : [...games].sort((a, b) =>
+                  a.status === "current" ? -1 : b.status === "current" ? 1 : 0
+                )
+            ).map(({ name, image, status, username, played, created_at }) => (
+              <div className="d-flex flex-row gap-4" key={name}>
+                <div className="card-game-cover">
+                  <div
+                    role="img"
+                    aria-label={`${name + " Image Cover"}`}
+                    style={{ backgroundImage: `url(${image})` }}
+                  ></div>
+                </div>
 
-                  <div className="w-75">
-                    <div className="card-game-title text-nowrap text-truncate">
-                      <a
-                        href={generateDirectoryURL(name)}
-                        title={`Check out ${name} on twitch`}
-                        target="_blank"
-                        rel="noreferrer"
+                <div className="w-75">
+                  <div className="card-game-title text-nowrap text-truncate">
+                    <a
+                      href={generateDirectoryURL(name)}
+                      title={`Check out ${name} on twitch`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {name}
+                    </a>
+                  </div>
+                  <div className="d-flex flex-row gap-2 mt-2">
+                    {isBacklog ? (
+                      <Badge
+                        className={`card-badge-game-${backlogBadgeClass(
+                          played
+                        )}`}
                       >
-                        {name}
-                      </a>
-                    </div>
-                    <div className="d-flex flex-row gap-2 mt-2">
-                      {isBacklog ? (
-                        <Badge
-                          className={`card-badge-game-${backlogBadgeClass(
-                            played
-                          )}`}
-                        >
-                          {backlogBadgeText(played)}
+                        {backlogBadgeText(played)}
+                      </Badge>
+                    ) : (
+                      <>
+                        <Badge className={`card-badge-game-${status}`}>
+                          {status}
                         </Badge>
-                      ) : (
-                        <>
-                          <Badge className={`card-badge-game-${status}`}>
-                            {status}
+                        <Badge className="card-badge-twitch-username">
+                          <a
+                            className="text-decoration-none"
+                            href={`https://twitch.tv/${username}`}
+                            title={`Check out ${username} on twitch`}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            @{username}
+                          </a>
+                        </Badge>
+                        {isWithinLast24Hours(created_at) && (
+                          <Badge
+                            className="card-badge new"
+                            title="This game has been added within the last 24 hours"
+                          >
+                            New!!
                           </Badge>
-                          <Badge className="card-badge-twitch-username">
-                            <a
-                              className="text-decoration-none"
-                              href={`https://twitch.tv/${username}`}
-                              title={`Check out ${username} on twitch`}
-                              target="_blank"
-                              rel="noreferrer"
-                            >
-                              @{username}
-                            </a>
-                          </Badge>
-                          {isWithinLast24Hours(created_at) && (
-                            <Badge
-                              className="card-badge new"
-                              title="This game has been added within the last 24 hours"
-                            >
-                              New!!
-                            </Badge>
-                          )}
-                        </>
-                      )}
-                    </div>
+                        )}
+                      </>
+                    )}
                   </div>
                 </div>
-              )
-            )
+              </div>
+            ))
           )}
         </div>
       </div>

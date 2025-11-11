@@ -14,7 +14,11 @@ const DropdownMenu = ({ type }) => {
         },
       })
     } else if (type === "Sort") {
-      dispatch({ type: "SORT_SUGGESTED", payload: status.toLowerCase() })
+      dispatch({
+        type: "SORT_SUGGESTED",
+        payload: status.toLowerCase(),
+        isSorted: true,
+      })
     }
   }
 
@@ -32,7 +36,10 @@ const DropdownMenu = ({ type }) => {
         {type} by
       </button>
       <ul className="dropdown-menu ms-3 py-0">
-        <li className="dropdown-item" onClick={() => handleMenuClick("Next")}>
+        <li
+          className="dropdown-item"
+          onClick={() => handleMenuClick("Current")}
+        >
           {">"} Currently Playing
         </li>
         <li className="dropdown-item" onClick={() => handleMenuClick("Queue")}>
