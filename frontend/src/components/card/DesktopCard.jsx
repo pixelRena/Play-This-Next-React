@@ -176,7 +176,7 @@ const DesktopCard = () => {
                       {name}
                     </a>
                   </div>
-                  <div className="d-flex flex-row gap-2 mt-2">
+                  <div className="d-flex flex-row gap-2 mt-2 w-90">
                     {isBacklog ? (
                       <Badge
                         className={`card-badge-game-${backlogBadgeClass(
@@ -190,7 +190,7 @@ const DesktopCard = () => {
                         <Badge className={`card-badge-game-${status}`}>
                           {status}
                         </Badge>
-                        <Badge className="card-badge-twitch-username">
+                        <Badge className="card-badge-twitch-username text-truncate w-auto">
                           <a
                             className="text-decoration-none"
                             href={`https://twitch.tv/${username}`}
