@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState, useReducer } from "react"
 import axios from "axios"
 import { initialState, reducer } from "./Store.utils.jsx"
+import { API_URL, REDIRECT_URL } from "../config"
 
 export const Store = createContext({
   state: initialState,
@@ -48,17 +49,19 @@ export const StoreProvider = ({ children }) => {
     }
   }
 
-  const usernameApi = async (newUsername, token, expires_in) => {
+  const usernameApi = async (newUsername, token, expires_in, isOwner) => {
     try {
       localStorage.setItem("ttv-username", newUsername)
       localStorage.setItem("ttv-token", token)
       localStorage.setItem("ttv-token-expires-in", expires_in)
+      localStorage.setItem("ttv-is-owner", String(!!isOwner))
       dispatch({
         type: "user",
         payload: {
           username: newUsername,
           token,
           expires_in,
+          isOwner: !!isOwner,
         },
       })
       return
@@ -68,20 +71,58 @@ export const StoreProvider = ({ children }) => {
     }
   }
 
+  // Re-check ownership for an existing session. Fresh logins (token in the URL
+  // hash) are handled by the cards, so skip those.
+  useEffect(() => {
+    const { token } = state.user
+    const hasHashToken = new URLSearchParams(document.location.hash).has(
+      "#access_token"
+    )
+    if (!token || hasHashToken) return
+
+    const refreshUser = async () => {
+      try {
+        const { data } = await axios.get(
+          `${API_URL}/auth?access_token=${token}`
+        )
+        usernameApi(data.twitchUsername, token, data.expires_in, data.isOwner)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    refreshUser()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // Owner only: the server rejects anyone else
+  const deleteGame = async (name, isBacklog) => {
+    if (!window.confirm(`Delete "${name}"?`)) return
+
+    try {
+      await axios.delete(
+        `${API_URL}/games/${
+          isBacklog ? "backlog" : "suggested"
+        }?name=${encodeURIComponent(name)}`,
+        { headers: { Authorization: `Bearer ${state.user.token}` } }
+      )
+      forceFetchCall((prev) => !prev)
+    } catch (error) {
+      console.error(error)
+      window.alert("Unable to delete game.")
+    }
+  }
+
   useEffect(() => {
     const fetchGameData = async () => {
-      await api("https://play-this-next-react.vercel.app/games", "SUGGESTED")
-      await api(
-        "https://play-this-next-react.vercel.app/games/backlog",
-        "BACKLOG"
-      )
+      await api(`${API_URL}/games`, "SUGGESTED")
+      await api(`${API_URL}/games/backlog`, "BACKLOG")
     }
     fetchGameData()
   }, [postRequest])
 
   const authorize = async () =>
     window.location.replace(
-      `https://id.twitch.tv/oauth2/authorize?client_id=8h55e8b7evg28b8f1ybsb3sin8b883&redirect_uri=https://pixelrena.github.io/Play-This-Next-React&response_type=token&scope=user_read`
+      `https://id.twitch.tv/oauth2/authorize?client_id=8h55e8b7evg28b8f1ybsb3sin8b883&redirect_uri=${REDIRECT_URL}&response_type=token&scope=user_read`
     )
 
   const value = {
@@ -89,6 +130,7 @@ export const StoreProvider = ({ children }) => {
     dispatch,
     forceFetchCall,
     usernameApi,
+    deleteGame,
     authorize,
     api,
   }

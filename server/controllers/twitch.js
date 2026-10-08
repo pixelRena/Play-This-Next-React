@@ -50,13 +50,38 @@ const handleAuth = async (req, res) => {
     res.status(200).json({
       twitchUsername: userResponse.data.data[0].login,
       expires_in: validateToken["data"]["expires_in"],
+      isOwner: isOwnerId(validateToken.data),
     })
   } catch (error) {
     res.status(404).send("Unable to fetch twitch username. Try again later.")
   }
 }
 
+// Twitch user ids are permanent, unlike login names
+const isOwnerId = ({ user_id, client_id }) =>
+  !!process.env.TWITCH_OWNER_ID &&
+  user_id === process.env.TWITCH_OWNER_ID &&
+  client_id === process.env.TWITCH_CLIENT_ID
+
+// Express middleware: only lets the app owner through. The identity comes from
+// Twitch's validate response for the token, never from the request body.
+const requireOwner = async (req, res, next) => {
+  const token = (req.headers.authorization || "").replace(/^Bearer\s+/i, "")
+  if (!token) return res.status(401).send("Missing token")
+
+  try {
+    const { data } = await axios.get("https://id.twitch.tv/oauth2/validate", {
+      headers: { Authorization: `OAuth ${token}` },
+    })
+    if (!isOwnerId(data)) return res.status(403).send("Not allowed")
+    next()
+  } catch (error) {
+    res.status(401).send("Invalid or expired token")
+  }
+}
+
 module.exports = {
   handleSearch,
   handleAuth,
+  requireOwner,
 }

@@ -110,7 +110,24 @@ const handleAddGame = async (req, res, docs, backlogDB) => {
   })
 }
 
+// Owner-only (guarded by twitch.requireOwner). Deletes by game name.
+const handleDeleteGame = async (req, res, collection) => {
+  const { name } = req.query
+  if (!name) return res.status(400).send("Game name is required")
+
+  try {
+    const snapshot = await collection.where("name", "==", name).get()
+    if (snapshot.empty) return res.status(404).send("Game not found")
+
+    await Promise.all(snapshot.docs.map((snap) => snap.ref.delete()))
+    res.status(200).send(`Deleted "${name}"`)
+  } catch (e) {
+    res.status(500).send("Unable to delete game")
+  }
+}
+
 module.exports = {
+  handleDeleteGame,
   handleGames,
   handleBacklogGames,
   handleGameVote,

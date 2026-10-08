@@ -17,6 +17,8 @@ const initialState = {
     username: localStorage.getItem("ttv-username") ?? null,
     token: localStorage.getItem("ttv-token") ?? null,
     expires_in: localStorage.getItem("ttv-token-expires-in") ?? null,
+    // Cosmetic only: the server re-verifies the token on every delete
+    isOwner: localStorage.getItem("ttv-is-owner") === "true",
   },
   toastr: {
     message: "",

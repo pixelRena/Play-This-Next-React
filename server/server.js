@@ -48,6 +48,15 @@ app.post("/game/add", (req, res) => {
   games.handleAddGame(req, res, docs, backlogDB)
 })
 
+// Owner-only deletes
+app.delete("/games/suggested", twitch.requireOwner, (req, res) => {
+  games.handleDeleteGame(req, res, docs)
+})
+
+app.delete("/games/backlog", twitch.requireOwner, (req, res) => {
+  games.handleDeleteGame(req, res, backlogDB)
+})
+
 // Update the vote count of a suggested game in firebase DB
 // Todo: replace with id usage
 // app.put("/game/vote", (req, res) => {

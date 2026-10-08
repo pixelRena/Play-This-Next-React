@@ -12,9 +12,10 @@ import {
   scrollToTop,
 } from "../../utils.jsx"
 import Loader from "../loader/Loader.jsx"
+import { API_URL } from "../../config"
 
 const DesktopCard = () => {
-  const { usernameApi, state, dispatch } = useContext(Store)
+  const { usernameApi, deleteGame, state, dispatch } = useContext(Store)
   const { isBacklog } = state
   const games = isBacklog ? state.backlog.data : state.suggested.data
   const [searchText, setSearchText] = useState("")
@@ -74,9 +75,14 @@ const DesktopCard = () => {
     const collectUsername = async () => {
       try {
         const { data } = await axios.get(
-          `https://play-this-next-react.vercel.app/auth?access_token=${access_token}`
+          `${API_URL}/auth?access_token=${access_token}`
         )
-        usernameApi(data.twitchUsername, access_token, data.expires_in)
+        usernameApi(
+          data.twitchUsername,
+          access_token,
+          data.expires_in,
+          data.isOwner
+        )
       } catch (error) {
         console.error(error)
       }
@@ -212,6 +218,17 @@ const DesktopCard = () => {
                       </>
                     )}
                   </div>
+                  {state.user.isOwner && (
+                    <button
+                      type="button"
+                      className="btn btn-sm btn-dark mt-2"
+                      title={`Delete ${name}`}
+                      aria-label={`Delete ${name}`}
+                      onClick={() => deleteGame(name, isBacklog)}
+                    >
+                      <i className="bi bi-trash" />
+                    </button>
+                  )}
                 </div>
               </div>
             ))

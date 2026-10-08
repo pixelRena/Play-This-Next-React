@@ -2,6 +2,7 @@
 import { useContext, useState } from "react"
 import { Store } from "../../context/Store.context.jsx"
 import axios from "axios"
+import { API_URL } from "../../config"
 
 const AddGameModal = () => {
   const { state, dispatch, authorize, forceFetchCall } = useContext(Store)
@@ -16,13 +17,14 @@ const AddGameModal = () => {
       // !bug: "+" in search text breaks the search endpoint
       if (searchText.trim().length > 0) {
         let { data } = await axios.get(
-          `https://play-this-next-react.vercel.app/games/search?name=${searchText}&token=${state.user.token}`
+          `${API_URL}/games/search?name=${searchText}&token=${state.user.token}`
         )
 
         if (data.status === 401) {
           localStorage.removeItem("ttv-token")
           localStorage.removeItem("ttv-token-expires-in")
           localStorage.removeItem("ttv-username")
+          localStorage.removeItem("ttv-is-owner")
           dispatch({
             type: "user",
             payload: {
@@ -52,7 +54,7 @@ const AddGameModal = () => {
     e.preventDefault()
     try {
       const { data } = await axios.post(
-        "https://play-this-next-react.vercel.app/game/add",
+        `${API_URL}/game/add`,
         {
           games: selectedGames,
           username: state.user.username,
