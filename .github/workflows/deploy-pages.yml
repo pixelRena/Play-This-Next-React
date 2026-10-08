@@ -36,7 +36,7 @@ jobs:
       # step's credentials, so the token goes in the repo URL.
       - run: |
           npx gh-pages -d build \
-            -u "github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>" \
+            -u '"github-actions[bot]" <github-actions@users.noreply.github.com>' \
             -r "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
