@@ -198,17 +198,15 @@ const DesktopCard = () => {
                           <Badge className={`card-badge-game-${status}`}>
                             {status}
                           </Badge>
-                          <Badge className="card-badge-twitch-username text-truncate w-auto">
-                            <a
-                              className="text-decoration-none"
-                              href={`https://twitch.tv/${username}`}
-                              title={`Check out ${username} on twitch`}
-                              target="_blank"
-                              rel="noreferrer"
-                            >
-                              @{username}
-                            </a>
-                          </Badge>
+                          <a
+                            className="card-badge-twitch-username text-truncate w-auto text-decoration-none"
+                            href={`https://twitch.tv/${username}`}
+                            title={`Check out ${username} on twitch`}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            @{username}
+                          </a>
                           {isWithinLast24Hours(created_at) && (
                             <Badge
                               className="card-badge new"
@@ -227,12 +225,12 @@ const DesktopCard = () => {
                     ) && (
                       <button
                         type="button"
-                        className="btn btn-sm btn-dark mt-2"
-                        title={`Delete ${name}`}
-                        aria-label={`Delete ${name}`}
+                        className="card-badge-game-declined mt-2"
+                        title={`Remove ${name}`}
+                        aria-label={`Remove ${name}`}
                         onClick={() => deleteGame(name, isBacklog)}
                       >
-                        <i className="bi bi-trash" />
+                        Remove
                       </button>
                     )}
                   </div>

@@ -29,6 +29,15 @@
     color: $status-declined-color;
     border-color: $status-declined-color;
   }
+  // Badges that are buttons or links (e.g. "Remove", the username)
+  &:is(button, a) {
+    text-transform: inherit;
+    line-height: inherit;
+    cursor: pointer;
+    &:hover {
+      filter: brightness(1.2);
+    }
+  }
   &[class*="twitch-username"] {
     background: $twitch-username-background;
     color: $twitch-username-color;
