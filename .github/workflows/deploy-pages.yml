@@ -31,8 +31,12 @@ jobs:
         env:
           CI: false
 
-      # Publishes build/ to the gh-pages branch, same as `npm run deploy`
+      # Publishes build/ to the gh-pages branch, same as `npm run deploy`.
+      # gh-pages pushes from its own clone, which doesn't inherit the checkout
+      # step's credentials, so the token goes in the repo URL.
       - run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          npx gh-pages -d build
+          npx gh-pages -d build \
+            -u "github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>" \
+            -r "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
