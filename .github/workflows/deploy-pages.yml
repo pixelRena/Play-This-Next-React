@@ -1,0 +1,38 @@
+name: Deploy to GitHub Pages
+
+# Manual only: run from the Actions tab ("Run workflow"). Beta site: the job
+# only runs for ui-alpha-01, so picking any other branch does nothing.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/ui-alpha-01'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: yarn
+          cache-dependency-path: frontend/yarn.lock
+
+      - run: yarn install --frozen-lockfile
+
+      # CI=false so lint warnings don't fail the build (same as a local build)
+      - run: yarn build
+        env:
+          CI: false
+
+      # Publishes build/ to the gh-pages branch, same as `npm run deploy`
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          npx gh-pages -d build
