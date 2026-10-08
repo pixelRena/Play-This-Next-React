@@ -115,15 +115,6 @@ const DesktopCard = () => {
       className="desktop-card card rounded-0 d-none d-md-block text-uppercase mt-lg-0 mt-5"
       ref={ref}
     >
-      {showButton && (
-        <button
-          className="btn btn-dark rounded-0 btn-sm position-fixed top-80 start-88 z-3"
-          title="Scroll to top"
-          onClick={() => scrollToTop(ref)}
-        >
-          <i className="bi bi-arrow-up fs-5" />
-        </button>
-      )}
       <div className="card-body p-4">
         <div className="d-flex flex-column gap-4">
           <div className="input-group border-bottom">
@@ -235,6 +226,18 @@ const DesktopCard = () => {
           )}
         </div>
       </div>
+      {/* Sticks to the bottom of the card's scroll area, so it can't leave the card */}
+      {showButton && (
+        <div className="scroll-top-anchor">
+          <button
+            className="btn btn-dark rounded-0 btn-sm"
+            title="Scroll to top"
+            onClick={() => scrollToTop(ref)}
+          >
+            <i className="bi bi-arrow-up fs-5" />
+          </button>
+        </div>
+      )}
     </div>
   )
 }

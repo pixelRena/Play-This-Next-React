@@ -11,6 +11,18 @@
     height: 655px;
     overflow-x: hidden;
   }
+  // Zero-height sticky row: pins the button to the bottom of the scrolling card
+  .scroll-top-anchor {
+    position: sticky;
+    bottom: 0;
+    height: 0;
+    z-index: 3;
+    button {
+      position: absolute;
+      right: 6px;
+      bottom: 16px;
+    }
+  }
   .card-game-title a {
     color: $primary-blue-light;
     font-size: 20px;
