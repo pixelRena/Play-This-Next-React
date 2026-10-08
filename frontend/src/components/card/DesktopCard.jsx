@@ -7,6 +7,7 @@ import axios from "axios"
 import {
   backlogBadgeClass,
   backlogBadgeText,
+  canDeleteGame,
   generateDirectoryURL,
   isWithinLast24Hours,
   scrollToTop,
@@ -81,7 +82,8 @@ const DesktopCard = () => {
           data.twitchUsername,
           access_token,
           data.expires_in,
-          data.isOwner
+          data.isOwner,
+          data.userId
         )
       } catch (error) {
         console.error(error)
@@ -152,77 +154,91 @@ const DesktopCard = () => {
               : [...games].sort((a, b) =>
                   a.status === "current" ? -1 : b.status === "current" ? 1 : 0
                 )
-            ).map(({ name, image, status, username, played, created_at }) => (
-              <div className="d-flex flex-row gap-4" key={name}>
-                <div className="card-game-cover">
-                  <div
-                    role="img"
-                    aria-label={`${name + " Image Cover"}`}
-                    style={{ backgroundImage: `url(${image})` }}
-                  ></div>
-                </div>
-
-                <div className="w-75">
-                  <div className="card-game-title text-nowrap text-truncate">
-                    <a
-                      href={generateDirectoryURL(name)}
-                      title={`Check out ${name} on twitch`}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      {name}
-                    </a>
+            ).map(
+              ({
+                name,
+                image,
+                status,
+                username,
+                user_id,
+                played,
+                created_at,
+              }) => (
+                <div className="d-flex flex-row gap-4" key={name}>
+                  <div className="card-game-cover">
+                    <div
+                      role="img"
+                      aria-label={`${name + " Image Cover"}`}
+                      style={{ backgroundImage: `url(${image})` }}
+                    ></div>
                   </div>
-                  <div className="d-flex flex-row gap-2 mt-2 w-90">
-                    {isBacklog ? (
-                      <Badge
-                        className={`card-badge-game-${backlogBadgeClass(
-                          played
-                        )}`}
+
+                  <div className="w-75">
+                    <div className="card-game-title text-nowrap text-truncate">
+                      <a
+                        href={generateDirectoryURL(name)}
+                        title={`Check out ${name} on twitch`}
+                        target="_blank"
+                        rel="noreferrer"
                       >
-                        {backlogBadgeText(played)}
-                      </Badge>
-                    ) : (
-                      <>
-                        <Badge className={`card-badge-game-${status}`}>
-                          {status}
+                        {name}
+                      </a>
+                    </div>
+                    <div className="d-flex flex-row gap-2 mt-2 w-90">
+                      {isBacklog ? (
+                        <Badge
+                          className={`card-badge-game-${backlogBadgeClass(
+                            played
+                          )}`}
+                        >
+                          {backlogBadgeText(played)}
                         </Badge>
-                        <Badge className="card-badge-twitch-username text-truncate w-auto">
-                          <a
-                            className="text-decoration-none"
-                            href={`https://twitch.tv/${username}`}
-                            title={`Check out ${username} on twitch`}
-                            target="_blank"
-                            rel="noreferrer"
-                          >
-                            @{username}
-                          </a>
-                        </Badge>
-                        {isWithinLast24Hours(created_at) && (
-                          <Badge
-                            className="card-badge new"
-                            title="This game has been added within the last 24 hours"
-                          >
-                            New!!
+                      ) : (
+                        <>
+                          <Badge className={`card-badge-game-${status}`}>
+                            {status}
                           </Badge>
-                        )}
-                      </>
+                          <Badge className="card-badge-twitch-username text-truncate w-auto">
+                            <a
+                              className="text-decoration-none"
+                              href={`https://twitch.tv/${username}`}
+                              title={`Check out ${username} on twitch`}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              @{username}
+                            </a>
+                          </Badge>
+                          {isWithinLast24Hours(created_at) && (
+                            <Badge
+                              className="card-badge new"
+                              title="This game has been added within the last 24 hours"
+                            >
+                              New!!
+                            </Badge>
+                          )}
+                        </>
+                      )}
+                    </div>
+                    {canDeleteGame(
+                      state.user,
+                      { user_id, status },
+                      isBacklog
+                    ) && (
+                      <button
+                        type="button"
+                        className="btn btn-sm btn-dark mt-2"
+                        title={`Delete ${name}`}
+                        aria-label={`Delete ${name}`}
+                        onClick={() => deleteGame(name, isBacklog)}
+                      >
+                        <i className="bi bi-trash" />
+                      </button>
                     )}
                   </div>
-                  {state.user.isOwner && (
-                    <button
-                      type="button"
-                      className="btn btn-sm btn-dark mt-2"
-                      title={`Delete ${name}`}
-                      aria-label={`Delete ${name}`}
-                      onClick={() => deleteGame(name, isBacklog)}
-                    >
-                      <i className="bi bi-trash" />
-                    </button>
-                  )}
                 </div>
-              </div>
-            ))
+              )
+            )
           )}
         </div>
       </div>

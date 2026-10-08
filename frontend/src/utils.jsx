@@ -26,7 +26,21 @@ const scrollToTop = (ref) => {
   ref.current.scrollTo({ top: 0, behavior: "smooth" })
 }
 
+// UI only: the server makes the real decision. The owner can delete anything;
+// other users only their own games that are still queued.
+const canDeleteGame = (user, game, isBacklog) => {
+  if (!user.token) return false
+  if (user.isOwner) return true
+  return (
+    !isBacklog &&
+    !!game.user_id &&
+    game.user_id === user.userId &&
+    String(game.status).toLowerCase() === "queue"
+  )
+}
+
 export {
+  canDeleteGame,
   generateDirectoryURL,
   isWithinLast24Hours,
   backlogBadgeClass,

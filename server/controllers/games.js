@@ -51,7 +51,9 @@ const handleGameVote = async (req, res, db) => {
 }
 
 const handleAddGame = async (req, res, docs, backlogDB) => {
-  const { games, username } = req.body
+  const { games } = req.body
+  // Identity comes from the verified token, not the request body
+  const { id: userId, login: username } = req.twitchUser
   const suggestedCollection = docs
   const backlogCollection = backlogDB
   const gamesAdded = []
@@ -82,7 +84,8 @@ const handleAddGame = async (req, res, docs, backlogDB) => {
     if (nameQuerySuggested.empty && nameQueryBacklog.empty) {
       gamesAdded.push(name)
       gamesAddedArray.push({
-        username: username || "User not provided",
+        username,
+        user_id: userId,
         name,
         image,
         status: "queue",
@@ -110,14 +113,31 @@ const handleAddGame = async (req, res, docs, backlogDB) => {
   })
 }
 
-// Owner-only (guarded by twitch.requireOwner). Deletes by game name.
-const handleDeleteGame = async (req, res, collection) => {
+// Deletes by game name (guarded by twitch.requireUser). The owner can delete
+// anything. With allowAdder, the user who added a game can delete it while it
+// is still queued. Games without a user_id are owner-only.
+const handleDeleteGame = async (req, res, collection, { allowAdder } = {}) => {
   const { name } = req.query
+  const { id: userId, isOwner } = req.twitchUser
   if (!name) return res.status(400).send("Game name is required")
 
   try {
     const snapshot = await collection.where("name", "==", name).get()
     if (snapshot.empty) return res.status(404).send("Game not found")
+
+    const isAllowed = (snap) => {
+      if (isOwner) return true
+      const { user_id, status } = snap.data()
+      return (
+        !!allowAdder &&
+        !!user_id &&
+        user_id === userId &&
+        String(status).toLowerCase() === "queue"
+      )
+    }
+    if (!snapshot.docs.every(isAllowed)) {
+      return res.status(403).send("Not allowed to delete this game")
+    }
 
     await Promise.all(snapshot.docs.map((snap) => snap.ref.delete()))
     res.status(200).send(`Deleted "${name}"`)

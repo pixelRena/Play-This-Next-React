@@ -44,16 +44,17 @@ app.get("/games", (req, res) => {
 })
 
 // Adds new suggested game(s) to firebase DB
-app.post("/game/add", (req, res) => {
+app.post("/game/add", twitch.requireUser, (req, res) => {
   games.handleAddGame(req, res, docs, backlogDB)
 })
 
-// Owner-only deletes
-app.delete("/games/suggested", twitch.requireOwner, (req, res) => {
-  games.handleDeleteGame(req, res, docs)
+// Deletes: the owner can delete anything, users only their own queued
+// suggestions, and the backlog is owner-only
+app.delete("/games/suggested", twitch.requireUser, (req, res) => {
+  games.handleDeleteGame(req, res, docs, { allowAdder: true })
 })
 
-app.delete("/games/backlog", twitch.requireOwner, (req, res) => {
+app.delete("/games/backlog", twitch.requireUser, (req, res) => {
   games.handleDeleteGame(req, res, backlogDB)
 })
 

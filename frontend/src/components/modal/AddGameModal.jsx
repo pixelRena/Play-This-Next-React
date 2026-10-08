@@ -25,6 +25,7 @@ const AddGameModal = () => {
           localStorage.removeItem("ttv-token-expires-in")
           localStorage.removeItem("ttv-username")
           localStorage.removeItem("ttv-is-owner")
+          localStorage.removeItem("ttv-user-id")
           dispatch({
             type: "user",
             payload: {
@@ -55,10 +56,8 @@ const AddGameModal = () => {
     try {
       const { data } = await axios.post(
         `${API_URL}/game/add`,
-        {
-          games: selectedGames,
-          username: state.user.username,
-        }
+        { games: selectedGames },
+        { headers: { Authorization: `Bearer ${state.user.token}` } }
       )
       dispatch({
         type: "toastr",

@@ -49,12 +49,19 @@ export const StoreProvider = ({ children }) => {
     }
   }
 
-  const usernameApi = async (newUsername, token, expires_in, isOwner) => {
+  const usernameApi = async (
+    newUsername,
+    token,
+    expires_in,
+    isOwner,
+    userId
+  ) => {
     try {
       localStorage.setItem("ttv-username", newUsername)
       localStorage.setItem("ttv-token", token)
       localStorage.setItem("ttv-token-expires-in", expires_in)
       localStorage.setItem("ttv-is-owner", String(!!isOwner))
+      localStorage.setItem("ttv-user-id", userId)
       dispatch({
         type: "user",
         payload: {
@@ -62,6 +69,7 @@ export const StoreProvider = ({ children }) => {
           token,
           expires_in,
           isOwner: !!isOwner,
+          userId,
         },
       })
       return
@@ -85,7 +93,13 @@ export const StoreProvider = ({ children }) => {
         const { data } = await axios.get(
           `${API_URL}/auth?access_token=${token}`
         )
-        usernameApi(data.twitchUsername, token, data.expires_in, data.isOwner)
+        usernameApi(
+          data.twitchUsername,
+          token,
+          data.expires_in,
+          data.isOwner,
+          data.userId
+        )
       } catch (error) {
         console.error(error)
       }
@@ -94,7 +108,8 @@ export const StoreProvider = ({ children }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // Owner only: the server rejects anyone else
+  // The server decides who may delete what; the buttons are just hidden for
+  // everyone else
   const deleteGame = async (name, isBacklog) => {
     if (!window.confirm(`Delete "${name}"?`)) return
 

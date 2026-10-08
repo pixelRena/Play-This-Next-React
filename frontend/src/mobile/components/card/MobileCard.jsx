@@ -5,6 +5,7 @@ import axios from "axios"
 import {
   backlogBadgeClass,
   backlogBadgeText,
+  canDeleteGame,
   generateDirectoryURL,
   isWithinLast24Hours,
   scrollToTop,
@@ -81,7 +82,8 @@ const MobileCard = () => {
           data.twitchUsername,
           access_token,
           data.expires_in,
-          data.isOwner
+          data.isOwner,
+          data.userId
         )
       } catch (error) {
         console.error(error)
@@ -179,7 +181,15 @@ const MobileCard = () => {
               <div>No games to display. Try a different filter.</div>
             ) : (
               games.map(
-                ({ name, image, status, username, played, created_at }) => (
+                ({
+                  name,
+                  image,
+                  status,
+                  username,
+                  user_id,
+                  played,
+                  created_at,
+                }) => (
                   <div className="d-flex flex-row mt-4 gap-4" key={name}>
                     <div className="card-game-cover">
                       <div
@@ -241,7 +251,11 @@ const MobileCard = () => {
                           </>
                         )}
                       </div>
-                      {state.user.isOwner && (
+                      {canDeleteGame(
+                        state.user,
+                        { user_id, status },
+                        isBacklog
+                      ) && (
                         <button
                           type="button"
                           className="btn btn-sm btn-dark mt-2"
