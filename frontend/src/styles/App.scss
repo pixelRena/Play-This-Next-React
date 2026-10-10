@@ -125,6 +125,20 @@ main {
     width: 391px;
     border-radius: 10px;
   }
+
+  .btn.btn-twitch-logout {
+    background-color: transparent;
+    color: $twitch-purple;
+    border: 2px solid $twitch-purple;
+    font-size: 24px;
+    font-weight: 400;
+    width: 391px;
+    border-radius: 10px;
+    &:hover {
+      background-color: $twitch-purple;
+      color: $light;
+    }
+  }
 }
 
 body .dropdown-menu:not(.dropdown-menu-mobile) {
@@ -207,7 +221,8 @@ body .dropdown-menu:not(.dropdown-menu-mobile) {
     .menu-buttons .btn.card-flipper {
       margin-top: unset;
     }
-    .btn.btn-twitch-login {
+    .btn.btn-twitch-login,
+    .btn.btn-twitch-logout {
       width: 100%;
     }
     .dropdown-menu-container {

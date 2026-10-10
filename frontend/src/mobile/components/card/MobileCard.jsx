@@ -85,6 +85,13 @@ const MobileCard = () => {
           data.isOwner,
           data.userId
         )
+        // Drop the token from the address bar (and leave /callback/ when
+        // running locally) so a reload uses the saved login
+        window.history.replaceState(
+          null,
+          "",
+          `${process.env.PUBLIC_URL}/${window.location.search}`
+        )
       } catch (error) {
         console.error(error)
       }

@@ -7,7 +7,7 @@ import { cardSwitchText } from "./utils.jsx"
 import MobileCard from "./mobile/components/card/MobileCard.jsx"
 
 const App = () => {
-  const { state, authorize, dispatch } = useContext(Store)
+  const { state, authorize, dispatch, logout } = useContext(Store)
   const { isBacklog } = state
 
   const cardSwitchDispatch = () => {
@@ -71,7 +71,10 @@ const App = () => {
           <DesktopCard />
           <MobileCard />
           <button
-            className="btn btn-twitch-login text-uppercase mt-4 mx-md-5 p-0 ms-3"
+            className="btn btn-twitch-login text-uppercase text-truncate mt-4 mx-md-5 py-0 px-3 ms-3"
+            title={
+              state.user.username ? `Logged in: ${state.user.username}` : ""
+            }
             onClick={authorize}
             // Todo: Disable button if user is already logged in
             disabled={state.user.username}
@@ -80,6 +83,15 @@ const App = () => {
               ? `Logged in: ${state.user.username}`
               : "Login with twitch "}
           </button>
+          {state.user.username && (
+            <button
+              type="button"
+              className="btn btn-twitch-logout d-block text-uppercase mt-2 mx-md-5 ms-3"
+              onClick={logout}
+            >
+              Log out
+            </button>
+          )}
         </div>
       </div>
     </main>

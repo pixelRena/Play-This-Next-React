@@ -6,5 +6,5 @@ export const API_URL =
 // This URL must be registered as a redirect URL in the Twitch developer console
 export const REDIRECT_URL =
   process.env.NODE_ENV === "development"
-    ? `${window.location.origin}${process.env.PUBLIC_URL}`
+    ? `${window.location.origin}/callback/`
     : "https://pixelrena.github.io/Play-This-Next-React"

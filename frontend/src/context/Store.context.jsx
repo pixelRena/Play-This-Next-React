@@ -61,7 +61,9 @@ export const StoreProvider = ({ children }) => {
       localStorage.setItem("ttv-token", token)
       localStorage.setItem("ttv-token-expires-in", expires_in)
       localStorage.setItem("ttv-is-owner", String(!!isOwner))
-      localStorage.setItem("ttv-user-id", userId)
+      // setItem(key, undefined) would store the text "undefined"
+      if (userId) localStorage.setItem("ttv-user-id", userId)
+      else localStorage.removeItem("ttv-user-id")
       dispatch({
         type: "user",
         payload: {
@@ -69,7 +71,7 @@ export const StoreProvider = ({ children }) => {
           token,
           expires_in,
           isOwner: !!isOwner,
-          userId,
+          userId: userId ?? null,
         },
       })
       return
@@ -79,8 +81,29 @@ export const StoreProvider = ({ children }) => {
     }
   }
 
-  // Re-check ownership for an existing session. Fresh logins (token in the URL
-  // hash) are handled by the cards, so skip those.
+  // Forget a saved login, e.g. when twitch no longer accepts the token
+  const clearSession = () => {
+    ;[
+      "ttv-username",
+      "ttv-token",
+      "ttv-token-expires-in",
+      "ttv-is-owner",
+      "ttv-user-id",
+    ].forEach((key) => localStorage.removeItem(key))
+    dispatch({
+      type: "user",
+      payload: {
+        username: null,
+        token: null,
+        expires_in: null,
+        isOwner: false,
+        userId: null,
+      },
+    })
+  }
+
+  // Re-check an existing session (ownership, user id). Fresh logins (token in
+  // the URL hash) are handled by the cards, so skip those.
   useEffect(() => {
     const { token } = state.user
     const hasHashToken = new URLSearchParams(document.location.hash).has(
@@ -102,6 +125,9 @@ export const StoreProvider = ({ children }) => {
         )
       } catch (error) {
         console.error(error)
+        // The server answered but rejected the token: the login has expired.
+        // (No response at all means offline or server down; keep the session.)
+        if (error.response) clearSession()
       }
     }
     refreshUser()
@@ -146,6 +172,7 @@ export const StoreProvider = ({ children }) => {
     forceFetchCall,
     usernameApi,
     deleteGame,
+    logout: clearSession,
     authorize,
     api,
   }
