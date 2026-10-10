@@ -7,7 +7,7 @@
     "node": "22.x"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node --test tests/",
     "start": "node server.js",
     "local": "nodemon local.js",
     "watch": "nodemon"
