@@ -25,9 +25,23 @@ const DropdownMenu = () => {
         Filter By
       </button>
       <ul className="dropdown-menu dropdown-menu-mobile w-100">
+        {state.user.userId && (
+          <li
+            onClick={() =>
+              dispatch({
+                type: "FILTER_SUGGESTED_MINE",
+                payload: state.user.userId,
+              })
+            }
+          >
+            <a className="dropdown-item" href="#">
+              Games I Submitted
+            </a>
+          </li>
+        )}
         <li onClick={() => handleMenuClick("Next")}>
           <a className="dropdown-item" href="#">
-            Currently Playing
+            Next
           </a>
         </li>
         <li onClick={() => handleMenuClick("Queue")}>

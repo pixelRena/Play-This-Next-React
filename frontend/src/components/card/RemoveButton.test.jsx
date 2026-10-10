@@ -4,7 +4,7 @@ jest.mock("axios", () => ({ get: jest.fn(), post: jest.fn(), delete: jest.fn() }
 
 const GAMES = [
   { name: "My Queued Game", user_id: "111", status: "queue", username: "player" },
-  { name: "My Current Game", user_id: "111", status: "current", username: "player" },
+  { name: "My Current Game", user_id: "111", status: "next", username: "player" },
   { name: "Their Game", user_id: "222", status: "queue", username: "other" },
   { name: "Legacy Game", status: "queue", username: "old" },
 ]

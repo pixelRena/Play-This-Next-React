@@ -22,6 +22,9 @@ const DropdownMenu = ({ type }) => {
     }
   }
 
+  const handleMyGamesClick = () =>
+    dispatch({ type: "FILTER_SUGGESTED_MINE", payload: state.user.userId })
+
   // const handleReset = () => {
   //   dispatch({ type: "RESET_SUGGESTED", payload: originalData })
   // }
@@ -36,11 +39,16 @@ const DropdownMenu = ({ type }) => {
         {type} by
       </button>
       <ul className="dropdown-menu ms-3 py-0">
+        {type === "Filter" && state.user.userId && (
+          <li className="dropdown-item" onClick={handleMyGamesClick}>
+            {">"} Games I Submitted
+          </li>
+        )}
         <li
           className="dropdown-item"
-          onClick={() => handleMenuClick("Current")}
+          onClick={() => handleMenuClick("Next")}
         >
-          {">"} Currently Playing
+          {">"} Next
         </li>
         <li className="dropdown-item" onClick={() => handleMenuClick("Queue")}>
           {">"} Queue

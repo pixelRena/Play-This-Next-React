@@ -85,7 +85,24 @@ const reducer = (state, action) => {
         suggested: {
           ...state.suggested,
           data: state.suggested.originalData.filter(
-            (item) => item.status === action.payload.status
+            // "next" also covers games saved with the older "current" status
+            (item) =>
+              item.status === action.payload.status ||
+              (action.payload.status === "next" && item.status === "current")
+          ),
+          isFiltered: true,
+          isSorted: false,
+        },
+      }
+
+    // Matches on the permanent Twitch user id, same as the delete rule
+    case "FILTER_SUGGESTED_MINE":
+      return {
+        ...state,
+        suggested: {
+          ...state.suggested,
+          data: state.suggested.originalData.filter(
+            (item) => !!action.payload && item.user_id === action.payload
           ),
           isFiltered: true,
           isSorted: false,

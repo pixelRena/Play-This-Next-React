@@ -13,6 +13,11 @@
     color: $status-completed-color;
     border-color: $status-completed-color;
   }
+  &[class*="game-next"] {
+    background: $status-next-background;
+    color: $status-next-color;
+    border-color: $status-next-color;
+  }
   &[class*="game-current"],
   &.new {
     background: $status-current-background;
