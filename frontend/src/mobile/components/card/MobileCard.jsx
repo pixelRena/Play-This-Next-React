@@ -13,6 +13,7 @@ import {
 } from "../../../utils.jsx"
 import Loader from "../../../components/loader/Loader.jsx"
 import { API_URL } from "../../../config"
+import useScrollTopButton from "../../../hooks/useScrollTopButton"
 import "../../../styles/Card.scss"
 import DropdownMenu from "../dropdown-menu/DropdownMenu.jsx"
 
@@ -21,9 +22,8 @@ const MobileCard = () => {
   const { isBacklog } = state
   const games = isBacklog ? state.backlog.data : state.suggested.data
   const [searchText, setSearchText] = useState("")
-  const [scrollPosition, setSrollPosition] = useState(0)
-  const [showButton, setShowButton] = useState(false)
   const ref = useRef(null)
+  const showButton = useScrollTopButton(ref, [games, isBacklog])
 
   const searchTextHandler = (e) => {
     if (!isBacklog) {
@@ -55,17 +55,6 @@ const MobileCard = () => {
         type: "FILTER_BACKLOG_TEXT",
         payload: e.target.value,
       })
-    }
-  }
-
-  const handleVisibleButton = () => {
-    const position = ref.current.scrollTop
-    setSrollPosition(position)
-
-    if (scrollPosition > 600) {
-      return setShowButton(true)
-    } else if (scrollPosition < 600) {
-      return setShowButton(false)
     }
   }
 
@@ -104,10 +93,6 @@ const MobileCard = () => {
   useEffect(() => {
     setSearchText("")
   }, [isBacklog])
-
-  useEffect(() => {
-    ref.current.addEventListener("scroll", handleVisibleButton)
-  })
 
   return (
     <div

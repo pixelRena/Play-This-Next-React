@@ -14,16 +14,18 @@ import {
 } from "../../utils.jsx"
 import Loader from "../loader/Loader.jsx"
 import { API_URL } from "../../config"
+import useScrollTopButton from "../../hooks/useScrollTopButton"
+
+const isPlayingStatus = (status) => status === "next" || status === "current"
 
 const DesktopCard = () => {
   const { usernameApi, deleteGame, state, dispatch } = useContext(Store)
   const { isBacklog } = state
   const games = isBacklog ? state.backlog.data : state.suggested.data
   const [searchText, setSearchText] = useState("")
-  const [scrollPosition, setSrollPosition] = useState(0)
-  const [showButton, setShowButton] = useState(false)
   const [showSortedGames, setShowSortedGames] = useState(false)
   const ref = useRef(null)
+  const showButton = useScrollTopButton(ref, [games, isBacklog])
 
   const searchTextHandler = (e) => {
     if (!isBacklog) {
@@ -55,17 +57,6 @@ const DesktopCard = () => {
         type: "FILTER_BACKLOG_TEXT",
         payload: e.target.value,
       })
-    }
-  }
-
-  const handleVisibleButton = () => {
-    const position = ref.current.scrollTop
-    setSrollPosition(position)
-
-    if (scrollPosition > 600) {
-      return setShowButton(true)
-    } else if (scrollPosition < 600) {
-      return setShowButton(false)
     }
   }
 
@@ -105,10 +96,6 @@ const DesktopCard = () => {
     setSearchText("")
     setShowSortedGames(false)
   }, [isBacklog])
-
-  useEffect(() => {
-    ref.current.addEventListener("scroll", handleVisibleButton)
-  })
 
   useEffect(() => {
     const { isSorted } = state.suggested
@@ -159,7 +146,11 @@ const DesktopCard = () => {
             (showSortedGames
               ? games
               : [...games].sort((a, b) =>
-                  a.status === "current" ? -1 : b.status === "current" ? 1 : 0
+                  isPlayingStatus(a.status)
+                    ? -1
+                    : isPlayingStatus(b.status)
+                    ? 1
+                    : 0
                 )
             ).map(
               ({
