@@ -117,22 +117,28 @@ main {
     }
   }
 
+  // Login and log out buttons side by side
+  .twitch-account-row {
+    width: 380px;
+  }
+
   .btn.btn-twitch-login {
+    flex: 1 1 0;
+    min-width: 0; // lets the text truncate instead of widening the row
     background-color: $twitch-purple;
     color: $light;
-    font-size: 40px;
+    font-size: 30px;
     font-weight: 400;
-    width: 391px;
     border-radius: 10px;
   }
 
   .btn.btn-twitch-logout {
+    flex: 0 0 auto;
     background-color: transparent;
     color: $twitch-purple;
     border: 2px solid $twitch-purple;
-    font-size: 24px;
+    font-size: 18px;
     font-weight: 400;
-    width: 391px;
     border-radius: 10px;
     &:hover {
       background-color: $twitch-purple;
@@ -221,9 +227,15 @@ body .dropdown-menu:not(.dropdown-menu-mobile) {
     .menu-buttons .btn.card-flipper {
       margin-top: unset;
     }
-    .btn.btn-twitch-login,
+    // Same span as the menu buttons: 1.5rem in (ms-4) and out to the right edge
+    .twitch-account-row {
+      width: calc(100% - 1.5rem);
+    }
+    .btn.btn-twitch-login {
+      font-size: 22px;
+    }
     .btn.btn-twitch-logout {
-      width: 100%;
+      font-size: 16px;
     }
     .dropdown-menu-container {
       display: none;

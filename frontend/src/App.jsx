@@ -70,28 +70,30 @@ const App = () => {
         <div>
           <DesktopCard />
           <MobileCard />
-          <button
-            className="btn btn-twitch-login text-uppercase text-truncate mt-4 mx-md-5 py-0 px-3 ms-3"
-            title={
-              state.user.username ? `Logged in: ${state.user.username}` : ""
-            }
-            onClick={authorize}
-            // Todo: Disable button if user is already logged in
-            disabled={state.user.username}
-          >
-            {state.user.username
-              ? `Logged in: ${state.user.username}`
-              : "Login with twitch "}
-          </button>
-          {state.user.username && (
+          <div className="twitch-account-row d-flex gap-2 mt-4 mx-md-5 ms-4">
             <button
-              type="button"
-              className="btn btn-twitch-logout d-block text-uppercase mt-2 mx-md-5 ms-3"
-              onClick={logout}
+              className="btn btn-twitch-login text-uppercase text-truncate py-0 px-3"
+              title={
+                state.user.username ? `Logged in: ${state.user.username}` : ""
+              }
+              onClick={authorize}
+              // Todo: Disable button if user is already logged in
+              disabled={state.user.username}
             >
-              Log out
+              {state.user.username
+                ? `Logged in: ${state.user.username}`
+                : "Login with twitch "}
             </button>
-          )}
+            {state.user.username && (
+              <button
+                type="button"
+                className="btn btn-twitch-logout text-uppercase"
+                onClick={logout}
+              >
+                Log out
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </main>
