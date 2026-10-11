@@ -6,6 +6,9 @@ const initialState = {
     error: "",
     isFiltered: false,
     isSorted: false,
+    // Which dropdown choice is applied (shown in the menus): e.g. "queue", "mine"
+    activeFilter: null,
+    activeSort: null,
   },
   backlog: {
     originalData: [],
@@ -92,6 +95,8 @@ const reducer = (state, action) => {
           ),
           isFiltered: true,
           isSorted: false,
+          activeFilter: action.payload.status,
+          activeSort: null,
         },
       }
 
@@ -106,6 +111,8 @@ const reducer = (state, action) => {
           ),
           isFiltered: true,
           isSorted: false,
+          activeFilter: "mine",
+          activeSort: null,
         },
       }
 
@@ -143,6 +150,8 @@ const reducer = (state, action) => {
           }),
           isFiltered: false,
           isSorted: true,
+          activeFilter: null,
+          activeSort: action.payload,
         },
       }
 
@@ -154,6 +163,8 @@ const reducer = (state, action) => {
           data: action.payload,
           isFiltered: false,
           isSorted: false,
+          activeFilter: null,
+          activeSort: null,
         },
       }
 
