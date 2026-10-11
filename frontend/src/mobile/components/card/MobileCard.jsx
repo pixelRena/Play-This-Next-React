@@ -12,8 +12,10 @@ import {
   cardSwitchText,
 } from "../../../utils.jsx"
 import Loader from "../../../components/loader/Loader.jsx"
+import LoadMoreSpinner from "../../../components/loader/LoadMoreSpinner.jsx"
 import { API_URL } from "../../../config"
 import useScrollTopButton from "../../../hooks/useScrollTopButton"
+import useLazyList from "../../../hooks/useLazyList"
 import "../../../styles/Card.scss"
 import DropdownMenu from "../dropdown-menu/DropdownMenu.jsx"
 
@@ -24,6 +26,7 @@ const MobileCard = () => {
   const [searchText, setSearchText] = useState("")
   const ref = useRef(null)
   const showButton = useScrollTopButton(ref, [games, isBacklog])
+  const { visibleItems, sentinelRef, hasMore } = useLazyList(games, ref)
 
   const searchTextHandler = (e) => {
     if (!isBacklog) {
@@ -172,7 +175,7 @@ const MobileCard = () => {
             {games.length === 0 && !state.suggested.loading ? (
               <div>No games to display. Try a different filter.</div>
             ) : (
-              games.map(
+              visibleItems.map(
                 ({
                   name,
                   image,
@@ -261,6 +264,7 @@ const MobileCard = () => {
                 )
               )
             )}
+            {hasMore && <LoadMoreSpinner sentinelRef={sentinelRef} />}
           </div>
         </div>
       </div>

@@ -1,7 +1,7 @@
 import "../../styles/Card.scss"
 // import Results from "../../mock.json"
 import Badge from "../badge/Badge"
-import { useContext, useEffect, useRef, useState } from "react"
+import { useContext, useEffect, useMemo, useRef, useState } from "react"
 import { Store } from "../../context/Store.context.jsx"
 import axios from "axios"
 import {
@@ -13,8 +13,10 @@ import {
   scrollToTop,
 } from "../../utils.jsx"
 import Loader from "../loader/Loader.jsx"
+import LoadMoreSpinner from "../loader/LoadMoreSpinner.jsx"
 import { API_URL } from "../../config"
 import useScrollTopButton from "../../hooks/useScrollTopButton"
+import useLazyList from "../../hooks/useLazyList"
 
 const isPlayingStatus = (status) => status === "next" || status === "current"
 
@@ -26,6 +28,21 @@ const DesktopCard = () => {
   const [showSortedGames, setShowSortedGames] = useState(false)
   const ref = useRef(null)
   const showButton = useScrollTopButton(ref, [games, isBacklog])
+  // Stable identity, so the lazy list only starts over when the games change
+  const orderedGames = useMemo(
+    () =>
+      showSortedGames
+        ? games
+        : [...games].sort((a, b) =>
+            isPlayingStatus(a.status)
+              ? -1
+              : isPlayingStatus(b.status)
+              ? 1
+              : 0
+          ),
+    [games, showSortedGames]
+  )
+  const { visibleItems, sentinelRef, hasMore } = useLazyList(orderedGames, ref)
 
   const searchTextHandler = (e) => {
     if (!isBacklog) {
@@ -143,16 +160,7 @@ const DesktopCard = () => {
           {games.length === 0 && !state.suggested.loading ? (
             <div>No games to display. Try a different filter.</div>
           ) : (
-            (showSortedGames
-              ? games
-              : [...games].sort((a, b) =>
-                  isPlayingStatus(a.status)
-                    ? -1
-                    : isPlayingStatus(b.status)
-                    ? 1
-                    : 0
-                )
-            ).map(
+            visibleItems.map(
               ({
                 name,
                 image,
@@ -236,6 +244,7 @@ const DesktopCard = () => {
               )
             )
           )}
+          {hasMore && <LoadMoreSpinner sentinelRef={sentinelRef} />}
         </div>
       </div>
       {/* Sticks to the bottom of the card's scroll area, so it can't leave the card */}

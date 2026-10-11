@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 
 const SHOW_AFTER_PX = 600
 
@@ -37,8 +37,15 @@ const useScrollTopButton = (ref, deps = []) => {
     }
   }, [ref, update])
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(update, deps)
+  // A different list (filter, search, sort, list switch) starts at the top,
+  // like the lazy list does, instead of leaving you part way down it
+  const firstRun = useRef(true)
+  useEffect(() => {
+    if (firstRun.current) firstRun.current = false
+    else if (ref.current) ref.current.scrollTop = 0
+    update()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, deps)
 
   return showButton
 }
