@@ -131,8 +131,12 @@ const DesktopCard = () => {
       <div className="card-body p-4">
         <div className="d-flex flex-column gap-4">
           <div className="input-group border-bottom">
-            <span className="input-group-text bi-search border-0 bg-transparent fs-5 " />
+            <span
+              className="input-group-text bi-search border-0 bg-transparent fs-5 "
+              aria-hidden="true"
+            />
             <input
+              aria-label="Search games"
               value={searchText}
               onChange={(e) => searchTextHandler(e)}
               type="search"
@@ -253,9 +257,10 @@ const DesktopCard = () => {
           <button
             className="btn btn-dark rounded-0 btn-sm"
             title="Scroll to top"
+            aria-label="Scroll to top"
             onClick={() => scrollToTop(ref)}
           >
-            <i className="bi bi-arrow-up fs-5" />
+            <i className="bi bi-arrow-up fs-5" aria-hidden="true" />
           </button>
         </div>
       )}

@@ -124,9 +124,10 @@ const MobileCard = () => {
               <button
                 className="btn btn-dark rounded-0 btn-md position-fixed top-90 start-85"
                 title="Scroll to top"
+                aria-label="Scroll to top"
                 onClick={() => scrollToTop(ref)}
               >
-                <i className="bi bi-arrow-up" />
+                <i className="bi bi-arrow-up" aria-hidden="true" />
               </button>
             )}
             <div className="input-group border-bottom">
@@ -135,6 +136,7 @@ const MobileCard = () => {
                 value={searchText}
                 onChange={(e) => searchTextHandler(e)}
                 type="search"
+                aria-label="Search games"
                 className="form-control border-0 bg-transparent text-uppercase fs-6 rounded-0"
                 placeholder="Search games..."
               />

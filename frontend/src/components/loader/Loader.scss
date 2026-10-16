@@ -57,3 +57,19 @@
     opacity: 0;
   }
 }
+
+// Respect users who ask for less motion: show a static ring instead
+@media (prefers-reduced-motion: reduce) {
+  #loader div {
+    animation: none;
+    top: 0;
+    left: 0;
+    width: 72px;
+    height: 72px;
+    opacity: 1;
+  }
+
+  #loader div:nth-child(2) {
+    display: none;
+  }
+}

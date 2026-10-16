@@ -28,6 +28,8 @@ const Notification = () => {
     <div
       className={`toast align-items-center text-uppercase ${toastrClass}`}
       role="alert"
+      aria-live="assertive"
+      aria-atomic="true"
     >
       <div className="d-flex">
         <div className="toast-body">{message}</div>

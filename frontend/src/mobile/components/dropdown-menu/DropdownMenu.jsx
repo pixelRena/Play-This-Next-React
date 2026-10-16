@@ -40,15 +40,18 @@ const DropdownMenu = () => {
       </button>
       <ul className="dropdown-menu dropdown-menu-mobile w-100">
         {options.map(({ key, label }) => (
-          <li key={key} onClick={() => handleMenuClick(key)}>
-            <a
-              className={`dropdown-item${key === active ? " active" : ""}`}
-              href="#"
+          <li key={key}>
+            <button
+              type="button"
+              className={`dropdown-item text-uppercase${
+                key === active ? " active" : ""
+              }`}
               aria-current={key === active ? "true" : undefined}
+              onClick={() => handleMenuClick(key)}
             >
               {key === active ? "✓ " : ""}
               {label}
-            </a>
+            </button>
           </li>
         ))}
       </ul>

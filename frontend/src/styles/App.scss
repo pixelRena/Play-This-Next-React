@@ -168,10 +168,17 @@ body .dropdown-menu:not(.dropdown-menu-mobile) {
     font-weight: 500;
     color: $light;
     line-height: 45px;
+    text-transform: uppercase;
 
     &.active-option {
       background-color: $dark;
       font-weight: 700;
+    }
+
+    &:focus-visible {
+      background-color: $dark;
+      outline: 3px solid $light;
+      outline-offset: -3px;
     }
 
     &:hover {

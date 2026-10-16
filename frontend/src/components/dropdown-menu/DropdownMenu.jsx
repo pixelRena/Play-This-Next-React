@@ -48,13 +48,18 @@ const DropdownMenu = ({ type }) => {
       </button>
       <ul className="dropdown-menu ms-3 py-0">
         {options.map(({ key, label }) => (
-          <li
-            key={key}
-            className={`dropdown-item${key === active ? " active-option" : ""}`}
-            aria-current={key === active ? "true" : undefined}
-            onClick={() => handleMenuClick(key)}
-          >
-            {key === active ? "✓" : ">"} {label}
+          <li key={key}>
+            <button
+              type="button"
+              className={`dropdown-item${
+                key === active ? " active-option" : ""
+              }`}
+              aria-current={key === active ? "true" : undefined}
+              onClick={() => handleMenuClick(key)}
+            >
+              <span aria-hidden="true">{key === active ? "✓" : ">"}</span>{" "}
+              {label}
+            </button>
           </li>
         ))}
       </ul>
