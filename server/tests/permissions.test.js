@@ -52,6 +52,17 @@ const makeRes = () => {
   return res
 }
 
+// A query over some matching docs; chained where() calls narrow it further
+const query = (matches) => ({
+  where: (field, op, value) =>
+    query(matches.filter((d) => d.data()[field] === value)),
+  get: async () => ({
+    empty: matches.length === 0,
+    size: matches.length,
+    docs: matches,
+  }),
+})
+
 // Stand-in for a Firestore collection holding the given documents
 const makeCollection = (items) => {
   const deleted = []
@@ -63,13 +74,19 @@ const makeCollection = (items) => {
   const collection = {
     deleted,
     saved,
-    where: (field, op, value) => ({
-      get: async () => {
-        const matches = docs.filter((d) => d.data()[field] === value)
-        return { empty: matches.length === 0, docs: matches }
-      },
-    }),
+    where: (field, op, value) => query(docs.filter((d) => d.data()[field] === value)),
     doc: () => ({ set: (obj) => saved.push(obj) }),
+    // Enough of Firestore's runTransaction for the add handler
+    firestore: {
+      runTransaction: async (fn) => {
+        const staged = []
+        await fn({
+          get: (q) => q.get(),
+          set: (ref, obj) => staged.push(() => ref.set(obj)),
+        })
+        staged.forEach((write) => write())
+      },
+    },
   }
   return collection
 }
@@ -223,5 +240,94 @@ describe("adding games", () => {
     assert.equal(suggested.saved[0].user_id, "111")
     assert.equal(suggested.saved[0].username, "player")
     assert.equal(suggested.saved[0].status, "queue")
+  })
+
+  const add = async ({ names, queued = 0, user, backlog = [] }) => {
+    const suggested = makeCollection(
+      Array.from({ length: queued }, (_, i) => ({
+        name: `Queued ${i}`,
+        user_id: "111",
+        status: "queue",
+      }))
+    )
+    const res = makeRes()
+    const req = {
+      body: { games: names.map((name) => ({ name, image: "img" })) },
+      twitchUser: user || { id: "111", login: "player", isOwner: false },
+    }
+    games.handleAddGame(req, res, suggested, makeCollection(backlog))
+    await res.done
+    return { res, suggested }
+  }
+
+  test("allows adding up to the per-user queue limit", async () => {
+    const { res, suggested } = await add({ names: ["A", "B"], queued: 1 })
+    assert.equal(res.statusCode, 200)
+    assert.equal(suggested.saved.length, 2)
+  })
+
+  test("rejects everything when it would go over the queue limit", async () => {
+    const { res, suggested } = await add({ names: ["A", "B"], queued: 2 })
+    assert.equal(res.statusCode, 403)
+    assert.match(res.body.message, /1 of 3/)
+    assert.equal(suggested.saved.length, 0)
+  })
+
+  test("says so when the queue is already full", async () => {
+    const { res } = await add({ names: ["A"], queued: games.MAX_QUEUED_PER_USER })
+    assert.equal(res.statusCode, 403)
+    assert.match(res.body.message, /already have/)
+  })
+
+  test("only counts the user's queued games, not other statuses or users", async () => {
+    const suggested = makeCollection([
+      { name: "Done", user_id: "111", status: "completed" },
+      { name: "Declined", user_id: "111", status: "declined" },
+      { name: "Next", user_id: "111", status: "next" },
+      { name: "Theirs 1", user_id: "222", status: "queue" },
+      { name: "Theirs 2", user_id: "222", status: "queue" },
+      { name: "Theirs 3", user_id: "222", status: "queue" },
+    ])
+    const res = makeRes()
+    games.handleAddGame(
+      { body: { games: [{ name: "A" }, { name: "B" }, { name: "C" }] }, twitchUser: { id: "111", login: "player", isOwner: false } },
+      res,
+      suggested,
+      makeCollection([])
+    )
+    await res.done
+    assert.equal(res.statusCode, 200)
+  })
+
+  test("the owner is not limited", async () => {
+    const { res } = await add({
+      names: ["A", "B", "C", "D", "E"],
+      queued: 5,
+      user: { id: "1", login: "owner", isOwner: true },
+    })
+    assert.equal(res.statusCode, 200)
+  })
+
+  test("repeats within one request are added once", async () => {
+    const { res, suggested } = await add({ names: ["A", "A", " A "] })
+    assert.equal(res.statusCode, 200)
+    assert.equal(suggested.saved.length, 1)
+  })
+
+  test("rejects games already on the backlog and saves nothing", async () => {
+    const { res, suggested } = await add({
+      names: ["A", "B"],
+      backlog: [{ name: "B" }],
+    })
+    assert.equal(res.statusCode, 406)
+    assert.equal(suggested.saved.length, 0)
+  })
+
+  test("rejects an empty or malformed list", async () => {
+    assert.equal((await add({ names: [] })).res.statusCode, 400)
+    const res = makeRes()
+    games.handleAddGame({ body: {}, twitchUser: { id: "1", login: "x" } }, res, makeCollection([]), makeCollection([]))
+    await res.done
+    assert.equal(res.statusCode, 400)
   })
 })

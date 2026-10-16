@@ -50,67 +50,113 @@ const handleGameVote = async (req, res, db) => {
   }
 }
 
+// Most games one user can have waiting in the queue at once. Slots free up when
+// a game is played, declined or removed. The owner is exempt.
+const MAX_QUEUED_PER_USER = Number(process.env.MAX_QUEUED_PER_USER) || 3
+
+class AddGameError extends Error {
+  constructor(status, message) {
+    super(message)
+    this.status = status
+  }
+}
+
+// Set LIMIT_OWNER=true to apply the queue limit to the owner too (for testing)
+const OWNER_EXEMPT = process.env.LIMIT_OWNER !== "true"
+
+const removeSlashes = (name) => name.replace(/\//g, "")
+
 const handleAddGame = async (req, res, docs, backlogDB) => {
-  const { games } = req.body
   // Identity comes from the verified token, not the request body
   const { id: userId, login: username } = req.twitchUser
-  const suggestedCollection = docs
-  const backlogCollection = backlogDB
-  const gamesAdded = []
-  const duplicates = []
-  const gamesAddedArray = []
+  const isOwner = req.twitchUser.isOwner && OWNER_EXEMPT
 
-  const removeSlashes = (inputString) => {
-    if (inputString.includes("/")) {
-      return inputString.replace(/\//g, "")
-    } else {
-      return inputString
+  try {
+    if (!Array.isArray(req.body?.games) || req.body.games.length === 0) {
+      throw new AddGameError(400, "Select at least one game to add.")
     }
+
+    // Clean names and drop repeats within the same request
+    const unique = new Map()
+    for (const game of req.body.games) {
+      if (typeof game?.name !== "string") {
+        throw new AddGameError(400, "Each game needs a name.")
+      }
+      const name = removeSlashes(game.name).trim()
+      if (name) unique.set(name, { name, image: game.image })
+    }
+    const newGames = [...unique.values()]
+    if (newGames.length === 0) {
+      throw new AddGameError(400, "Each game needs a name.")
+    }
+    if (!isOwner && newGames.length > MAX_QUEUED_PER_USER) {
+      throw new AddGameError(
+        403,
+        `You can only add up to ${MAX_QUEUED_PER_USER} games at a time.`
+      )
+    }
+
+    // Count, duplicate checks and writes share one transaction so two
+    // simultaneous requests can't both slip past the limit or a duplicate
+    await docs.firestore.runTransaction(async (tx) => {
+      // Firestore requires every read to happen before the first write
+      const queued = isOwner
+        ? null
+        : await tx.get(
+            docs.where("user_id", "==", userId).where("status", "==", "queue")
+          )
+      const checks = await Promise.all(
+        newGames.map(async ({ name }) => {
+          const [suggested, backlog] = await Promise.all([
+            tx.get(docs.where("name", "==", name)),
+            tx.get(backlogDB.where("name", "==", name)),
+          ])
+          return { name, exists: !suggested.empty || !backlog.empty }
+        })
+      )
+
+      const duplicates = checks.filter((c) => c.exists).map((c) => c.name)
+      if (duplicates.length) {
+        throw new AddGameError(
+          406,
+          `"${duplicates.join(
+            ", "
+          )}" is already on the suggested or backlog list. Please remove them and search for different games.`
+        )
+      }
+
+      if (queued) {
+        const slotsLeft = MAX_QUEUED_PER_USER - queued.size
+        if (newGames.length > slotsLeft) {
+          throw new AddGameError(
+            403,
+            slotsLeft <= 0
+              ? `You already have ${queued.size} of ${MAX_QUEUED_PER_USER} games in the queue. Wait for one to be played or remove one to add another.`
+              : `You only have ${slotsLeft} of ${MAX_QUEUED_PER_USER} queue slots left, but selected ${newGames.length}.`
+          )
+        }
+      }
+
+      newGames.forEach(({ name, image }) => {
+        tx.set(docs.doc(name), {
+          username,
+          user_id: userId,
+          name,
+          image,
+          status: "queue",
+          created_at: new Date(),
+        })
+      })
+    })
+
+    res.send(newGames.map((g) => g.name))
+  } catch (e) {
+    if (e instanceof AddGameError) {
+      return res.status(e.status).json({ message: e.message })
+    }
+    console.error(e)
+    res.status(500).json({ message: "Unable to add games. Please try again." })
   }
-
-  const promises = games.map(async ({ name, image }) => {
-    // Todo: Modify to handle unknown errors
-    name = removeSlashes(name)
-
-    // Check for duplications
-    const nameQuerySuggested = await suggestedCollection
-      .where("name", "==", name)
-      .get()
-    const nameQueryBacklog = await backlogCollection
-      .where("name", "==", name)
-      .get()
-
-    // If game doesn't exist in collection, add the game
-    if (nameQuerySuggested.empty && nameQueryBacklog.empty) {
-      gamesAdded.push(name)
-      gamesAddedArray.push({
-        username,
-        user_id: userId,
-        name,
-        image,
-        status: "queue",
-        created_at: new Date(),
-      })
-    } else {
-      duplicates.push(name)
-    }
-  })
-
-  Promise.all(promises).then(() => {
-    // If game(s) are already on the list
-    if (!!duplicates.length) {
-      res.status(406).json({
-        message: `"${duplicates.join(
-          ", "
-        )}" is already on the suggested or backlog list. Please remove them and search for different games.`,
-      })
-    } else {
-      gamesAddedArray.map((obj) => {
-        suggestedCollection.doc(String(obj.name)).set(obj)
-      })
-      res.send(gamesAdded)
-    }
-  })
 }
 
 // Deletes by game name (guarded by twitch.requireUser). The owner can delete
@@ -152,4 +198,5 @@ module.exports = {
   handleBacklogGames,
   handleGameVote,
   handleAddGame,
+  MAX_QUEUED_PER_USER,
 }

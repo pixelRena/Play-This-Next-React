@@ -4,11 +4,13 @@ import DropdownMenu from "./components/dropdown-menu/DropdownMenu"
 import { useContext } from "react"
 import { Store } from "./context/Store.context.jsx"
 import { cardSwitchText } from "./utils.jsx"
+import useQueueSlots from "./hooks/useQueueSlots.js"
 import MobileCard from "./mobile/components/card/MobileCard.jsx"
 
 const App = () => {
   const { state, authorize, dispatch, logout } = useContext(Store)
   const { isBacklog } = state
+  const { queuedCount, limited, max } = useQueueSlots()
 
   const cardSwitchDispatch = () => {
     dispatch({ type: "isBacklog", payload: !isBacklog })
@@ -32,6 +34,7 @@ const App = () => {
             disabled={!state.user.username}
           >
             Add a game
+            {state.user.username && limited && ` (${queuedCount}/${max})`}
           </button>
 
           {!isBacklog && (

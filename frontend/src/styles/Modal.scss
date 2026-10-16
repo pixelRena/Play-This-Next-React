@@ -15,6 +15,18 @@
   input.form-check-input:checked {
     background-color: $dark;
   }
+  // Zero-height sticky row: pins the button to the bottom of the scrolling results
+  .scroll-top-anchor {
+    position: sticky;
+    bottom: 0;
+    height: 0;
+    z-index: 3;
+    button {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+    }
+  }
 }
 
 @media (max-width: 768px) {
@@ -23,5 +35,44 @@
     .modal-content {
       height: 100%;
     }
+  }
+}
+
+// Same size as the "My Games Selected" button (btn-sm) beside it
+.queue-slots-line {
+  font-size: 0.875rem;
+}
+
+.queue-info-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  // Square box sized from the text so the glyph stays centered
+  width: 1.5em;
+  height: 1.5em;
+  font-size: 1.25em;
+  line-height: 1;
+  color: inherit;
+
+  &::before {
+    display: block;
+    vertical-align: 0;
+  }
+}
+
+// Floats above the modal (z-index over Bootstrap's modal at 1055)
+.queue-info-tip {
+  position: fixed;
+  z-index: 2000;
+  width: 240px;
+  padding: 0.5rem 0.75rem;
+  font-size: 12px;
+  line-height: 1.4;
+  text-transform: none;
+  color: $light;
+  background-color: $dark;
+
+  &[hidden] {
+    display: none;
   }
 }

@@ -1,14 +1,22 @@
 // import Results from "../../mock.json"
-import { useContext, useState } from "react"
+import { useContext, useRef, useState } from "react"
 import { Store } from "../../context/Store.context.jsx"
 import axios from "axios"
 import { API_URL } from "../../config"
+import QueueSlotsInfo from "./QueueSlotsInfo"
+import { scrollToTop } from "../../utils.jsx"
+import useScrollTopButton from "../../hooks/useScrollTopButton"
+import useQueueSlots from "../../hooks/useQueueSlots"
 
 const AddGameModal = () => {
   const { state, dispatch, authorize, forceFetchCall } = useContext(Store)
   const [searchText, setSearchText] = useState("")
   const [games, setGames] = useState([])
   const [selectedGames, setSelectedGames] = useState([])
+  const bodyRef = useRef(null)
+  const showButton = useScrollTopButton(bodyRef, [games])
+
+  const { queuedCount, slotsLeft, limited, max } = useQueueSlots()
 
   const onSearchHandler = async (e) => {
     e.preventDefault()
@@ -120,7 +128,10 @@ const AddGameModal = () => {
               X
             </button>
           </div>
-          <div className="modal-body text-uppercase h-50 overflow-y-auto">
+          <div
+            className="modal-body text-uppercase h-50 overflow-y-auto"
+            ref={bodyRef}
+          >
             <form onSubmit={onSearchHandler}>
               <div className="input-group input-group-sm mb-3 border border-dark border-2 rounded-0">
                 <span className="input-group-text bi-search border-0 bg-transparent fs-5" />
@@ -141,31 +152,61 @@ const AddGameModal = () => {
             >
               My Games Selected ({selectedGames.length})
             </button>
+            {state.user.token && limited && (
+              <div className="queue-slots-line mb-2 d-flex align-items-center gap-2">
+                <span role="status">
+                  Queue slots used: {queuedCount} of {max}
+                  {slotsLeft === 0 &&
+                    " — wait for a game to be played or remove one to add more"}
+                </span>
+                <QueueSlotsInfo max={max} />
+              </div>
+            )}
             <div className="border-top pt-2">
               {games.length === 0 ? (
                 <p>Start by searching for games</p>
               ) : (
-                games.map(({ name, image }, i) => (
-                  <div
-                    className="d-flex flex-row gap-3 py-2"
-                    key={`${name}-game-item-${i}`}
-                  >
-                    <input
-                      className="form-check-input border border-2 border-dark rounded-0"
-                      type="checkbox"
-                      checked={!!selectedGames.find((g) => g.name === name)}
-                      onChange={() => selectGameHandler({ name, image })}
-                    />
-                    <img
-                      src={image}
-                      alt={`Game thumbnail for ${name}`}
-                      width="100px"
-                    />
-                    <h6 className="mb-0">{name}</h6>
-                  </div>
-                ))
+                games.map(({ name, image }, i) => {
+                  const isSelected = selectedGames.some((g) => g.name === name)
+                  return (
+                    <div
+                      className="d-flex flex-row gap-3 py-2"
+                      key={`${name}-game-item-${i}`}
+                    >
+                      <input
+                        className="form-check-input border border-2 border-dark rounded-0"
+                        type="checkbox"
+                        checked={isSelected}
+                        disabled={
+                          !isSelected && selectedGames.length >= slotsLeft
+                        }
+                        onChange={() => selectGameHandler({ name, image })}
+                      />
+                      <img
+                        src={image}
+                        alt={`Game thumbnail for ${name}`}
+                        width="100px"
+                      />
+                      <h6 className="mb-0">{name}</h6>
+                    </div>
+                  )
+                })
               )}
             </div>
+            {/* Sticks to the bottom of the scrolling results */}
+            {showButton && (
+              <div className="scroll-top-anchor">
+                <button
+                  type="button"
+                  className="btn btn-dark rounded-0 btn-sm"
+                  title="Scroll to top"
+                  aria-label="Scroll to top"
+                  onClick={() => scrollToTop(bodyRef)}
+                >
+                  <i className="bi bi-arrow-up fs-5" aria-hidden="true" />
+                </button>
+              </div>
+            )}
           </div>
           <div className="modal-footer border-dark">
             {!state.user.token ? (
