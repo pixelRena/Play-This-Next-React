@@ -19,6 +19,8 @@ const backlogBadgeClass = (played) =>
 
 const backlogBadgeText = (played) => (played ? "Completed" : "Not Started")
 
+const isNext = (status) => String(status).toLowerCase() === "next"
+
 const cardSwitchText = (isBacklog) =>
   isBacklog ? "Suggested Games" : "Backlog Games"
 
@@ -45,6 +47,7 @@ export {
   isWithinLast24Hours,
   backlogBadgeClass,
   backlogBadgeText,
+  isNext,
   cardSwitchText,
   scrollToTop,
 }

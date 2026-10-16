@@ -7,6 +7,7 @@ import axios from "axios"
 import {
   backlogBadgeClass,
   backlogBadgeText,
+  isNext,
   canDeleteGame,
   generateDirectoryURL,
   isWithinLast24Hours,
@@ -196,13 +197,20 @@ const DesktopCard = () => {
                     </div>
                     <div className="d-flex flex-row gap-2 mt-2 w-90">
                       {isBacklog ? (
-                        <Badge
-                          className={`card-badge-game-${backlogBadgeClass(
-                            played
-                          )}`}
-                        >
-                          {backlogBadgeText(played)}
-                        </Badge>
+                        <>
+                          {!(isNext(status) && !played) && (
+                            <Badge
+                              className={`card-badge-game-${backlogBadgeClass(
+                                played
+                              )}`}
+                            >
+                              {backlogBadgeText(played)}
+                            </Badge>
+                          )}
+                          {isNext(status) && (
+                            <Badge className="card-badge-game-next">next</Badge>
+                          )}
+                        </>
                       ) : (
                         <>
                           <Badge className={`card-badge-game-${status}`}>
