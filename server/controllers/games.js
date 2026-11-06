@@ -192,7 +192,63 @@ const handleDeleteGame = async (req, res, collection, { allowAdder } = {}) => {
   }
 }
 
+// Owner only: copies a suggested game to the backlog and removes it from
+// suggested
+const handleMoveToBacklog = async (req, res, docs, backlogDB) => {
+  if (!req.twitchUser.isOwner) {
+    return res.status(403).send("Only the owner can move games")
+  }
+  const { name } = req.body || {}
+  if (typeof name !== "string" || !name) {
+    return res.status(400).send("Game name is required")
+  }
+
+  try {
+    const snapshot = await docs.where("name", "==", name).get()
+    if (snapshot.empty) return res.status(404).send("Game not found")
+
+    const batch = docs.firestore.batch()
+    snapshot.docs.forEach((snap) => {
+      const { name, image, username, user_id, created_at } = snap.data()
+      const game = { name, image, username, played: false, status: "backlog" }
+      if (user_id) game.user_id = user_id
+      if (created_at) game.created_at = created_at
+      batch.set(backlogDB.doc(name), game)
+      batch.delete(snap.ref)
+    })
+    await batch.commit()
+    res.status(200).send(`Moved "${name}" to the backlog`)
+  } catch (e) {
+    console.error(e)
+    res.status(500).send("Unable to move game")
+  }
+}
+
+// Owner only: marks a suggested game as "next"
+const handleStartGame = async (req, res, docs) => {
+  if (!req.twitchUser.isOwner) {
+    return res.status(403).send("Only the owner can start games")
+  }
+  const { name } = req.body || {}
+  if (typeof name !== "string" || !name) {
+    return res.status(400).send("Game name is required")
+  }
+
+  try {
+    const snapshot = await docs.where("name", "==", name).get()
+    if (snapshot.empty) return res.status(404).send("Game not found")
+
+    await Promise.all(snapshot.docs.map((snap) => snap.ref.update({ status: "next" })))
+    res.status(200).send(`"${name}" is now next`)
+  } catch (e) {
+    console.error(e)
+    res.status(500).send("Unable to start game")
+  }
+}
+
 module.exports = {
+  handleStartGame,
+  handleMoveToBacklog,
   handleDeleteGame,
   handleGames,
   handleBacklogGames,

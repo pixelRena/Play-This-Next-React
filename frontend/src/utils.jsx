@@ -41,8 +41,14 @@ const canDeleteGame = (user, game, isBacklog) => {
   )
 }
 
+// UI only: the server makes the real decision. Only the owner can move a
+// suggested game to the backlog.
+const canMoveToBacklog = (user, isBacklog) =>
+  !isBacklog && !!user.token && !!user.isOwner
+
 export {
   canDeleteGame,
+  canMoveToBacklog,
   generateDirectoryURL,
   isWithinLast24Hours,
   backlogBadgeClass,

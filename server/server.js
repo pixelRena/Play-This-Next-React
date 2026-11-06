@@ -58,6 +58,16 @@ app.delete("/games/backlog", twitch.requireUser, (req, res) => {
   games.handleDeleteGame(req, res, backlogDB)
 })
 
+// Owner only: moves a suggested game to the backlog
+app.post("/games/suggested/backlog", twitch.requireUser, (req, res) => {
+  games.handleMoveToBacklog(req, res, docs, backlogDB)
+})
+
+// Owner only: sets a suggested game's status to "next"
+app.post("/games/suggested/start", twitch.requireUser, (req, res) => {
+  games.handleStartGame(req, res, docs)
+})
+
 // Update the vote count of a suggested game in firebase DB
 // Todo: replace with id usage
 // app.put("/game/vote", (req, res) => {

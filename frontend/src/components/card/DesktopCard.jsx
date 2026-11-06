@@ -9,6 +9,7 @@ import {
   backlogBadgeText,
   isNext,
   canDeleteGame,
+  canMoveToBacklog,
   generateDirectoryURL,
   isWithinLast24Hours,
   scrollToTop,
@@ -22,7 +23,7 @@ import useLazyList from "../../hooks/useLazyList"
 const isPlayingStatus = (status) => status === "next" || status === "current"
 
 const DesktopCard = () => {
-  const { usernameApi, deleteGame, state, dispatch } = useContext(Store)
+  const { usernameApi, deleteGame, moveToBacklog, startGame, state, dispatch } = useContext(Store)
   const { isBacklog } = state
   const games = isBacklog ? state.backlog.data : state.suggested.data
   const [searchText, setSearchText] = useState("")
@@ -236,21 +237,47 @@ const DesktopCard = () => {
                         </>
                       )}
                     </div>
-                    {canDeleteGame(
-                      state.user,
-                      { user_id, status },
-                      isBacklog
-                    ) && (
-                      <button
-                        type="button"
-                        className="card-badge-game-declined mt-2"
-                        title={`Remove ${name}`}
-                        aria-label={`Remove ${name}`}
-                        onClick={() => deleteGame(name, isBacklog)}
-                      >
-                        Remove
-                      </button>
-                    )}
+                    <div className="d-flex flex-row gap-2">
+                      {canMoveToBacklog(state.user, isBacklog) && (
+                        <>
+                          {!isNext(status) && (
+                            <button
+                              type="button"
+                              className="card-badge-game-next mt-2"
+                              title={`Start ${name}`}
+                              aria-label={`Start ${name}`}
+                              onClick={() => startGame(name)}
+                            >
+                              Start
+                            </button>
+                          )}
+                          <button
+                            type="button"
+                            className="card-badge-game-completed mt-2"
+                            title={`Move ${name} to backlog`}
+                            aria-label={`Move ${name} to backlog`}
+                            onClick={() => moveToBacklog(name)}
+                          >
+                            Backlog
+                          </button>
+                        </>
+                      )}
+                      {canDeleteGame(
+                        state.user,
+                        { user_id, status },
+                        isBacklog
+                      ) && (
+                        <button
+                          type="button"
+                          className="card-badge-game-declined mt-2"
+                          title={`Remove ${name}`}
+                          aria-label={`Remove ${name}`}
+                          onClick={() => deleteGame(name, isBacklog)}
+                        >
+                          Remove
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
               )

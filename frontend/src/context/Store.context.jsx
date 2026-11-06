@@ -153,6 +153,36 @@ export const StoreProvider = ({ children }) => {
     }
   }
 
+  const moveToBacklog = async (name) => {
+    if (!window.confirm(`Move "${name}" to the backlog?`)) return
+
+    try {
+      await axios.post(
+        `${API_URL}/games/suggested/backlog`,
+        { name },
+        { headers: { Authorization: `Bearer ${state.user.token}` } }
+      )
+      forceFetchCall((prev) => !prev)
+    } catch (error) {
+      console.error(error)
+      window.alert("Unable to move game.")
+    }
+  }
+
+  const startGame = async (name) => {
+    try {
+      await axios.post(
+        `${API_URL}/games/suggested/start`,
+        { name },
+        { headers: { Authorization: `Bearer ${state.user.token}` } }
+      )
+      forceFetchCall((prev) => !prev)
+    } catch (error) {
+      console.error(error)
+      window.alert("Unable to start game.")
+    }
+  }
+
   useEffect(() => {
     const fetchGameData = async () => {
       await api(`${API_URL}/games`, "SUGGESTED")
@@ -172,6 +202,8 @@ export const StoreProvider = ({ children }) => {
     forceFetchCall,
     usernameApi,
     deleteGame,
+    moveToBacklog,
+    startGame,
     logout: clearSession,
     authorize,
     api,
