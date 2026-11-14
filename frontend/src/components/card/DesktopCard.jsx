@@ -8,6 +8,7 @@ import {
   backlogBadgeClass,
   backlogBadgeText,
   isNext,
+  isCompleted,
   canDeleteGame,
   canMoveToBacklog,
   generateDirectoryURL,
@@ -240,7 +241,7 @@ const DesktopCard = () => {
                     <div className="d-flex flex-row flex-wrap column-gap-2">
                       {canMoveToBacklog(state.user, isBacklog) && (
                         <>
-                          {!isNext(status) && (
+                          {!isNext(status) && !isCompleted(status) && (
                             <button
                               type="button"
                               className="card-badge-game-next mt-2"

@@ -21,6 +21,8 @@ const backlogBadgeText = (played) => (played ? "Completed" : "Not Started")
 
 const isNext = (status) => String(status).toLowerCase() === "next"
 
+const isCompleted = (status) => String(status).toLowerCase() === "completed"
+
 const cardSwitchText = (isBacklog) =>
   isBacklog ? "Suggested Games" : "Backlog Games"
 
@@ -54,6 +56,7 @@ export {
   backlogBadgeClass,
   backlogBadgeText,
   isNext,
+  isCompleted,
   cardSwitchText,
   scrollToTop,
 }
