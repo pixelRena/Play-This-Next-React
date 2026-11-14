@@ -237,7 +237,7 @@ const DesktopCard = () => {
                         </>
                       )}
                     </div>
-                    <div className="d-flex flex-row gap-2">
+                    <div className="d-flex flex-row flex-wrap column-gap-2">
                       {canMoveToBacklog(state.user, isBacklog) && (
                         <>
                           {!isNext(status) && (
